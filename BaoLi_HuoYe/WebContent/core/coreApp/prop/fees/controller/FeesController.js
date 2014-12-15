@@ -250,7 +250,7 @@ init:function(){
 			},
 		"window[xtype=fees.window] baseform #save":{
 			beforeclick:function(btn){
-				btn.callback=function(info){
+				 btn.callback=function(info){
 					
 				       
 					
