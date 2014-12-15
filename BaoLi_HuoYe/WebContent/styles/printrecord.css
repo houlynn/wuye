@@ -1,0 +1,85 @@
+body {
+	margin: 0 0 0 0;
+}
+
+
+.trhidden{
+	visibility: hidden;
+	height:0;
+	margin : -10;
+	display :compact;
+/* 	border : 0;
+	border-color: white; */
+}
+
+printtable table {
+	border-collapse: collapse;
+	border-color: green;
+	color: black;
+	margin: auto;
+	font-family: 宋体;
+	font-size: 14px;
+	white-space: normal;
+}
+
+[fontsize="13px"] {
+	font-size: 13px;
+}
+
+[fontsize="14px"] {
+	font-size: 14px;
+}
+
+[fontsize="15px"] {
+	font-size: 15px;
+}
+
+[fontsize="16px"] {
+	font-size: 16px;
+}
+
+[fontsize="17px"] {
+	font-size: 17px;
+}
+
+[fontsize="18px"] {
+	font-size: 18px;
+}
+
+.headtitle {
+	font-family: 黑体;
+	font-size: 20px;
+}
+
+.headtitlelarge {
+	font-family: 黑体;
+	font-size: 28px;
+}
+
+.buttons {
+	background-color: rgb(255, 255, 220);
+	text-align: center;
+	vertical-align: middle; margin : auto;
+	width: 100%;
+	height: 30px;
+	margin: auto;
+	padding-top: 8px;
+}
+
+.button-print {
+	padding: 0 0 0 18px;
+	background: url(../images/button/print.png) no-repeat center left
+		!important;
+}
+
+.button-exit {
+	padding: 0 0 0 18px;
+	background: url(../images/button/return.png) no-repeat center left
+		!important;
+}
+
+@media print {
+	.printer-noprint {
+		display: none;
+	}
+}

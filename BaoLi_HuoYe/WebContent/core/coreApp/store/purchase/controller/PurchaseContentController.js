@@ -1,0 +1,20 @@
+Ext.define("core.store.purchase.controller.PurchaseContentController",{
+	extend:"Ext.app.Controller",
+	init:function(){
+		var self=this
+		//事件注册
+		this.control({
+		});
+	},
+	views:[
+	"core.store.purchase.view.PurchaseContentGrid",
+	"core.store.purchase.view.PurchaseContentPanel",
+	"core.store.purchase.view.PurchaseContentForm",
+	"core.store.purchase.view.PurchaseItemGrid",
+	"core.store.purchase.view.PurchaseItemPanel",
+	],
+	stores:[
+	        "core.store.purchase.store.PurchaseContentStore",
+	        "core.store.purchase.store.PurchaseItemStore"
+		]
+});

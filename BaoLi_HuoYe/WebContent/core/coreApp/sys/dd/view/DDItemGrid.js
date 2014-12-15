@@ -1,0 +1,45 @@
+Ext.define("core.sys.dd.view.DDItemGrid",{
+	extend:"core.app.base.BaseGrid",
+	alias:"widget.dd.dditemgrid",
+	tbar:[
+		{xtype:'button',text:'添加',ref:'gridInsertF',iconCls:'table_add',hidden:true},
+		{xtype:'button',text:'添加',ref:'gridInsert',iconCls:'table_add'},
+		{xtype:'button',text:'删除',ref:'gridDelete',iconCls:'table_remove'},
+		{xtype:'button',text:'保存',ref:'gridSave',iconCls:'table_save'}
+	],
+	columns:[{
+		xtype:"rownumberer",
+		width : 35,
+		text :'No.',
+		align : 'center'
+	},{
+		text:"主键",
+		dataIndex:"itemId",
+		hidden:true
+	},{
+		text:"项名称",
+		dataIndex:"itemName",
+		field:{
+			xtype:"textfield"
+		}
+	},{
+		text:"项编码",
+		dataIndex:"itemCode",
+		field:{
+			xtype:"textfield"
+		}
+	},{
+		text:"排序",
+		dataIndex:"orderIndex",
+		field:{
+			xtype:"numberfield"
+		}}
+		],
+	store:"core.sys.dd.store.DDItemStore",
+	bbar:{
+		xtype:'pagingtoolbar',
+		store:"core.sys.dd.store.DDItemStore",
+		dock:'bottom',
+		displayInfo:true
+	}
+});

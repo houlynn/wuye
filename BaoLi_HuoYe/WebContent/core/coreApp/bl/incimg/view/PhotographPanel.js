@@ -1,0 +1,42 @@
+Ext.define("core.bl.incimg.view.PhotographPanel",{
+	extend:"core.app.base.BasePanel",
+	alias:"widget.bl.photographPanel",
+	funCode:"photograph_main",
+	funData:{
+	        action:"/bl/incimg", //请求Action
+	        whereSql:"",//表格查询条件
+	        orderSql:"operatingTime",//表格排序条件
+	        pkName:"pId",
+	        modelName:"org.yingqu.baoli.model.Photograph",//实体全路径
+	        tableName:"Photograph",//表名
+	        defaultObj:{enabled:"1"},//默认信息，用于表格添加的时候字段默认值
+	        isChildren:false,//是否子功能
+	        children:[{//子功能的配置
+	        	funCode:"photographitem_main"	        	
+	        }],
+	        //子功能信息
+	        childFun:[],
+	        parentCode:"photograph_main",//主功能功能编码
+	        connectFields:[{//关联字段
+			mainFieldCode:"",//主功能字段名
+			childFieldCode:"",//子功能字段名
+			foreignKey:"foreignKey",//外键虚字段
+			isQuery:true
+			}]
+	},
+		items:[{
+		xtype:"basecenterpanel",
+				items:[{
+					xtype:"basequerypanel",
+					region:"north",
+					items:[
+			]
+			},{
+			xtype:"bl.photographGrid",
+			region:"center"
+		}]
+	},{
+	xtype:"bl.photographForm",
+		hidden:true
+	}]
+});

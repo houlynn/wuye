@@ -1,0 +1,240 @@
+/*  菜单accordion 中的菜单条的样式 */
+.labelmenu {
+	font-size: 13px;
+	padding: 3px;
+}
+
+.selected {
+	background-color: #feeeed;
+}
+
+
+.labelmenu:HOVER {
+	font-size: 13px;
+	color: blue;
+	background-color: #a3cf62;
+}
+
+/* 主页面上的top和bottom region 显示和隐藏 */
+.hiddentop {
+	cursor: n-resize;
+	background: url("../images/button/mini-top.png");
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+.showtop {
+	cursor: s-resize;
+	background: url("../images/button/mini-bottom.png");
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+printtable table {
+	border-collapse: true;
+}
+
+.hidden {
+	display: none;
+}
+
+/* 页面顶部的layout以及上面链接的样式 */
+body {
+	margin: 40;
+	padding: 40;
+}
+
+.hh1 {
+	font-size: 3em;
+	font-weight: bold;
+	color: #333;
+	margin-left: 20px;
+	white-space: nowrap;
+}
+
+.index-header {
+	border: 0 none;
+	padding-left: 3px;
+}
+
+.aa {
+	background-image: none !important;
+	background: none !important;
+}
+
+.panel-background {
+	background: url("../images/login/bg.gif") !important;
+}
+
+.topheader-neptune {
+	background: url("../images/bg/green.png") repeat-x scroll 0 50% #77aa33;
+}
+
+.topheader-classic {
+	background: url("../images/bg/blue.png") repeat-x scroll 0 50% #77aa33;
+}
+
+.topheader-gray {
+	background: url("../images/bg/gray.png") repeat-x scroll 0 50% #77aa33;
+}
+
+.topheader-steelblue {
+	background-color: #325989;
+}
+
+.index-header-icon {
+	padding-top: 8px;
+	padding-left: 10px;
+}
+
+.index-title {
+	color: white;
+	font: 20px tahoma, arial, sans-serif;
+}
+
+.index-title-ver {
+	color: #ddd;
+	font-size: 12px;
+	padding-top: 10px;
+	padding-left: 8px;
+	padding-right: 30px;
+}
+
+.head-form-title,.head-form-titleFocused {
+	color: white;
+	font-size: 12px;
+}
+
+.headPanelLink {
+	/*padding-top: 10px;*/
+	white-space: nowrap;
+}
+
+.headPanelLink a {
+	color: #ccc;
+	text-decoration: none;
+}
+
+.headPanelLink a:HOVER {
+	color: #eee;
+	text-decoration: underline;
+}
+
+/* 界面方案的选择css */
+.theme-neptune {
+	background: #157fcc;
+}
+
+.theme-classic {
+	background: #abc7ec;
+}
+
+.theme-gray {
+	background: #a2a2a2;
+}
+
+.theme-steelblue {
+	background: #244977;
+}
+
+.theme-select-over {
+	border-width: 1px;
+	border-style: outset;
+}
+
+/* 页面底部的layout以及上面链接的样式 */
+.index-footer {
+	background: url("../images/bg/hd-bg.gif") repeat-x scroll 0 50% #1E4176;
+	border: 0 none;
+	padding-left: 3px;
+}
+
+.footPanelLink {
+	padding-top: 3px;
+	white-space: nowrap;
+}
+
+.footPanelLink a {
+	color: #ccc;
+	text-decoration: none;
+}
+
+.footPanelLink a:HOVER {
+	color: #eee;
+	text-decoration: underline;
+}
+
+#loading {
+	position: absolute;
+	left: 45%;
+	top: 40%;
+	margin-left: -45px;
+	padding: 2px;
+	z-index: 20001;
+	height: auto;
+	border: 1px solid #ccc;
+}
+
+#loading .loading-indicator {
+	background: white;
+	color: #444;
+	font: bold 13px tahoma, arial, helvetica;
+	padding: 10px;
+	margin: 0;
+	height: auto;
+}
+
+#loading .loading-indicator img {
+	margin-right: 8px;
+	float: left;
+	vertical-align: top;
+}
+
+#loading-msg {
+	font: normal 10px arial, tahoma, sans-serif;
+}
+
+/* 弹出式对话框的 ＣＳＳ*/
+#instructions ul li {
+	list-style-type: disc;
+	list-style-position: outside;
+	font-size: 12px;
+	margin: 0px 0px 0px 20px;
+}
+
+/* Icons */
+.ux-notification-icon-smile {
+	background-image: url('../images/system/smile1.png');
+}
+
+.ux-notification-icon-warn {
+	background-image: url('../images/system/warn.png');
+}
+
+.ux-notification-icon-error {
+	background-image: url('../images/system/error.png');
+}
+
+/* Using standard theme */
+.ux-notification-window .x-window-body {
+	text-align: center;
+	padding: 15px 5px 15px 5px;
+	width: 200px;
+}
+
+/* Custom styling */
+.ux-notification-light .x-window-header {
+	background-color: transparent;
+}
+
+body .ux-notification-light {
+	background-image: url('../images/bg/fader.png');
+}
+
+.ux-notification-light .x-window-body {
+	text-align: center;
+	padding: 15px 5px 18px 5px;
+	width: 200px;
+	background-color: transparent;
+	border: 0px solid white;
+}

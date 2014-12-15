@@ -1,0 +1,26 @@
+Ext.define("core.bl.vi.view.VirtualIconPanel",{
+	extend:"core.app.base.BasePanel",
+	alias:"widget.bl.virtualIconPanel",
+	funCode:"virtualIcon_main",
+	funData:{
+	        action:"/bl/vi", //请求Action
+	        whereSql:"",//表格查询条件
+	        orderSql:"operatingTime",//表格排序条件
+	        pkName:"iconid",
+	        modelName:"org.yingqu.baoli.model.VirtualIcon",//实体全路径
+	        tableName:"VirtualIcon",//表名
+	        isChildren:false,//是否子功能
+	},
+		items:[{
+		xtype:"basecenterpanel",
+				items:[
+{
+	xtype:"bl.virtualIconGrid",
+	region:"center"
+}
+		]
+	},{
+	xtype:"bl.virtualIconForm",
+		hidden:true
+	}]
+});

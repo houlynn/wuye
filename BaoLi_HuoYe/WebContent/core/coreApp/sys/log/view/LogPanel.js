@@ -1,0 +1,50 @@
+Ext.define("core.sys.log.view.LogPanel",{
+	extend:"core.app.base.BasePanel",
+	alias:"widget.logpanel",
+	funCode:"logmodule_main",
+	funData:{
+	        action:"/log", //请求Action
+	        whereSql:"",//表格查询条件
+	        orderSql:"operatingTime",//表格排序条件
+	        pkName:"logId",
+	        modelName:"com.model.hibernate.system.shared.OperateLog",//实体全路径
+	        tableName:"OperateLog",//表名
+	        defaultObj:{name:"@createUserName@",birthday:"@createTime@"},//默认信息，用于表格添加的时候字段默认值
+	        childFun:[]
+	},
+	items:[{
+		xtype:"basecenterpanel",
+		items:[{
+			xtype:"basequerypanel",
+			region:"north",
+			items:[{
+				xtype:"basequeryfield",
+				queryType:"textfield",
+				fieldLabel:"操作用户",
+				width:800,
+				name:"username"
+			},{
+				xtype:"basequeryfield",
+				queryType:"textfield",
+				fieldLabel:"操作类型 ",
+				name:"operatingType"
+			},{
+				xtype:"basequeryfield",
+				queryType:"datetimefield",
+				fieldLabel:"操作时间",
+				name:"operatingTime",
+				config:{
+					dateType : 'datetime'				
+				}
+			},{
+				xtype:"basequeryfield",
+				queryType:"textfield",
+				fieldLabel:"操作部门",
+				name:"createDeptName"
+			}]
+		},{
+			xtype:"loggrid",
+			region:"center"
+		}]
+	}]
+});

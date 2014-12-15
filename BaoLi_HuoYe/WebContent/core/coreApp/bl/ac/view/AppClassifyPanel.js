@@ -1,0 +1,41 @@
+Ext.define("core.bl.ac.view.AppClassifyPanel",{
+	extend:"core.app.base.BasePanel",
+	alias:"widget.bl.appClassifyPanel",
+	funCode:"appClassify_main",
+	funData:{
+	        action:"/bl/ac", //请求Action
+	        whereSql:"",//表格查询条件
+	        orderSql:"operatingTime",//表格排序条件
+	        pkName:"cid",
+	        modelName:"org.yingqu.baoli.model.AppClassify",//实体全路径
+	        tableName:"AppClassify",//表名
+	        defaultObj:{enabled:"1"},//默认信息，用于表格添加的时候字段默认值
+	        isChildren:false,//是否子功能
+	        children:[{//子功能的配置
+	        	funCode:"appClassifyItem_main"	        	
+	        }],
+	},
+		items:[{
+		xtype:"basecenterpanel",
+				items:[{
+					xtype:"basequerypanel",
+					region:"north",
+					items:[
+			  {
+				xtype:"basequeryfield",
+				queryType:"textfield",
+				fieldLabel:"分类名称",
+				name:"classify",
+				config:{
+				}
+			},
+			]
+			},{
+			xtype:"bl.appClassifyGrid",
+			region:"center"
+		}]
+	},{
+	xtype:"bl.appClassifyForm",
+		hidden:true
+	}]
+});

@@ -1,0 +1,44 @@
+Ext.define("core.store.storeCheck.view.StoreCheckPanel",{
+	extend:"core.app.base.BasePanel",
+	alias:"widget.store.storeCheckPanel",
+	funCode:"storeCheck_main",
+	funData:{
+	        action:"/store/storeCheck", //请求Action
+	        whereSql:"",//表格查询条件
+	        orderSql:"operatingTime",//表格排序条件
+	        pkName:"sckeckId",
+	        modelName:"org.yingqu.Purchase.model.StoreCheck",//实体全路径
+	        tableName:"StoreCheck",//表名
+	        defaultObj:{enabled:"1"}//默认信息，用于表格添加的时候字段默认值
+	},
+		items:[{
+		xtype:"basecenterpanel",
+				items:[{
+					xtype:"basequerypanel",
+					region:"north",
+					items:[
+			  {
+				xtype:"basequeryfield",
+				queryType:"basecombobox",
+				fieldLabel:"货品",
+				name:"productId",
+				config:{
+					ddCode:"PRODUCT",
+				}
+			},
+			  {
+				xtype:"basequeryfield",
+				queryType:"datetimefield",
+				fieldLabel:"盘点日期",
+				name:"checkPeriod",
+				config:{
+					dateType : 'date'
+				}
+			},
+			]
+			},{
+			xtype:"store.storeCheckGrid",
+			region:"center"
+		}]
+	}]
+});

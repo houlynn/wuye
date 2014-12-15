@@ -1,0 +1,51 @@
+Ext.define("core.store.purchase.view.PurchaseContentPanel",{
+	extend:"core.app.base.BasePanel",
+	alias:"widget.store.purchaseContentPanel",
+	funCode:"purchaseContent_main",
+	funData:{
+	        action:"/store/purchase", //请求Action
+	        whereSql:"",//表格查询条件
+	        orderSql:"operatingTime",//表格排序条件
+	        pkName:"purid",
+	        modelName:"org.yingqu.Purchase.model.PurchaseContent",//实体全路径
+	        tableName:"PurchaseContent",//表名
+	        defaultObj:{enabled:"1"},//默认信息，用于表格添加的时候字段默认值
+	        isChildren:false,//是否子功能
+	        children:[{//子功能的配置
+	        	funCode:"purchaseItem_main"	        	
+	        }],
+	},
+		items:[{
+		xtype:"basecenterpanel",
+				items:[{
+					xtype:"basequerypanel",
+					region:"north",
+					items:[
+			  {
+				xtype:"basequeryfield",
+				queryType:"basecombobox",
+				fieldLabel:"经办人",
+				name:"endUid",
+				config:{
+					ddCode:"ENDUSER",
+				}
+			},
+			  {
+				xtype:"basequeryfield",
+				queryType:"datetimefield",
+				fieldLabel:"进货日期",
+				name:"purchaseDate",
+				config:{
+					dateType : 'date'
+				}
+			},
+			]
+			},{
+			xtype:"store.purchaseContentGrid",
+			region:"center"
+		}]
+	},{
+	xtype:"store.purchaseContentForm",
+		hidden:true
+	}]
+});

@@ -1,0 +1,105 @@
+@CHARSET "gb2312";
+
+
+.effect04{  
+	font-size: 5em;
+  background-color: #333;  
+  background-image:  
+  
+      linear-gradient(  
+        45deg,  
+        transparent 45%,  
+        hsla(48,20%,90%,1) 45%,  
+        hsla(48,20%,90%,1) 55%,  
+        transparent 0  
+        );  
+    background-size: .05em .05em;  
+  -webkit-background-clip: text;  
+  -webkit-text-fill-color: transparent;  
+  -webkit-text-stroke: 2px #111;  
+}
+
+
+.effect06 {  
+	font-size: 3em;
+	-webkit-text-fill-color: transparent;  
+    -webkit-text-stroke: 2px #161616;  
+    background-size: cover;  
+}  
+
+.body {
+	background-image: url("../images/login/bg.gif") !important;
+}
+
+#errorMessage {
+	font-family: "Times New Roman", Georgia, Serif;
+	color: red;
+	font-weight: bold;
+}
+
+.hh1 {
+	font-size: 3em;
+	font-weight: bold;
+	color: #333;
+  margin-left: 20px;
+  white-space: nowrap;
+}
+
+
+#identifyingCodeImage {
+	border: 1px solid #00f;
+}
+
+
+#loading {
+	position: absolute;
+	left: 45%;
+	top: 40%;
+	margin-left: -45px;
+	padding: 2px;
+	z-index: 20001;
+	height: auto;
+	border: 1px solid #ccc;
+}
+
+#loading .loading-indicator {
+	background: white;
+	color: #444;
+	font: bold 13px tahoma, arial, helvetica;
+	padding: 10px;
+	margin: 0;
+	height: auto;
+}
+
+#loading .loading-indicator img {
+	margin-right: 8px;
+	float: left;
+	vertical-align: top;
+}
+
+#loading-msg {
+	font: normal 10px arial, tahoma, sans-serif;
+}
+
+
+/* 界面方案的选择css */
+.theme-neptune {
+	background: #157fcc;
+}
+
+.theme-classic {
+	background: #abc7ec;
+}
+
+.theme-gray {
+	background: #a2a2a2;
+}
+
+.theme-access {
+	background: #34394a;
+}
+
+.theme-select-over {
+	border-width: 1px;
+	border-style: outset;
+}

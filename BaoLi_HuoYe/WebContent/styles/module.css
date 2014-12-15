@@ -1,0 +1,518 @@
+.datecolor {
+	color: #a40;
+}
+
+.numbercolor {
+	color: #00C;
+}
+
+.intcolor {
+	color: #00C;
+}
+
+.booleancolor {
+	color: #005831;
+}
+
+.hascondition {
+	color: #1d953f;
+}
+
+
+/*  report result list grid 中的总计和小计*/
+
+.x-grid-cell-inner-row-numberer {
+	/* 防止查询结果列表中的row number 粗体，粗体的话太长，放不下  */
+	font-weight : normal ;
+}
+
+.total .x-report-cell {
+	background-color: #6699CC;
+	font-weight: bold;
+	color: #00C;
+}
+
+.x-grid-row-selected .x-report-cell {
+	background-color: #dfe8f6 !important;
+}
+
+.x-grid-row-focused .x-report-cell {
+	background-color: #dfe8f6 !important;
+}
+
+.subtotal20 .x-report-cell {
+	background-color: #66ccff;
+	font-weight: bold;
+}
+
+.subtotal21 .x-report-cell {
+	background-color: #99ccff;
+	font-weight: bold;
+}
+
+.subtotal22 .x-report-cell {
+	background-color: #ccffff;
+	font-weight: bold;
+}
+
+.subtotal23 .x-report-cell {
+	background-color: #ccffff;
+	font-weight: bold;
+}
+
+.subtotal24 .x-report-cell {
+	background-color: #ccffff;
+	font-weight: bold;
+}
+
+/*  conditiongrid 各种条件背景颜色，正常，无作用，子查询  */
+.conditionunused .x-condition-cell {
+	background-color: #F3B1D9 !important;
+}
+
+.conditionsubquery .x-condition-cell {
+	background-color: #88dbe6 !important;
+}
+
+/* form 的 contain 中 table 类型的 th 的定义 */
+.fieldContainerTableth {
+	text-align: center;
+	font-weight: bold;
+	height: 30px;
+	font-size: 14px;
+}
+
+.x-grid-cell-inner breakword {
+	word-wrap: break-word !important;
+	word-break: normal;
+}
+
+.breakword {
+	word-wrap: break-word !important;
+	word-break: normal;
+}
+
+.errorMessage {
+	color: red;
+	font-size: 15px;
+}
+
+.ux-filtered-column {
+	font-style: normal !important;
+	font-weight: normal !important;
+	color: #ed1941;
+}
+
+.ux-gridfilter-text-icon {
+	background-image: url(../images/find.png) !important;
+}
+
+
+
+.gridNameField a {
+	color: #11264f;
+	text-decoration: underline;
+}
+
+.childalignright {
+	float: right;
+	text-decoration: underline;
+}
+
+.gridNameField a:HOVER {
+	color: #33f;
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+.gridheadicon {
+	vertical-align: middle;
+}
+
+.treeitemimportant {
+	color: #a40;
+}
+/* grid 的选中的筛选值的设置  */
+.filtertext {
+	background-color: yellow;
+}
+
+.rightsrc img {
+	float: right;
+	height: 12px;
+	width: 12px;
+	cursor: pointer;
+}
+
+.gridheadicon img {
+	height: 11px;
+	margin-right: 3px;
+	vertical-align: middle;
+}
+
+.approvethisgridheadicon {
+	vertical-align: middle;
+	color: blue;
+}
+
+
+.can_payout {
+	background-image: url("../images/button/can_payout.png");
+}
+
+.already_payout {
+	background-image: url("../images/button/auditing.png");
+}
+
+.not_payout {
+	background-image: url("../images/button/not_payout.png");
+}
+
+.already_auditing {
+	background-image: url("../images/button/auditing.png");
+}
+
+.not_auditing {
+	background-image: url("../images/button/no_auditing.png");
+}
+
+.approve_ok {
+	background-image: url("../images/approve/approve_ok.png");
+}
+
+.approve_cancel {
+	background-image: url("../images/approve/approve_cancel.png");
+}
+
+.approve_0 {
+	background-image: url("../images/approve/0.png");
+}
+
+.approve_1 {
+	background-image: url("../images/approve/1.png");
+}
+
+.approve_2 {
+	background-image: url("../images/approve/2.png");
+}
+
+.approve_3 {
+	background-image: url("../images/approve/3.png");
+}
+
+.approve_4 {
+	background-image: url("../images/approve/4.png");
+}
+
+.approve_5 {
+	background-image: url("../images/approve/5.png");
+}
+
+.approve_6 {
+	background-image: url("../images/approve/6.png");
+}
+
+/* 综合查询模块里面的每一个选中的条件，删除按钮 */
+a .condition_clear {
+	border-radius: 2px;
+	border: 1px solid #a1a1a1;
+	width: 10px;
+	height: 10px;
+	float: top;
+}
+
+a:HOVER .condition_clear {
+	border-radius: 2px;
+	border: 1px solid #5151a1;
+	background-color: #aabbcc;
+	width: 10px;
+	height: 10px;
+	float: top;
+}
+
+/* 导航Tree，如果有记录数的话，加在text后面，用下面的样式 */
+.navigateTreeItem {
+	color: blue;
+	font-size: 80%;
+}
+
+/* module grid title */
+.rightconner-number {
+	color: blue;
+	font-size: 80%;
+}
+
+.module-header {
+	background: url("../images/bg/mt-bg.gif") repeat-x scroll 0 50% #5E91a6;
+	border: 0 none;
+	padding-left: 3px;
+	color: white;
+}
+
+.moduleTitleLink {
+	white-space: nowrap;
+	overflow: visible;
+	padding-top: 3px;
+}
+
+.moduleTitleLink a {
+	color: #eee;
+	text-decoration: none;
+}
+
+.moduleTitleLink a:HOVER {
+	color: #fff;
+	/* 	text-decoration: underline; */
+}
+
+/* = disabled tree nodes
+----------------------------------------------- */
+.dvp-tree-node-disabled .x-grid-cell {
+	/* 	-moz-opacity: 0.5;
+	opacity: .5; */
+	color: gray;
+	background-color: #f6f5ec;
+	/* 	filter: alpha(opacity =           50);
+ */
+}
+
+.expansionLayout {
+	/* 	padding-left: 2px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	padding-right: 2px;
+	margin-right : 20px; */
+	margin-left: -25px;
+	border-width: 2px;
+	border-color: orange;
+	border-style: solid;
+	width: 100%;
+}
+
+/*
+grid cell styles sample
+*/
+.myBoxedGridCell {
+	font-family: Verdana, Bitstream Vera Sans, sans-serif;
+	font-size: 11px;
+	color: black;
+	border-bottom: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
+	background-color: #ffffff;
+}
+
+.myBoxedGridCellDark {
+	font-family: Verdana, Bitstream Vera Sans, sans-serif;
+	font-size: 11px;
+	color: black;
+	border-bottom: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
+	background-color: #eeeeff;
+}
+
+.myBoxedGridCellOver,.myBoxedGridCellOverDark {
+	font-family: Verdana, Bitstream Vera Sans, sans-serif;
+	font-size: 11px;
+	color: black;
+	border-bottom: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
+	background-color: #c0ffc0;
+}
+
+.myBoxedGridCellSelected,.myBoxedGridCellSelectedDark {
+	font-family: Verdana, Bitstream Vera Sans, sans-serif;
+	font-size: 11px;
+	color: white;
+	border-bottom: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
+	background-color: #8080ff;
+}
+
+.myBoxedGridCellSelectedOver,.myBoxedGridCellSelectedOverDark {
+	font-family: Verdana, Bitstream Vera Sans, sans-serif;
+	font-size: 11px;
+	color: white;
+	border-bottom: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
+	background-color: #8080ff;
+}
+
+.myBoxedGridCellDisabled,.myBoxedGridCellDisabledDark {
+	font-family: Verdana, Bitstream Vera Sans, sans-serif;
+	font-size: 11px;
+	color: #808080;
+	border-bottom: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
+	background-color: #ffffff;
+}
+
+/*
+审批的列的css,背景不一样
+*/
+.myApproveGridCell {
+	font-family: Verdana, Bitstream Vera Sans, sans-serif;
+	font-size: 11px;
+	color: black;
+	border-bottom: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
+	background-color: #ddddff;
+}
+
+.myApproveGridCellDark {
+	font-family: Verdana, Bitstream Vera Sans, sans-serif;
+	font-size: 11px;
+	color: black;
+	border-bottom: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
+	background-color: #ccccff;
+}
+
+.myApproveGridCellOver,.myApproveGridCellOverDark {
+	font-family: Verdana, Bitstream Vera Sans, sans-serif;
+	font-size: 11px;
+	color: black;
+	border-bottom: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
+	background-color: #c0ffc0;
+}
+
+.myApproveGridCellSelected,.myApproveGridCellSelectedDark {
+	font-family: Verdana, Bitstream Vera Sans, sans-serif;
+	font-size: 11px;
+	color: white;
+	border-bottom: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
+	background-color: #8080ff;
+}
+
+.myApproveGridCellSelectedOver,.myApproveGridCellSelectedOverDark {
+	font-family: Verdana, Bitstream Vera Sans, sans-serif;
+	font-size: 11px;
+	color: white;
+	border-bottom: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
+	background-color: #8080ff;
+}
+
+.myApproveGridCellDisabled,.myApproveGridCellDisabledDark {
+	font-family: Verdana, Bitstream Vera Sans, sans-serif;
+	font-size: 11px;
+	color: #808080;
+	border-bottom: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
+	background-color: #cccccc;
+}
+
+/*
+综合查询中小计汇总行的css,背景更深不一样
+*/
+.subTotalGridCell {
+	font-family: Verdana, Bitstream Vera Sans, sans-serif;
+	font-size: 11px;
+	color: black;
+	border-bottom: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
+	background-color: #bbbbff;
+}
+
+.subTotalGridCellDark {
+	font-family: Verdana, Bitstream Vera Sans, sans-serif;
+	font-size: 11px;
+	color: black;
+	border-bottom: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
+	background-color: #bbbbff; /*aaaaff*/
+}
+
+.subTotalGridCellOver,.subTotalGridCellOverDark {
+	font-family: Verdana, Bitstream Vera Sans, sans-serif;
+	font-size: 11px;
+	color: black;
+	border-bottom: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
+	background-color: #c0ffc0;
+}
+
+.subTotalGridCellSelected,.subTotalGridCellSelectedDark {
+	font-family: Verdana, Bitstream Vera Sans, sans-serif;
+	font-size: 11px;
+	color: white;
+	border-bottom: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
+	background-color: #8080ff;
+}
+
+.subTotalGridCellSelectedOver,.subTotalGridCellSelectedOverDark {
+	font-family: Verdana, Bitstream Vera Sans, sans-serif;
+	font-size: 11px;
+	color: white;
+	border-bottom: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
+	background-color: #8080ff;
+}
+
+.subTotalGridCellDisabled,.subTotalGridCellDisabledDark {
+	font-family: Verdana, Bitstream Vera Sans, sans-serif;
+	font-size: 11px;
+	color: #808080;
+	border-bottom: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
+	background-color: #cccccc;
+}
+
+/*
+综合查询中总计汇总行的css,背景更深不一样
+*/
+.totalGridCell {
+	font-family: Verdana, Bitstream Vera Sans, sans-serif;
+	font-size: 11px;
+	color: black;
+	border-bottom: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
+	background-color: #8888ff;
+}
+
+.totalGridCellDark {
+	font-family: Verdana, Bitstream Vera Sans, sans-serif;
+	font-size: 11px;
+	color: black;
+	border-bottom: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
+	background-color: #8888ff;
+}
+
+.totalGridCellOver,.totalGridCellOverDark {
+	font-family: Verdana, Bitstream Vera Sans, sans-serif;
+	font-size: 11px;
+	color: black;
+	border-bottom: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
+	background-color: #c0ffc0;
+}
+
+.totalGridCellSelected,.totalGridCellSelectedDark {
+	font-family: Verdana, Bitstream Vera Sans, sans-serif;
+	font-size: 11px;
+	color: white;
+	border-bottom: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
+	background-color: #8080ff;
+}
+
+.totalGridCellSelectedOver,.totalGridCellSelectedOverDark {
+	font-family: Verdana, Bitstream Vera Sans, sans-serif;
+	font-size: 11px;
+	color: white;
+	border-bottom: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
+	background-color: #8080ff;
+}
+
+.totalGridCellDisabled,.totalGridCellDisabledDark {
+	font-family: Verdana, Bitstream Vera Sans, sans-serif;
+	font-size: 11px;
+	color: #808080;
+	border-bottom: 1px solid #c0c0c0;
+	border-right: 1px solid #c0c0c0;
+	background-color: #cccccc;
+}

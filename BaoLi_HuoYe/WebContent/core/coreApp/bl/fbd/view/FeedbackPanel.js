@@ -1,0 +1,55 @@
+Ext.define("core.bl.fbd.view.FeedbackPanel",{
+	extend:"core.app.base.BasePanel",
+	alias:"widget.bl.feedbackPanel",
+	funCode:"feedback_main",
+	funData:{
+	        action:"/bl/fbd", //请求Action
+	        whereSql:"",//表格查询条件
+	        orderSql:"operatingTime",//表格排序条件
+	        pkName:"fbid",
+	        modelName:"org.yingqu.baoli.model.Feedback",//实体全路径
+	        tableName:"Feedback",//表名
+	        defaultObj:{enabled:"1"},//默认信息，用于表格添加的时候字段默认值
+	        isChildren:false,//是否子功能
+	},
+		items:[{
+		xtype:"basecenterpanel",
+				items:[{
+					xtype:"basequerypanel",
+					region:"north",
+					items:[
+			  {
+				xtype:"basequeryfield",
+				queryType:"textfield",
+				fieldLabel:"反馈用户",
+				name:"username",
+				config:{
+				}
+			},
+			  {
+				xtype:"basequeryfield",
+				queryType:"textfield",
+				fieldLabel:"反馈信息",
+				name:"msg",
+				config:{
+				}
+			},
+			  {
+				xtype:"basequeryfield",
+				queryType:"datetimefield",
+				fieldLabel:"反馈时间",
+				name:"fbtime",
+				config:{
+					dateType : 'date'
+				}
+			},
+			]
+			},{
+			xtype:"bl.feedbackGrid",
+			region:"center"
+		}]
+	},{
+	xtype:"bl.feedbackForm",
+		hidden:true
+	}]
+});

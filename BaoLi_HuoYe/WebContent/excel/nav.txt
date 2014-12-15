@@ -1,0 +1,4 @@
+ns	_t7018___tf_name,tf_name,tf_origin,tf_unitPrice,tf_costPrice,tf_remark
+limit	20
+moduleName	Product
+navigates	[{"moduleName":"ProductClass","tableAsName":"_t7018","primarykey":"tf_productClassId","fieldtitle":"\u5546\u54c1\u7c7b\u522b","equalsValue":"10","equalsMethod":null,"text":"\u5927\u5bb6\u7535","isCodeLevel":false}]

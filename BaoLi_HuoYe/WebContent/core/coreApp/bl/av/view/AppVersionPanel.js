@@ -1,0 +1,69 @@
+Ext.define("core.bl.av.view.AppVersionPanel",{
+	extend:"core.app.base.BasePanel",
+	alias:"widget.bl.appVersionPanel",
+	funCode:"appVersion_main",
+	funData:{
+	        action:"/bl/av", //请求Action
+	        whereSql:"",//表格查询条件
+	        orderSql:"operatingTime",//表格排序条件
+	        pkName:"id",
+	        modelName:"org.yingqu.baoli.model.AppVersion",//实体全路径
+	        tableName:"AppVersion",//表名
+	        defaultObj:{enabled:"1"},//默认信息，用于表格添加的时候字段默认值
+	        isChildren:false,//是否子功能
+	        children:[{//子功能的配置
+	        	funCode:"appVersionitem_main"	        	
+	        }],
+	        //子功能信息
+	        childFun:[],
+	        parentCode:"appVersion_main",//主功能功能编码
+	        connectFields:[{//关联字段
+			mainFieldCode:"",//主功能字段名
+			childFieldCode:"",//子功能字段名
+			foreignKey:"foreignKey",//外键虚字段
+			isQuery:true
+			}]
+	},
+		items:[{
+		xtype:"basecenterpanel",
+				items:[{
+					xtype:"basequerypanel",
+					region:"north",
+					items:[
+			  {
+				xtype:"basequeryfield",
+				queryType:"textfield",
+				fieldLabel:"应用名称",
+				name:"versonName",
+				config:{
+				}
+			},
+			  {
+				xtype:"basequeryfield",
+				queryType:"textfield",
+				fieldLabel:"版本号",
+				name:"versonCode",
+				config:{
+				}
+			},
+			  {
+				xtype:"basequeryfield",
+				queryType:"datetimefield",
+				fieldLabel:"发布时间",
+				name:"uptime",
+				config:{
+					dateType : 'datetime'
+				}
+			},
+			]
+			},{
+			xtype:"bl.appVersionGrid",
+			region:"center",
+			autoScroll : false
+				
+		}]
+	},{
+	xtype:"bl.appVersionForm",
+		hidden:true
+	}]
+});
