@@ -19,6 +19,7 @@ Ext.define('core.app.view.region.BaseForm', {
 							itemId : 'save',
 							glyph : 0xf0c7,
 							handler : function(button){
+								var self=this;
 								var form = button.up('form');
 								console.log(button.up('form').getForm().getRecord());
 								button.up('form').updateRecord();
@@ -27,7 +28,9 @@ Ext.define('core.app.view.region.BaseForm', {
 							    		var model= button.up('form').getForm().getRecord().save();
 							    		var task = new Ext.util.DelayedTask(function() {
 							    			if(model.getProxy().errorInfo){
+							    			   self.callback(model.getProxy().errorInfo);
 								    			return;
+								    			
 								    		}
 								    		delete model.getProxy().errorInfo;
 								    		system.smileInfo("保存成功!")

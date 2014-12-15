@@ -247,10 +247,16 @@ init:function(){
 											store.load();	
 											
 				}
+			},
+		"window[xtype=fees.window] baseform #save":{
+			beforeclick:function(btn){
+				btn.callback=function(info){
+					
+				       
+					
+				}
+			 }
 			}
-		  
-
-
 		});
 	},
 	views:[
