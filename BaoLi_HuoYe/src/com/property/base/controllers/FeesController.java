@@ -183,9 +183,6 @@ public class FeesController   implements LogerManager,CommonException {
 	}
 	
 	
-	
-	
-	
 
 	
    private @ResponseBody String  getList(HttpServletRequest request){
