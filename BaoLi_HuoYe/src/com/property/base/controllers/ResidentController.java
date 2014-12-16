@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.model.hibernate.property.FeesItemLink;
 import com.model.hibernate.property.LevelInfo;
 import com.model.hibernate.property.ResidentInfo;
 import com.model.hibernate.property.Village;
@@ -217,12 +218,17 @@ public class ResidentController    implements LogerManager,CommonException {
 	}
 	
 	
-	
-	
-	
-	
-	
-	
+	@RequestMapping("/linkFess")
+	public @ResponseBody DataInsertResponseInfo   makeFessItme(String type,int vid
+			) throws Exception{
+		DataInsertResponseInfo result=new DataInsertResponseInfo();
+		FeesItemLink feesItemLink=new FeesItemLink();
+		feesItemLink.setTf_type(type);
+		Village village=new Village();
+		village.setTf_viid(vid);
+		ebi.save(feesItemLink);
+		return result;
+	}
 	
 /*	
 
