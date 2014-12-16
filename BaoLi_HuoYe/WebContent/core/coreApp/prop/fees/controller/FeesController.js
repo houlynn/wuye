@@ -32,9 +32,14 @@ init:function(){
 						     var model = Ext.create(modulegrid.getStore().model);
 			                 model.set(model.idProperty, null); 
 			                 model.set("tf_mtype","001");
-			                 var  window=  Ext.createWidget("fees.window",{
-			                   viewModel:viewModel,
-				                grid:modulegrid
+			                 
+			          var tree= btn.ownerCt.ownerCt.ownerCt.down("container[xtype=fees.levelTree]");
+   		     	      	 var commbox=tree.down("basecombobox[ref=vicombobox]");
+   		     	      	 var vid=commbox.getValue();
+			             var  window=  Ext.createWidget("fees.window",{
+			                    viewModel:viewModel,
+				                grid:modulegrid,
+				                vid:vid
 			                 });
 			                    window.down('form[xtype=baseform]').setData(model);
 			                    var title=selection[0].get("text")+" 水表信息录入";
@@ -252,13 +257,14 @@ init:function(){
 			beforeclick:function(btn){
 				btn.callback=function(info){
 					var resutlCode= info.errorInfo.resultCode;
+					var vid=btn.up("window[xtype=fees.window]").vid;
 					 if(300==resutlCode){
 						 btn.ownerCt.ownerCt.ownerCt.close();
 				    	 var window= Ext.createWidget("window",{
 				           	  title:"并联收费标准",
 				           	  width:300,
 				           	  height:100,
-				           	  items:[{xtype:"fees.feesitemform"}]
+				           	  items:[{xtype:"fees.feesitemform",vid:vid}]
 				           	 });
 				           	 window.show();
 					 }
@@ -270,22 +276,28 @@ init:function(){
 	          */
 	         "form[xtype=fees.feesitemform] #feeeItemCombobox":{
 	         	  render:function(combo) {
-	         	  	var from= combo.ownerCt.ownerCt.ownerCt;
-	         	  //	var tag=from.tag;
+	         	  	var from= combo.ownerCt;
+	         	  	var vid=from.vid;
 	         	    var ddCode ={
-                          whereSql:' and tf_Village=1'//+tag.vid
+                          whereSql:' and tf_Village='+vid
                        }
                  Ext.apply(combo.ddCode,ddCode);
                  var store=combo.store;
                  var proxy=store.getProxy();
 				  proxy.extraParams=combo.ddCode;
 			      store.load();	
-				   
-	         	  	
 	         	  }
-	         	
 	         },
-			
+	           "form[xtype=fees.feesitemform] #save":{
+	           	click:function(btn){
+	           			 var from= btn.ownerCt.ownerCt;
+	           			 var comm=from.down("#feeeItemCombobox");
+	           			 var feessid=comm.getValue();
+	         	  	     var vid=from.vid;
+                       	 var resObj=self.ajax({url:"/201/linkFess.action",params:{vid:vid,type:"001",feessid:feessid}});	           	
+	           	
+	           	}
+	           }, 
 		});
 	},
 	views:[
@@ -297,7 +309,7 @@ init:function(){
 	"core.prop.fees.view.SettingFeesItemForm"
 	],
 	stores:[
-	'core.prop.fees.store.LevelStore',
+	'core.prop.fees.store.LevelStore'
 	],
     models : []
 });

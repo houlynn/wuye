@@ -19,8 +19,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.model.hibernate.property.FeesInfo;
+import com.model.hibernate.property.FeesItemLink;
 import com.model.hibernate.property.LevelInfo;
 import com.model.hibernate.property.ResidentInfo;
+import com.model.hibernate.property.Village;
 import com.model.hibernate.system._Module;
 import com.property.base.ebi.FeesEbi;
 import com.ufo.framework.common.core.exception.ResponseErrorInfo;
@@ -182,8 +185,30 @@ public class FeesController   implements LogerManager,CommonException {
 		return resutl;
 	}
 	
+	@RequestMapping("/linkFess")
+	public @ResponseBody DataInsertResponseInfo   makeFessItme(String type,int vid,int feessid
+			) throws Exception{
+		String hql="select count(*) from  FeesItemLink where 1=1 and tf_Village="+vid+" and tf_type='"+type+"'";
+		Integer count=ebi.getCount(hql);
+		DataInsertResponseInfo result=new DataInsertResponseInfo();
+		if(count==0){
+		FeesItemLink feesItemLink=new FeesItemLink();
+		feesItemLink.setTf_type(type);
+		Village tf_Village=new Village();
+		tf_Village.setTf_viid(vid);
+		feesItemLink.setTf_Village(tf_Village);
+		FeesInfo tf_FeesInfo=new FeesInfo();
+		tf_FeesInfo.setTf_feesid(feessid);
+		feesItemLink.setTf_FeesInfo(tf_FeesInfo);
+		ebi.save(feesItemLink);
+		}
+		result.setDefaultMsg("并联成功!");
+		return result;
+	}
 	
 
+	
+	
 	
    private @ResponseBody String  getList(HttpServletRequest request){
     	

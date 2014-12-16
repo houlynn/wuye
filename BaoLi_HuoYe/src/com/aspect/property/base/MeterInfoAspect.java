@@ -5,6 +5,8 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import com.aspect.ModuleAspect;
+import com.model.hibernate.property.FeesInfo;
+import com.model.hibernate.property.FeesItemLink;
 import com.model.hibernate.property.MeterInfo;
 import com.model.hibernate.property.ResidentInfo;
 import com.model.hibernate.property.Village;
@@ -70,6 +72,14 @@ public class MeterInfoAspect implements ModuleAspect ,XcodeInterface,CommonExcep
 		Integer count= ebi.getCount(hql);
 		if(count==0){
 			getAppException(moduleName, "收费标准未并联需要手动设置", ResponseErrorInfo.STATUS_CUSTOM_WARM);
+		}else{
+			String hqlfee=" from FeesItemLink where 1=1 and tf_Village="+vill.getTf_viid()+" and tf_type='001'";
+			List<FeesItemLink> list=(List<FeesItemLink>) ebi.queryByHql(hqlfee);
+			if(list!=null&&list.size()>0){
+				FeesItemLink itemLink=list.get(0);
+				info.setTf_FeesInfo(itemLink.getTf_FeesInfo());
+			}
+		
 		}
 	}
 

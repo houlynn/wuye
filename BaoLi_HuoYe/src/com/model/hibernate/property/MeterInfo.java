@@ -60,6 +60,11 @@ public class MeterInfo extends BaseEntity {
 	private String tf_mtype;
 	@FieldInfo(title = "抄表周期", number =80)
 	private String tf_rendDate;
+	
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+	@JoinColumn(name = "tf_feesid",nullable=false)
+	@FieldInfo(title = "收费标准", number =60)
+	private  FeesInfo tf_FeesInfo; 
 
 	public int getTf_MeterId() {
 		return tf_MeterId;
@@ -155,6 +160,14 @@ public class MeterInfo extends BaseEntity {
 
 	public void setTf_rendDate(String tf_rendDate) {
 		this.tf_rendDate = tf_rendDate;
+	}
+
+	public FeesInfo getTf_FeesInfo() {
+		return tf_FeesInfo;
+	}
+
+	public void setTf_FeesInfo(FeesInfo tf_FeesInfo) {
+		this.tf_FeesInfo = tf_FeesInfo;
 	}
 	
 }
