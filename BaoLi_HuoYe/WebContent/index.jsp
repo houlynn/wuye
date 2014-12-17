@@ -17,8 +17,12 @@
 <meta http-equiv="expires" content="0">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>后台管理</title>
-<link type="text/css" rel="stylesheet"
-	href="<%=basePath%>css/font-awesome.css">
+<link type="text/css" rel="stylesheet"href="<%=basePath%>css/font-awesome.css">
+
+<link type="text/css" rel="stylesheet"href="<%=basePath%>css/animated-dataview.css">
+<link type="text/css" rel="stylesheet"href="<%=basePath%>css/data-view.css">
+
+
 <script type="text/javascript" src="<%=basePath%>extjs/ext-all-dev.js"></script>
 <link type="text/css" rel="stylesheet"
 	href="<%=basePath%>css/module.css">
