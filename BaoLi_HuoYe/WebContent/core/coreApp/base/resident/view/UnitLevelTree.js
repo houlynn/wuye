@@ -24,25 +24,4 @@ Ext.define("core.base.resident.view.UnitLevelTree",{
 	    	tree.getSelectionModel().deselectAll(true);
 	   	 }
 	}],
-	
-	rbar:[{
-			xtype : 'button',
-			tooltip : '添加楼宇',
-			iconCls : 'tree_model_add',
-			ref : 'treeIns'
-		}, 
-		{
-			xtype : 'button',
-			tooltip : '添加楼层',
-			iconCls : 'tree_func_add',
-			disabled : true,
-			ref : 'treechildIns'
-		},	
-		{
-			xtype : 'button',
-			tooltip : '删除楼宇',
-			iconCls : 'tree_delete',
-			disabled : true,
-			ref : 'treeDel'
-		}]
 })

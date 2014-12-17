@@ -4,7 +4,7 @@ Ext.define("core.base.resident.view.ResidentUnit", {
 			alias : "widget.resident.residentUnit",
 			layout : 'border',
 			items : [{
-						xtype : "resident.levelTree",
+						xtype : "resident.unitlevelTree",
 						region : "west",
 						width : comm.get("clientWidth") * 0.18
 					}, {

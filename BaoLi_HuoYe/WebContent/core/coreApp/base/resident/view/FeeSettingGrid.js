@@ -1,9 +1,10 @@
 Ext.define("core.base.resident.view.FeeSettingGrid",{
 extend:"Ext.grid.Panel",
 alias:"widget.resident.feesettinggrid",
+store:"core.base.resident.store.SettingStore",
  tbar:[{xtype:'button',text:'一键清空',itemId:'clearBtn',iconCls:'table_remove'}],
  code:201,
-/*	columns : [{
+	columns : [{
 		width : 150,
 		dataIndex:"itemName",
 		text :'收费条目',
@@ -33,8 +34,8 @@ alias:"widget.resident.feesettinggrid",
 		align : 'center'
 	}
 	
-	 ],*/
-tools : [{type : 'gear'}],
+	 ],
+/*tools : [{type : 'gear'}],
     	listeners : {
 		 selectionChange : function(model, selected, eOpts){
 		  var viewModel=system.getViewModel(this.code)
@@ -205,7 +206,7 @@ tools : [{type : 'gear'}],
 			};	
 		this.callParent();
    	
-   }
+   }*/
     
 	
 })
