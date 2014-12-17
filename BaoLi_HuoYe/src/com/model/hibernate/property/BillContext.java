@@ -15,11 +15,13 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.model.hibernate.system.shared.EndUser;
 import com.ufo.framework.annotation.FieldInfo;
+import com.ufo.framework.annotation.TableInfo;
 import com.ufo.framework.common.model.BaseEntity;
 
 @DynamicInsert(value=true)
 @DynamicUpdate(value=true)
 @Entity
+@TableInfo(group = "收费管理", id = 300, title = "客户主表单")
 public class BillContext extends BaseEntity {
 	@Id
 	@GeneratedValue(generator = "increment")

@@ -39,8 +39,9 @@
 		  <mapping class="com.model.hibernate.property.FeesTypeItem"/>
 		  <mapping class="com.model.hibernate.property.MeterInfo"/>
 		  <mapping class="com.model.hibernate.property.SettingRendInfo"/>
-		  
 		   <mapping class="com.model.hibernate.property.FeesItemLink"/>
+		    <mapping class="com.model.hibernate.property.BillItem"/>
+		    <mapping class="com.model.hibernate.property.BillContext"/>
 		  
 		  
 		  
