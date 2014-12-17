@@ -13,6 +13,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
+import com.model.hibernate.system.shared.EndUser;
 import com.ufo.framework.annotation.FieldInfo;
 import com.ufo.framework.common.model.BaseEntity;
 
@@ -36,10 +37,64 @@ public class BillContext extends BaseEntity {
 	private double tf_realACount;
 	@FieldInfo(title = "应收金额", number =50)
 	private double tf_shouldCount;
-	
 	@FieldInfo(title = "备注", number =60)
 	private String tf_remark;
+	@JsonIgnore
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+	@JoinColumn(name = "userId",nullable=false)
+	@FieldInfo(title = "收费人员", number =70)
+	private EndUser tf_EndUser;
+	@FieldInfo(title = "收费时间", number =80)
+	private String  tf_feesTime;
+	public int getTf_billid() {
+		return tf_billid;
+	}
+	public void setTf_billid(int tf_billid) {
+		this.tf_billid = tf_billid;
+	}
+	public ResidentInfo getTf_ResidentInfo() {
+		return tf_ResidentInfo;
+	}
+	public void setTf_ResidentInfo(ResidentInfo tf_ResidentInfo) {
+		this.tf_ResidentInfo = tf_ResidentInfo;
+	}
+	public String getTf_month() {
+		return tf_month;
+	}
+	public void setTf_month(String tf_month) {
+		this.tf_month = tf_month;
+	}
+	public double getTf_realACount() {
+		return tf_realACount;
+	}
+	public void setTf_realACount(double tf_realACount) {
+		this.tf_realACount = tf_realACount;
+	}
+	public double getTf_shouldCount() {
+		return tf_shouldCount;
+	}
+	public void setTf_shouldCount(double tf_shouldCount) {
+		this.tf_shouldCount = tf_shouldCount;
+	}
+	public String getTf_remark() {
+		return tf_remark;
+	}
+	public void setTf_remark(String tf_remark) {
+		this.tf_remark = tf_remark;
+	}
+	public EndUser getTf_EndUser() {
+		return tf_EndUser;
+	}
+	public void setTf_EndUser(EndUser tf_EndUser) {
+		this.tf_EndUser = tf_EndUser;
+	}
+	public String getTf_feesTime() {
+		return tf_feesTime;
+	}
+	public void setTf_feesTime(String tf_feesTime) {
+		this.tf_feesTime = tf_feesTime;
+	}
 	
 	
-
+	
 }
