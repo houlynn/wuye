@@ -114,7 +114,16 @@ public class ModuleController implements LogerManager,CommonException {
 	@RequestMapping(value = "/fetchdata.do/{id}", method = RequestMethod.GET)
 	public @ResponseBody
 	Object getRecordById(String moduleName, @PathVariable("id") String id, HttpServletRequest request) {
-		log.debug("根据主键取得模块的一条记录:" + moduleName + "," + id);
+		
+		
+/*		List<Object> records = new ArrayList<Object>();
+		try {
+			records.add(moduleDAO.getModuleRecord("ResidentInfo", id, request).toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return records.get(0);*/
+	log.debug("根据主键取得模块的一条记录:" + moduleName + "," + id);
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("totalCount", 1);
 		List<Object> records = new ArrayList<Object>();
@@ -306,6 +315,20 @@ public class ModuleController implements LogerManager,CommonException {
 		return result;
 	}
 	*/
+	@RequestMapping("/loadUniteById.do/{rid}")
+	public @ResponseBody Object  loadUniteById(
+			 @PathVariable("rid") String rid,
+			HttpServletRequest request
+			){
+		List<Object> records = new ArrayList<Object>();
+		try {
+			records.add(moduleDAO.getModuleRecord("ResidentInfo", rid, request).toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return records.get(0);
+		
+	}
 	
 	
 	

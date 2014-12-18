@@ -65,7 +65,22 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 											   system.warnInfo("请选中房号进行查看");
 											   return;
 											}
-											
+											var rid=records[0].get("rid");
+										    var viewModel=system.getViewModel(104);
+							                var model=core.app.module.factory.ModelFactory.getModelByModule(viewModel.data);
+							                var resObje={};
+							                model.load(3, {
+						                         success: function(result) {
+						                        	
+						                        		var window = Ext.create('core.app.view.region.BaseWindow', {
+															viewModel:viewModel,
+														});
+														console.log(result);
+												       window.down('baseform').setData(result);
+												       window.show();
+						                         }
+						                       });
+										
 											
 										}
 									}, {
@@ -121,21 +136,18 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 		                 var uniteDatail= unitePanel.down("#uniteDetail");
 		                 var  from=unitePanel.down("#uniteFrom");
 		                 var rid=record.raw.rid;
-		                var m= core.app.module.factory.ModelFactory.getModelByModule("ResidentInfo");
-		                
-		              
-//var User = Ext.ModelManager.getModel('ResidentInfo');
-
-//Uses the configured RestProxy to make a GET request to /users/123
-m.load(1, {
-    success: function(user) {
-    	alert(user)
-        console.log(user.getId()); //logs 123
-    }
-});
-		                 var resObj=self.ajax({url:"unite/loadUniteById.action",params:{rid:rid}});
+		                 var viewModel=system.getViewModel(104);
+		                 var model=core.app.module.factory.ModelFactory.getModelByModule(viewModel.data);
+		                 model.load(rid, {
+                         success: function(result) {
+                        	 console.log(result);
+                        	 
+                        	 from.setData(result);
+                         }
+                       });
+		             /*    var resObj=self.ajax({url:"unite/loadUniteById.do",params:{rid:rid}});
 		                 console.log(resObj);
-		                 from.getForm().setValues(resObj);
+		                 from.getForm().setValues(resObj);*/
 		                 
 		                 
 		                 

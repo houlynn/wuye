@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -49,9 +50,9 @@ public class UnitFeesController  implements LogerManager{
 		return result;
 	}
 	
-	@RequestMapping("/loadUniteById")
+	@RequestMapping("/loadUniteById.action/{rid}")
 	public @ResponseBody Object  loadUniteById(
-			@RequestParam(value = "rid", required =true) String  rid,
+			 @PathVariable("rid") String rid,
 			HttpServletRequest request
 			){
 		List<Object> records = new ArrayList<Object>();
