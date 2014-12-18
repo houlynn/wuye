@@ -4,16 +4,25 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONSerializer;
+import net.sf.json.JsonConfig;
+
 import org.springframework.dao.DataAccessException;
+
 import com.aspect.ModuleAspect;
 import com.model.hibernate.system._Module;
 import com.ufo.framework.common.core.utils.ClassUtil;
+import com.ufo.framework.common.core.utils.StringUtil;
 import com.ufo.framework.system.ebo.ApplicationService;
+import com.ufo.framework.system.repertory.SqlModuleFilter;
 
 import ognl.Ognl;
 import ognl.OgnlException;
@@ -180,4 +189,36 @@ public class ModuleServiceFunction {
 		else
 			return object;
 	}
+	
+	public static List<SqlModuleFilter> changeToNavigateFilters(String str) {
+		List<SqlModuleFilter> result = new ArrayList<SqlModuleFilter>();
+		if (str != null && str.length() > 5) {
+			JsonConfig config = new JsonConfig();
+			config.setArrayMode(JsonConfig.MODE_OBJECT_ARRAY);
+			config.setRootClass(SqlModuleFilter.class);
+			SqlModuleFilter[] navigateFilters = (SqlModuleFilter[]) JSONSerializer.toJava(
+					JSONArray.fromObject(str), config);
+			// System.out.println(navigateFilters[0]);
+			for (SqlModuleFilter f : navigateFilters)
+				result.add(f);
+		}
+		result.parallelStream().forEach(item->System.out.println(item.getFilterSql()));
+		return result;
+	}
+	
+	public static  String getSortParam(String sortStr){
+		 SortParameter sorts[] = SortParameter.changeToSortParameters(sortStr);
+		 String result="";
+		for (SortParameter sort : sorts) {
+			result = result + sort.getProperty() + " "
+					+ sort.getDirection() + " , ";
+		}
+		if(StringUtil.isNotEmpty(result)){
+		result = result.substring(0, result.length() - 3);
+		}
+		return result;
+	}
+	
+	
+	
 }

@@ -31,6 +31,12 @@ public class UnitViewInfo {
 	 * 报修状态
 	 */
 	private String stateRepair;
+    /**
+     * 房号	
+     */
+	private String  number;
+	
+	
 
 
 	public int getRid() {
@@ -90,6 +96,16 @@ public class UnitViewInfo {
 
 	public void setStateRepair(String stateRepair) {
 		this.stateRepair = stateRepair;
+	}
+
+
+	public String getNumber() {
+		return number;
+	}
+
+
+	public void setNumber(String number) {
+		this.number = number;
 	}
 
 }

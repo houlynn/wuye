@@ -1,5 +1,8 @@
 Ext.define("core.base.resident.controller.ResidentFeesController", {
 	extend : "Ext.app.Controller",
+	mixins: {
+		suppleUtil:"core.util.SuppleUtil",
+	},
 	init : function() {
 		var self = this
 		alert(0);
@@ -8,9 +11,9 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 			"container[xtype=resident.unitlevelTree]":{
 				itemclick:function(treeview,node,item,index,e,eOpts){
 					var tree=treeview.ownerCt;
-					var gridModue=treeview.ownerCt.ownerCt.down("dataview[xtype=nuit.dataview]");
+					var dataView=treeview.ownerCt.ownerCt.down("dataview[xtype=nuit.dataview]");
 					var modue=system.getModuleDefine(node.raw.nodeInfo);
-		         var navigate={
+		           var navigate={
                 			moduleName:node.raw.nodeInfo,
                 			tableAsName:"_t"+modue.tf_moduleId,
                 			text:node.raw.text,
@@ -19,7 +22,7 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
                 		    equalsValue:node.raw.code,
                 		    isCodeLevel:false
                 	};
-                	var store=gridModue.store;
+                	var store=dataView.store;
                 	if(store.navigates){
                 		store.navigates.splice(0,store.navigates.length);
                 		store.navigates.push(navigate);
@@ -27,6 +30,7 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
                   	var proxy=store.getProxy();
                   	console.log(proxy.extraParams);
 					proxy.extraParams.navigates=Ext.encode(store.navigates);
+					proxy.extraParams.moduleType=node.raw.nodeInfoType
 					store.load();	  
 				}
 			},
@@ -111,7 +115,32 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 			           dataView.menu.showAt(e.getXY());
 			          e.stopEvent();
 		              },
+		            itemclick:function( view, record, item, index, e, eOpts ){
+		            	var unitePanel=view.ownerCt;
+		                 unitePanel.setTitle(record.get("number")+" "+record.get("rname"));
+		                 var uniteDatail= unitePanel.down("#uniteDetail");
+		                 var  from=unitePanel.down("#uniteFrom");
+		                 var rid=record.raw.rid;
+		                var m= core.app.module.factory.ModelFactory.getModelByModule("ResidentInfo");
+		                
 		              
+//var User = Ext.ModelManager.getModel('ResidentInfo');
+
+//Uses the configured RestProxy to make a GET request to /users/123
+m.load(1, {
+    success: function(user) {
+    	alert(user)
+        console.log(user.getId()); //logs 123
+    }
+});
+		                 var resObj=self.ajax({url:"unite/loadUniteById.action",params:{rid:rid}});
+		                 console.log(resObj);
+		                 from.getForm().setValues(resObj);
+		                 
+		                 
+		                 
+		          
+		            },    
 		              
 		              
 					}

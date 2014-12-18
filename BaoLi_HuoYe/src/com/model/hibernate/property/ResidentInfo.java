@@ -86,9 +86,6 @@ public class ResidentInfo  extends BaseEntity{
 	@FieldInfo(title = "房号", uniqueField = true, number = 160)
 	@Column(length = 50, nullable = false)
 	private String tf_number;
-	@FieldInfo(title = "房屋状态", number = 170)
-	@Column(length = 25)
-    private String tf_state;
 	@FieldInfo(title = "房屋编码", number = 180)
 	@Column(length = 50)
     private String tf_code;
@@ -109,6 +106,34 @@ public class ResidentInfo  extends BaseEntity{
 	@FieldInfo(title = "认购日期", number = 250)
 	@Column(length = 50)
     private String tf_subsDate;
+	
+	/////////////////房屋状态//////////////////////////////////
+	@FieldInfo(title = "备用状态", number = 170)
+	@Column(length = 25)
+    private String tf_state;
+    /**
+     * 入住状态
+     */
+	@FieldInfo(title = "入住状态", number = 170)
+	@Column(length = 25)
+	private String tf_stateOccupancy;
+	
+	/**
+	 * 欠费状态
+	 */
+	@FieldInfo(title = "欠费状态", number = 170)
+	@Column(length = 25)
+	private String tf_stateFees;
+	
+	
+	/**
+	 * 报修状态
+	 */
+	@FieldInfo(title = "报修状态", number = 170)
+	@Column(length = 25)
+	private String tf_stateRepair;
+	
+	
 	
 	@JsonIgnore
 	@ManyToOne(optional=true,fetch=FetchType.LAZY)
@@ -336,6 +361,30 @@ public class ResidentInfo  extends BaseEntity{
 
 	public void setTf_FeesTypeItems(Set<FeesTypeItem> tf_FeesTypeItems) {
 		this.tf_FeesTypeItems = tf_FeesTypeItems;
+	}
+
+	public String getTf_stateOccupancy() {
+		return tf_stateOccupancy;
+	}
+
+	public void setTf_stateOccupancy(String tf_stateOccupancy) {
+		this.tf_stateOccupancy = tf_stateOccupancy;
+	}
+
+	public String getTf_stateFees() {
+		return tf_stateFees;
+	}
+
+	public void setTf_stateFees(String tf_stateFees) {
+		this.tf_stateFees = tf_stateFees;
+	}
+
+	public String getTf_stateRepair() {
+		return tf_stateRepair;
+	}
+
+	public void setTf_stateRepair(String tf_stateRepair) {
+		this.tf_stateRepair = tf_stateRepair;
 	}
 	
 	

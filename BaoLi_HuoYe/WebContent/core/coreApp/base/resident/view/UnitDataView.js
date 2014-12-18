@@ -11,10 +11,11 @@ Ext.define("core.base.resident.view.UnitDataView", {
 					'<tpl for=".">',
 					'<div class="phone">',
 					(!Ext.isIE6
-							? '<img width="64" height="64" src="images/phones/{[values.name.replace(/ /g, "-")]}.png" />'
-							: '<div style="width:74px;height:74px;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'images/phones/{[values.name.replace(/ /g, "-")]}.png\',sizingMethod=\'scale\')"></div>'),
-					'<strong>{name}</strong>',
-					'<span>{price:usMoney} ({reviews} Review{[values.reviews == 1 ? "" : "s"]})</span>',
+							? '<img width="64" height="64" src="{iamgUrl}" />'
+							: '<div style="width:74px;height:74px;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'{iamgUrl}\',sizingMethod=\'scale\')"></div>'),
+					'<strong>业主姓名：{rname}</strong>',
+					'<span>房号{number}</span>',
+					'<span>房间状态信息:{stateOccupancy} {stateFees} {stateRepair}</span>',
 					'</div>', '</tpl>'),
 	plugins : [Ext.create('Ext.ux.DataView.Animated', {
 				duration : 550,
