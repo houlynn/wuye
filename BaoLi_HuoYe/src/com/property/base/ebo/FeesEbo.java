@@ -31,12 +31,6 @@ import com.ufo.framework.system.shared.module.DataFetchResponseInfo;
 @Service
 public class FeesEbo implements FeesEbi,CommonException {
 	
-	
-	private static final String  FEES_TYPE_WATER="001";//水费
-	private static final String  FEES_TYPE_POWER="002";//电费
-	private static final String  FEES_TYPE_COAL="003";//煤气费
-	
-	
 	@Resource(name="ebo")
 	private Ebi ebi;
 
@@ -49,7 +43,7 @@ public class FeesEbo implements FeesEbi,CommonException {
 		DataFetchResponseInfo responseInfo=new DataFetchResponseInfo();
 		SortParameter sorts[] = SortParameter.changeToSortParameters(sort);
 		List<SqlModuleFilter> navigateFilters=  changeToNavigateFilters(navigates);
-		String hql=" from MeterInfo where 1=1 and tf_mtype='"+FEES_TYPE_WATER+"'"+getCurrentXcodeSql();
+		String hql=" from MeterInfo where 1=1 and tf_mtype='"+MeterInfo.FEES_TYPE_WATER+"'"+getCurrentXcodeSql();
 		String whereSql="";
 		if("0".equals(nodeInfoType)){
 			SqlModuleFilter nav=navigateFilters.get(0);
@@ -79,7 +73,7 @@ public class FeesEbo implements FeesEbi,CommonException {
 				itemView.put("tf_state", item.getTf_state());
 				itemView.put("tf_acount", item.getTf_acount());
 				itemView.put("tf_remark", item.getTf_remark());
-				itemView.put("tf_mtype", FEES_TYPE_WATER);
+				itemView.put("tf_mtype", MeterInfo.FEES_TYPE_WATER);
 				return itemView;
 			}).collect(Collectors.toList());
 			

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.model.hibernate.property.FeesInfo;
 import com.model.hibernate.property.FeesTypeItem;
+import com.model.hibernate.property.MeterInfo;
 import com.model.hibernate.property.ResidentInfo;
 import com.property.base.ebi.UnitFeesEbi;
 import com.property.base.vo.UnitViewInfo;
@@ -84,31 +85,39 @@ public class UniteFeesEbo implements UnitFeesEbi {
 	 * 产生用欠费信息
 	 * @throws Exception 
 	 */
-public 	DataFetchResponseInfo loadUniteFees(int rid) throws Exception{
+public 	DataFetchResponseInfo addUniteFees(int rid) throws Exception{
 	DataFetchResponseInfo reuslt=new DataFetchResponseInfo();
 	String hql_ft=" from FeesTypeItem where 1=1 and tf_ResidentInfo="+rid;
 	SimpleDateFormat sdd=new SimpleDateFormat("yyyy-MM-dd");
 	SimpleDateFormat sdm=new SimpleDateFormat("yyyy-MM");
+	//取当前时间为结束天
 	String endTime=sdd.format(new Date());
+	//取当前时间为结束月
 	String endMonth=sdm.format(new Date());
+	//获取业主收费项目
 	List<FeesTypeItem> fessItems=(List<FeesTypeItem>) ebi.queryByHql(hql_ft);
 	//遍历业主收费项目
+	List<BillItem> bills=new ArrayList<>();
 	fessItems.forEach(item->{
+	int feesid=item.getTf_FeesInfo().getTf_feesid();
+	//开始时间	
 	String start=item.getTf_beginDate();
+	//结束时间
 	String end=item.getTf_endDate();
 	int reslut= endMonth.compareTo(end);
 	String startDate=start+"-01";
 	String endDate=end+"-01";
-	List<BillItem> bills=new ArrayList<>();
 	if(reslut<0){
 		endDate=endTime;
 	}
 	//取得至今收费周期
 	List<String> months=AppUtils.getMonthList(startDate, endDate);
 	for(String m : months){
-		String nchql=" select count(*) from BillItem where 1=1 and tf_state='1' and tf_feesDate='"+m+"'";
-		String ochql=" select count(*) from BillItem where 1=1 and tf_state='0' and tf_feesDate='"+m+"'";
-		String ohql="from BillItem where 1=1 and tf_state='0' and tf_feesDate='"+m+"'";
+		//已收项目
+		String nchql=" select count(*) from BillItem where 1=1 and tf_state='1' and tf_FeesInfo="+feesid+" and tf_feesDate='"+m+"'";
+		//未收项目
+		String ochql=" select count(*) from BillItem where 1=1 and tf_state='0'  and tf_FeesInfo="+feesid+" and tf_feesDate='"+m+"'";
+		String ohql="from BillItem where 1=1 and tf_state='0' and tf_FeesInfo="+feesid+"  and tf_feesDate='"+m+"'";
 		Integer count=0;
 		try {
 		 count=ebi.getCount(nchql);
@@ -126,40 +135,50 @@ public 	DataFetchResponseInfo loadUniteFees(int rid) throws Exception{
 		    	bill.setTf_FeesInfo(item.getTf_FeesInfo());//收费标准
 		    	bill.setTf_state("0");//收费状态
 		    	bill.addXcode();//物业标示
-		    	String feesType=item.getTf_FeesInfo().get
-		    	//////////////////////查找当月的 电表 水表 煤气表 //////////////////////////////
-		    	String mhql="from MeterInfo where 1=1 and  tf_rendDate='"+m+"' and tf_FeesInfo="+item.getTf_FeesInfo().getTf_feesid()+" and tf_ResidentInfo="+rid;
-		    	//找不到 是其他费用如物业费 或本月没有结束抄表
-		    	
-		    	
-		    	
-		    	
-		    	
-		    	
-		    	
-		    	
-		    	
-		    	
-		    	
-		    	
-		    	
-		    	
-		    	
-		    	
-		    	
+		    	String feesType=item.getTf_FeesInfo().getTf_feesTyep();
+		    	//费用为抄表类型
+		    	if(FeesInfo.FB.equals(feesType)){
+		    		//////////////////////查找当月的 电表 水表 煤气表 //////////////////////////////
+			    	String mhql="from MeterInfo where 1=1 and  tf_rendDate='"+m+"' and tf_FeesInfo="+item.getTf_FeesInfo().getTf_feesid()+" and tf_ResidentInfo="+rid;
+			    	List<MeterInfo> mlist= (List<MeterInfo>) ebi.queryByHql(mhql);
+			    	if(mlist!=null&&mlist.size()>0){
+			    		MeterInfo meterInfo=mlist.get(0);
+			    		bill.setTf_MeterInfo(meterInfo);
+			    	}else{
+			    		continue;
+			    	}
+		    		
+		    	}else if(FeesInfo.FC.equals(feesType)){
+		    		//非抄表类型只算单价作为收费金额
+		    		String hql=" from MeterInfo where 1=1 and tf_mtype='"+MeterInfo.FEES_TYPE_NOBLL+"' and tf_rendDate"+m+"'and tf_FeesInfo="+item.getTf_FeesInfo().getTf_feesid();
+		    		List<MeterInfo> mlist= (List<MeterInfo>) ebi.queryByHql(hql);
+		    		if(mlist!=null&&mlist.size()>0){
+			    		MeterInfo meterInfo=mlist.get(0);
+			    		bill.setTf_MeterInfo(meterInfo);
+			    		}else{
+			    			MeterInfo meterInfo=new MeterInfo();
+			    			meterInfo.setTf_acount(item.getTf_FeesInfo ().getTf_price());
+			    			meterInfo.setTf_mtermane(item.getTf_FeesInfo().getTf_freesName());
+			    			meterInfo.setTf_FeesInfo(item.getTf_FeesInfo());
+			    			ResidentInfo residentInfo=new ResidentInfo();
+			    			residentInfo.setTf_residentId(rid);
+			    			meterInfo.setTf_ResidentInfo(residentInfo);
+			    			ebi.save(meterInfo);
+			    			bill.setTf_MeterInfo(meterInfo);
+			    		}
+		    		    ebi.save(bill);
+					    bills.add(bill);
+		    	}
 		    }
-		  
 		 }
-			 
-		 
-		 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-		
-		
 	});
+	
+	reuslt.setTotalRows(bills.size());
+	reuslt.setMatchingObjects(bills);
 	return reuslt;
 }
 	

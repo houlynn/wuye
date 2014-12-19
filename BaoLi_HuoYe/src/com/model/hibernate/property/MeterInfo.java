@@ -8,10 +8,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
+
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
+
 import com.ufo.framework.annotation.FieldInfo;
 import com.ufo.framework.annotation.TableInfo;
 import com.ufo.framework.common.core.ext.ExtFieldType;
@@ -23,6 +25,12 @@ import com.ufo.framework.common.model.BaseEntity;
 @DynamicInsert(true)
 @TableInfo(group = "抄表管理", id =201, title = "抄表信息")
 public class MeterInfo extends BaseEntity {
+	public static final String  FEES_TYPE_NOBLL="000";//煤气费
+	public static final String  FEES_TYPE_WATER="001";//水费
+	public static final String  FEES_TYPE_POWER="002";//电费
+	public static final String  FEES_TYPE_COAL="003";//煤气费
+	
+	
 	@Id
 	@GeneratedValue(generator = "increment")
 	@GenericGenerator(name = "increment", strategy = "increment")

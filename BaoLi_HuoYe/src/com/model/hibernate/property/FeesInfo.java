@@ -24,6 +24,8 @@ import com.ufo.framework.common.model.BaseEntity;
 @TableInfo(group="基础信息",id=106,title="收费标准")
 @Entity
 public class FeesInfo extends BaseEntity {
+	public static final String FB="001";
+	public static final String FC="000";
 	@DDItemCode
 	@Id
 	@GeneratedValue(generator = "increment")
