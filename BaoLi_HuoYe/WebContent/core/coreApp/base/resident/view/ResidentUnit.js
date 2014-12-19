@@ -21,7 +21,7 @@ Ext.define("core.base.resident.view.ResidentUnit", {
 									xtype : "tabpanel",
 									region : "south",
 									height:300,
-									items : [{
+									items : [/*{
 												title : "客户详细信息",
 												itemId:"uniteDetail",
 												items:[{
@@ -30,7 +30,7 @@ Ext.define("core.base.resident.view.ResidentUnit", {
 							                    viewModel : system.getViewModel(104),
 							                    formScheme : system.getViewModel(104).get('tf_formSchemes')[0]
 												}]
-											},
+											},*/
 											{
 												title : "收费历史"
 											},

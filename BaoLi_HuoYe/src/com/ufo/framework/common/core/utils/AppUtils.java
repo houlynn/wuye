@@ -1079,5 +1079,34 @@ public class AppUtils {
 	    	        calendar.add(Calendar.DATE, (-index));
 	    	        return calendar.getTime();
 	    	    }
+	    
+	    /**
+	     * 获取月份列表
+	     */
+	    public static List<String>  getMonthList(String beginTime, String endTime) {  
+	        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
+	        SimpleDateFormat monthFormat = new SimpleDateFormat("yyyy-MM");  
+	        List<String> monthList = new ArrayList<String>();  
+	        try {  
+	            Date begin = format.parse(beginTime);  
+	            Date end = format.parse(endTime);  
+	            int months = (end.getYear() - begin.getYear()) * 12  
+	                    + (end.getMonth() - begin.getMonth());  
+	              
+	            for (int i = 0; i <= months; i++) {  
+	                Calendar calendar = Calendar.getInstance();    
+	                calendar.setTime(begin);    
+	                calendar.add(Calendar.MONTH, i);  
+	                monthList.add(monthFormat.format(calendar.getTime()));  
+	            }  
+	  
+	        } catch (ParseException e) {  
+	            e.printStackTrace();  
+	        }  
+	  
+	        return monthList;  
+	    } 
+	    
+	    
 
 }

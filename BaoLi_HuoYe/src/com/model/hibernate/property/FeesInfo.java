@@ -44,6 +44,10 @@ public class FeesInfo extends BaseEntity {
   @JoinColumn(name = "tf_viid",nullable=false)
  @FieldInfo(title = "所属小区", number = 120)
 	 private Village tf_Village;
+    
+    
+    private String tf_feesTyep;
+    
 	 public String getTf_remark() {
 		return tf_remark;
 	}
@@ -82,6 +86,14 @@ public class FeesInfo extends BaseEntity {
 
 	public void setTf_Village(Village tf_Village) {
 		this.tf_Village = tf_Village;
+	}
+
+	public String getTf_feesTyep() {
+		return tf_feesTyep;
+	}
+
+	public void setTf_feesTyep(String tf_feesTyep) {
+		this.tf_feesTyep = tf_feesTyep;
 	}
 	
 	

@@ -35,11 +35,14 @@ public class BillItem extends BaseEntity {
 	private FeesInfo tf_FeesInfo;
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JoinColumn(name = "tf_MeterId",nullable=false)
-	@FieldInfo(title = "收费标准", number =30)
+	@FieldInfo(title = "抄表信息", number =30)
 	private MeterInfo tf_MeterInfo;
 	@Column(length=25,nullable=false)
 	@FieldInfo(title = "收费状态", number =40)
 	private String tf_state;
+	@Column(length=25,nullable=false)
+	@FieldInfo(title = "收费日期", number =40)
+	private String tf_feesDate;
 	
 /*	@Transient
 	private String tf_feesType;
@@ -80,6 +83,13 @@ public class BillItem extends BaseEntity {
 	public void setTf_state(String tf_state) {
 		this.tf_state = tf_state;
 	}
+	public String getTf_feesDate() {
+		return tf_feesDate;
+	}
+	public void setTf_feesDate(String tf_feesDate) {
+		this.tf_feesDate = tf_feesDate;
+	}
+	
 /*	public String getTf_feesType() {
 		return tf_feesType;
 	}

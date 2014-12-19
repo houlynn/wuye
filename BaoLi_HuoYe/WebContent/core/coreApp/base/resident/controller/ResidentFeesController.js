@@ -65,10 +65,10 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 											   system.warnInfo("请选中房号进行查看");
 											   return;
 											}
-											var rid=records[0].get("rid");
+											var rid=records[0].raw.rid;
 										    var viewModel=system.getViewModel(104);
 							                var model=core.app.module.factory.ModelFactory.getModelByModule(viewModel.data);
-							                var resObje={};
+							     /*           var resObje={};
 							                model.load(3, {
 						                         success: function(result) {
 						                        	
@@ -79,8 +79,33 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 												       window.down('baseform').setData(result);
 												       window.show();
 						                         }
-						                       });
-										
+						                       });*/
+			            model.load(rid, {
+					    scope: this,
+					    failure: function(record, operation) {
+					        //do something if the load failed
+					        //record is null
+					    },
+					    success: function(record, operation) {
+					    	   /*  var obje=Ext.decode(Ext.value(record.raw,'{}'));
+					    	     alert(obje);
+					    		 from.setData(record);*/
+					    			var window = Ext.create('core.app.view.region.BaseWindow', {
+															viewModel:viewModel,
+															grid:dataView
+														});
+														 var obje=Ext.decode(Ext.value(record.raw,'{}'));
+														 record.data=obje;
+												       window.down('baseform').setData(record);
+												       window.show();
+					    		 
+					        //do something if the load succeeded
+					    },
+					    callback: function(record, operation, success) {
+					        //do something whether the load succeeded or failed
+					        //if operation is unsuccessful, record is null
+					    }
+					});
 											
 										}
 									}, {
@@ -94,6 +119,13 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 											   system.warnInfo("请选中房号进行收费");
 											   return;
 											}
+											uniteFees();
+											
+											
+											
+											
+											
+											
 											
 											
 										}
@@ -138,17 +170,6 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 		                 var rid=record.raw.rid;
 		                 var viewModel=system.getViewModel(104);
 		                 var model=core.app.module.factory.ModelFactory.getModelByModule(viewModel.data);
-		                 model.load(rid, {
-                         success: function(result) {
-                        	 console.log(result);
-                        	 
-                        	 from.setData(result);
-                         }
-                       });
-		             /*    var resObj=self.ajax({url:"unite/loadUniteById.do",params:{rid:rid}});
-		                 console.log(resObj);
-		                 from.getForm().setValues(resObj);*/
-		                 
 		                 
 		                 
 		          
@@ -161,6 +182,37 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 	views : ["core.base.resident.view.ResidentUnit",
 	          'core.base.resident.view.LevelTree',
 	          "core.base.resident.view.UnitLevelTree",
-			"core.base.resident.view.UnitDataView"],
+			"core.base.resident.view.UnitDataView",
+			 "core.base.resident.view.UniteFeesForm",
+			 "core.base.resident.view.UniteFeesGrid"
+			],
 	stores : ["core.base.resident.store.UnitStore",'core.base.resident.store.LevelStore',]
 });
+
+function uniteFees(){
+	  var win= Ext.createWidget("window",{
+	  	title:"客户收费",
+	  	width:600,
+	   autoHeight:true,
+	  	items:[{
+	  	 xtype:"unite.unitefeesfrom"
+	  	}],
+	  });
+	  win.show();
+	  
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

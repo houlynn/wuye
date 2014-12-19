@@ -1,25 +1,22 @@
 package com.property.base.ebo;
+import com.model.hibernate.property.BillItem;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
-
-
 import javax.annotation.Resource;
-
-
-
 
 import org.springframework.stereotype.Service;
 
-
-
-
+import com.model.hibernate.property.FeesInfo;
+import com.model.hibernate.property.FeesTypeItem;
 import com.model.hibernate.property.ResidentInfo;
 import com.property.base.ebi.UnitFeesEbi;
 import com.property.base.vo.UnitViewInfo;
+import com.ufo.framework.common.core.utils.AppUtils;
 import com.ufo.framework.common.core.web.ModuleServiceFunction;
 import com.ufo.framework.common.core.web.SortParameter;
 import com.ufo.framework.system.ebi.Ebi;
@@ -82,6 +79,89 @@ public class UniteFeesEbo implements UnitFeesEbi {
 	}
 	return responseInfo;
 	}
+	
+	/**
+	 * 产生用欠费信息
+	 * @throws Exception 
+	 */
+public 	DataFetchResponseInfo loadUniteFees(int rid) throws Exception{
+	DataFetchResponseInfo reuslt=new DataFetchResponseInfo();
+	String hql_ft=" from FeesTypeItem where 1=1 and tf_ResidentInfo="+rid;
+	SimpleDateFormat sdd=new SimpleDateFormat("yyyy-MM-dd");
+	SimpleDateFormat sdm=new SimpleDateFormat("yyyy-MM");
+	String endTime=sdd.format(new Date());
+	String endMonth=sdm.format(new Date());
+	List<FeesTypeItem> fessItems=(List<FeesTypeItem>) ebi.queryByHql(hql_ft);
+	//遍历业主收费项目
+	fessItems.forEach(item->{
+	String start=item.getTf_beginDate();
+	String end=item.getTf_endDate();
+	int reslut= endMonth.compareTo(end);
+	String startDate=start+"-01";
+	String endDate=end+"-01";
+	List<BillItem> bills=new ArrayList<>();
+	if(reslut<0){
+		endDate=endTime;
+	}
+	//取得至今收费周期
+	List<String> months=AppUtils.getMonthList(startDate, endDate);
+	for(String m : months){
+		String nchql=" select count(*) from BillItem where 1=1 and tf_state='1' and tf_feesDate='"+m+"'";
+		String ochql=" select count(*) from BillItem where 1=1 and tf_state='0' and tf_feesDate='"+m+"'";
+		String ohql="from BillItem where 1=1 and tf_state='0' and tf_feesDate='"+m+"'";
+		Integer count=0;
+		try {
+		 count=ebi.getCount(nchql);
+		 if(count==1){
+			 continue;//如果已经收过了不添加
+		 }else{
+		  count=ebi.getCount(ochql);
+		     if(count==1){
+			    List<BillItem> listItem= (List<BillItem>) ebi.queryByHql(ohql);
+			    bills.add(listItem.get(0));//如何没收但是记录已经经存在则添加
+		    }else{
+		    	//如何未收但是记录不存在产生一条收费记录
+		    	BillItem bill=new BillItem();
+		    	bill.setTf_feesDate(m);//收费周期
+		    	bill.setTf_FeesInfo(item.getTf_FeesInfo());//收费标准
+		    	bill.setTf_state("0");//收费状态
+		    	bill.addXcode();//物业标示
+		    	String feesType=item.getTf_FeesInfo().get
+		    	//////////////////////查找当月的 电表 水表 煤气表 //////////////////////////////
+		    	String mhql="from MeterInfo where 1=1 and  tf_rendDate='"+m+"' and tf_FeesInfo="+item.getTf_FeesInfo().getTf_feesid()+" and tf_ResidentInfo="+rid;
+		    	//找不到 是其他费用如物业费 或本月没有结束抄表
+		    	
+		    	
+		    	
+		    	
+		    	
+		    	
+		    	
+		    	
+		    	
+		    	
+		    	
+		    	
+		    	
+		    	
+		    	
+		    	
+		    	
+		    }
+		  
+		 }
+			 
+		 
+		 
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+		
+		
+	});
+	return reuslt;
+}
 	
 	
 }

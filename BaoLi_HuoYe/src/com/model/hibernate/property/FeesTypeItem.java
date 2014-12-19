@@ -14,6 +14,14 @@ import org.hibernate.annotations.GenericGenerator;
 import com.ufo.framework.annotation.FieldInfo;
 import com.ufo.framework.common.core.ext.ExtFieldType;
 import com.ufo.framework.common.model.BaseEntity;
+
+/**
+ * 业主-收费项目
+ *
+* @author HouLynn
+* @date 2014年12月19日
+  @version 1.0
+ */
 @Entity
 @DynamicInsert(true)
 @DynamicUpdate(true)
