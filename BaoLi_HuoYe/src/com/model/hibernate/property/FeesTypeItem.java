@@ -34,8 +34,8 @@ public class FeesTypeItem extends BaseEntity {
 	
 	@JsonIgnore
     @ManyToOne(optional=false)
-    @JoinColumn(name="tf_residentId")
-   @FieldInfo(title = "业主", number = 20)
+    @JoinColumn(name="tf_residentId",nullable=false)
+    @FieldInfo(title = "业主", number = 20)
 	private ResidentInfo tf_ResidentInfo;
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinColumn(name = "tf_feesid",nullable=false)

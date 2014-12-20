@@ -5,7 +5,7 @@ public class UnitViewInfo {
 	/**
 	 * 业主ID
 	 */
-	private int rid;
+	private Integer rid;
 	/**
 	 * 单元图片
 	 */
@@ -44,7 +44,7 @@ public class UnitViewInfo {
 	}
 
 
-	public void setRid(int rid) {
+	public void setRid(Integer rid) {
 		this.rid = rid;
 	}
 

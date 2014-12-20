@@ -47,7 +47,6 @@ public class FeesController implements LogerManager, CommonException {
 	public Ebi getEbi() {
 		return ebi;
 	}
-
 	@Autowired
 	private FeesEbi feeEbi;
 

@@ -6,7 +6,6 @@ Ext.define("core.app.base.BaseForm",{
 	autoScroll : true,
 	animCollapse : false,
 	animate:false,
-	animate:false,
 	bodyPadding : '10 20 0 20',
 	defaults:{
 		    labelSeparator :": ",

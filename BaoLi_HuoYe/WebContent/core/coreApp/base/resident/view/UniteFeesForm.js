@@ -1,7 +1,9 @@
 Ext.define('core.base.resident.view.UniteFeesForm', {
 	extend : "Ext.form.Panel",
 	alias : 'widget.unite.unitefeesfrom',
+	border:!1,
 	tbar : [],
+	 autoHeight:true,
 	fieldDefaults : {
 		labelWidth : 80,
 		labelAlign : "right"
@@ -10,21 +12,6 @@ Ext.define('core.base.resident.view.UniteFeesForm', {
 		var me = this;
 		this.buttons = [];
 		var self = this;
-		this.buttons.push({
-					text : '设置',
-					itemId : 'save',
-					ref : "settingBtan",
-					glyph : 0xf0c7,
-					handler : function(button) {
-					}
-				}, {
-					text : '取消',
-					itemId : 'close',
-					glyph : 0xf148,
-					handler : function(button) {
-						button.up('window').hide();
-					}
-				});
 		me.bodyStyle = 'padding : 5px 5px 0';
 		me.callParent(arguments);
 		//var grid = this.down("gridpanel[xtype=resident.feesettinggrid]");
@@ -75,11 +62,13 @@ Ext.define('core.base.resident.view.UniteFeesForm', {
 
 						{
 							xtype : 'fieldset',
-							autoHeight : true,
 							title : '选择收费条目',
+							autoHeight : true,
 							items : [{
 										xtype : "fieldcontainer",
 										layout : "hbox",
+										autoHeight : true,
+							            grow: true, 
 										items : [{
 													xtype : "unite.unitefeesgrid",
 													flex : 2

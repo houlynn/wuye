@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
@@ -26,39 +27,49 @@ public class BillItem extends BaseEntity {
 	@Id
 	@GeneratedValue(generator = "increment")
 	@GenericGenerator(name = "increment", strategy = "increment")
-	@FieldInfo(title = "ID号", number = 10, hidden = true)
+	@FieldInfo(title = "ID号", number = 90, hidden = true)
 	private int tf_billitemid;
 	
+	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JoinColumn(name = "tf_feesid",nullable=false)
-	@FieldInfo(title = "收费标准", number =20)
+	@FieldInfo(title = "收费标准", number =100)
 	private FeesInfo tf_FeesInfo;
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JoinColumn(name = "tf_MeterId",nullable=false)
-	@FieldInfo(title = "抄表信息", number =30)
+	@FieldInfo(title = "抄表信息", number =1010)
 	private MeterInfo tf_MeterInfo;
 	@Column(length=25,nullable=false)
-	@FieldInfo(title = "收费状态", number =40)
+	@FieldInfo(title = "收费状态", number =1120)
 	private String tf_state;
 	@Column(length=25,nullable=false)
-	@FieldInfo(title = "收费日期", number =40)
+	@FieldInfo(title = "收费周期", number =130)
 	private String tf_feesDate;
 	
-/*	@Transient
+	@Transient
+	@FieldInfo(title = "类型", number =10)
 	private String tf_feesType;
 	@Transient
+	@FieldInfo(title = "开始时间", number =30)
 	private String tf_startDate;
 	@Transient
+	@FieldInfo(title = "结束时间", number =40)
 	private String tf_endDate;
 	@Transient
+	@FieldInfo(title = "名称", number =20,uniqueField=true)
 	private String tf_feesName;
+	@FieldInfo(title = "单价", number =50)
+	private double tf_price;
 	@Transient
-	private String tf_price;
-	@Transient
+	@FieldInfo(title = "起码", number =60)
 	private String tf_startNuber;
 	@Transient
-	private String tf_endNuber;*/
-	
+	@FieldInfo(title = "止码", number =70)
+	private String tf_endNuber;
+	@FieldInfo(title = "数量", number =70)
+	private String tf_count;
+	@FieldInfo(title = "小计", number =80)
+	private double tf_acount;
 	public int getTf_billitemid() {
 		return tf_billitemid;
 	}
@@ -90,7 +101,7 @@ public class BillItem extends BaseEntity {
 		this.tf_feesDate = tf_feesDate;
 	}
 	
-/*	public String getTf_feesType() {
+	public String getTf_feesType() {
 		return tf_feesType;
 	}
 	public void setTf_feesType(String tf_feesType) {
@@ -114,12 +125,6 @@ public class BillItem extends BaseEntity {
 	public void setTf_feesName(String tf_feesName) {
 		this.tf_feesName = tf_feesName;
 	}
-	public String getTf_price() {
-		return tf_price;
-	}
-	public void setTf_price(String tf_price) {
-		this.tf_price = tf_price;
-	}
 	public String getTf_startNuber() {
 		return tf_startNuber;
 	}
@@ -131,8 +136,24 @@ public class BillItem extends BaseEntity {
 	}
 	public void setTf_endNuber(String tf_endNuber) {
 		this.tf_endNuber = tf_endNuber;
-	}*/
-
-	
+	}
+	public String getTf_count() {
+		return tf_count;
+	}
+	public void setTf_count(String tf_count) {
+		this.tf_count = tf_count;
+	}
+	public double getTf_acount() {
+		return tf_acount;
+	}
+	public void setTf_acount(double tf_acount) {
+		this.tf_acount = tf_acount;
+	}
+	public double getTf_price() {
+		return tf_price;
+	}
+	public void setTf_price(double tf_price) {
+		this.tf_price = tf_price;
+	}
 
 }

@@ -19,13 +19,20 @@ import com.ufo.framework.annotation.FieldInfo;
 import com.ufo.framework.annotation.TableInfo;
 import com.ufo.framework.common.model.BaseEntity;
 
+/**
+* @author HouLynn
+* @date 2014年12月20日
+  @version 1.0
+ */
 @DynamicInsert(true)
 @DynamicUpdate(true)
 @TableInfo(group="基础信息",id=106,title="收费标准")
 @Entity
 public class FeesInfo extends BaseEntity {
-	public static final String FB="001";
-	public static final String FC="000";
+	public static final String FB="001";//抄表类型
+	public static final String FC="000";//单位*建筑面积 如物业费
+	public static final String FM="002";//金额收取
+	
 	@DDItemCode
 	@Id
 	@GeneratedValue(generator = "increment")
@@ -43,13 +50,17 @@ public class FeesInfo extends BaseEntity {
 	 @Column(length=900)
 	 private String tf_remark;
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-  @JoinColumn(name = "tf_viid",nullable=false)
- @FieldInfo(title = "所属小区", number = 120)
-	 private Village tf_Village;
-    
-    
-    private String tf_feesTyep;
-    
+    @JoinColumn(name = "tf_viid",nullable=false)
+    @FieldInfo(title = "所属小区", number = 120)
+	private Village tf_Village;
+	/**
+	 * 收费项目计量方式 
+	 * 抄表类型
+	 * 单位*建筑面积
+	 * 金额收取  
+	 */
+    @FieldInfo(title = "计量方式", number = 10,nullAble=false)
+    private String tf_feesType;
 	 public String getTf_remark() {
 		return tf_remark;
 	}
@@ -90,13 +101,11 @@ public class FeesInfo extends BaseEntity {
 		this.tf_Village = tf_Village;
 	}
 
-	public String getTf_feesTyep() {
-		return tf_feesTyep;
+	public String getTf_feesType() {
+		return tf_feesType;
 	}
 
-	public void setTf_feesTyep(String tf_feesTyep) {
-		this.tf_feesTyep = tf_feesTyep;
+	public void setTf_feesType(String tf_feesType) {
+		this.tf_feesType = tf_feesType;
 	}
-	
-	
 }

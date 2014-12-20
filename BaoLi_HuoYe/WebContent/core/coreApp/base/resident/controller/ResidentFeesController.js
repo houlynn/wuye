@@ -55,10 +55,10 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 			if (!dataView.menu) {
 				dataView.menu = new Ext.menu.Menu({
 							items : [{
-										text : '查看业主详细信息',
-										iconCls : 'return',
-										itemId : 'query',
-										handler:function( item, e, eOpts ){
+										 text : '查看业主详细信息',
+										 iconCls : 'return',
+										 itemId : 'query',
+										 handler:function( item, e, eOpts ){
 											var dataView= Ext.getCmp("phones");
 											var records=dataView. getSelectionModel().getSelection();
 											if(records.length==0){
@@ -68,47 +68,24 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 											var rid=records[0].raw.rid;
 										    var viewModel=system.getViewModel(104);
 							                var model=core.app.module.factory.ModelFactory.getModelByModule(viewModel.data);
-							     /*           var resObje={};
-							                model.load(3, {
-						                         success: function(result) {
-						                        	
-						                        		var window = Ext.create('core.app.view.region.BaseWindow', {
-															viewModel:viewModel,
-														});
-														console.log(result);
-												       window.down('baseform').setData(result);
-												       window.show();
-						                         }
-						                       });*/
-			            model.load(rid, {
-					    scope: this,
-					    failure: function(record, operation) {
-					        //do something if the load failed
-					        //record is null
-					    },
-					    success: function(record, operation) {
-					    	   /*  var obje=Ext.decode(Ext.value(record.raw,'{}'));
-					    	     alert(obje);
-					    		 from.setData(record);*/
-					    			var window = Ext.create('core.app.view.region.BaseWindow', {
-															viewModel:viewModel,
-															grid:dataView
-														});
-														 var obje=Ext.decode(Ext.value(record.raw,'{}'));
-														 record.data=obje;
-												       window.down('baseform').setData(record);
-												       window.show();
-					    		 
-					        //do something if the load succeeded
-					    },
-					    callback: function(record, operation, success) {
-					        //do something whether the load succeeded or failed
-					        //if operation is unsuccessful, record is null
-					    }
-					});
-											
-										}
-									}, {
+								            model.load(rid, {
+										    scope: this,
+										    failure: function(record, operation) {
+										    },
+										    success: function(record, operation) {
+										    var window = Ext.create('core.app.view.region.BaseWindow', {
+																	viewModel:viewModel,
+																	 grid:dataView});
+																     var obje=Ext.decode(Ext.value(record.raw,'{}'));
+																     record.data=obje;
+																	 window.down('baseform').setData(record);
+																	 window.show();
+										    },
+										    callback: function(record, operation, success) {
+										    }
+										 });
+									}
+								}, {
 										text : '收费',
 										iconCls : 'table_save',
 										itemId : 'fees',
@@ -119,15 +96,7 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 											   system.warnInfo("请选中房号进行收费");
 											   return;
 											}
-											uniteFees();
-											
-											
-											
-											
-											
-											
-											
-											
+											uniteFees(records[0],dataView);
 										}
 									}, {
 										iconCls : 'table_edit',
@@ -188,19 +157,35 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 			],
 	stores : ["core.base.resident.store.UnitStore",'core.base.resident.store.LevelStore',]
 });
-
-function uniteFees(){
+/**
+ * 打开收费窗口
+ * @param {} record
+ */
+function uniteFees(record,view){
 	  var win= Ext.createWidget("window",{
 	  	title:"客户收费",
-	  	width:600,
-	   autoHeight:true,
+	   	width:1000,
+	    closeAction : 'hide',
+	    layout : 'fit',
+	    style:'border-width:0 0 0 0;',
+	    shadowOffset : 30,
+	    maxHeight :document.body.clientHeight * 0.98,
+	    autoHeight:true,
+	    maximized:0,
+	    maximizable:!0,
+	    module: 0,
+	    autoScroll : false,
 	  	items:[{
 	  	 xtype:"unite.unitefeesfrom"
 	  	}],
 	  });
 	  win.show();
-	  
-
+	  var niteFeesGrid=win.down("form[xtype=unite.unitefeesfrom]").down("grid[xtype=unite.unitefeesgrid]");
+	 var  store=niteFeesGrid.getStore();
+	 var proxy=store.getProxy();
+	  proxy.extraParams.rid=record.get("rid");
+	  store.reload();	
+	  win.setTitle( record.get("number")+"--"+record.get("rname"));
 
 }
 

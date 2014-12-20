@@ -24,11 +24,20 @@ import com.ufo.framework.common.model.BaseEntity;
 @DynamicUpdate(true)
 @DynamicInsert(true)
 @TableInfo(group = "抄表管理", id =201, title = "抄表信息")
+/**
+ * 业主收费数据  涵盖 抄表 单位*建筑面积 现金收取 等计量方式
+* @author HouLynn
+* @date 2014年12月20日
+  @version 1.0
+ */
 public class MeterInfo extends BaseEntity {
-	public static final String  FEES_TYPE_NOBLL="000";//煤气费
+	public static final String  FEES_TYPE_UNITE="000";//单位*建筑面积
+	public static final String  FEES_TYPE_NOUNITE="004";//金额收取
 	public static final String  FEES_TYPE_WATER="001";//水费
 	public static final String  FEES_TYPE_POWER="002";//电费
 	public static final String  FEES_TYPE_COAL="003";//煤气费
+	
+    public static final String FEES_TYPE_LL="005";//临时性收费
 	
 	
 	@Id
@@ -63,7 +72,7 @@ public class MeterInfo extends BaseEntity {
 	@Column(length=500)
 	@FieldInfo(title = "备注", number =70)
 	private String  tf_remark;
-	@Column(length=10)
+	@Column(length=10,nullable=false)
 	@FieldInfo(title = "种类", number =80)
 	private String tf_mtype;
 	@FieldInfo(title = "抄表周期", number =80)
@@ -73,7 +82,7 @@ public class MeterInfo extends BaseEntity {
 	@JoinColumn(name = "tf_feesid",nullable=false)
 	@FieldInfo(title = "收费标准", number =60)
 	private  FeesInfo tf_FeesInfo; 
-
+	
 	public int getTf_MeterId() {
 		return tf_MeterId;
 	}

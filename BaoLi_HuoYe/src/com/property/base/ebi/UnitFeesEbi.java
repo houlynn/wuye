@@ -8,6 +8,7 @@ import com.ufo.framework.system.shared.module.DataFetchResponseInfo;
 public interface UnitFeesEbi  extends LogerManager, CommonException {
 	
 	public DataFetchResponseInfo loadUnit(String navigates,String sort,String moduleType);
+	public 	DataFetchResponseInfo addUniteFees(int rid) throws Exception;
 	
 
 }

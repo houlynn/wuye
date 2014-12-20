@@ -99,6 +99,7 @@ public 	DataFetchResponseInfo addUniteFees(int rid) throws Exception{
 	//遍历业主收费项目
 	List<BillItem> bills=new ArrayList<>();
 	fessItems.forEach(item->{
+	debug("遍历:"+item.getTf_ResidentInfo().getTf_residentName()+item.getTf_FeesInfo().getTf_freesName());	
 	int feesid=item.getTf_FeesInfo().getTf_feesid();
 	//开始时间	
 	String start=item.getTf_beginDate();
@@ -128,6 +129,7 @@ public 	DataFetchResponseInfo addUniteFees(int rid) throws Exception{
 		     if(count==1){
 			    List<BillItem> listItem= (List<BillItem>) ebi.queryByHql(ohql);
 			    bills.add(listItem.get(0));//如何没收但是记录已经经存在则添加
+			    continue;
 		    }else{
 		    	//如何未收但是记录不存在产生一条收费记录
 		    	BillItem bill=new BillItem();
@@ -135,40 +137,81 @@ public 	DataFetchResponseInfo addUniteFees(int rid) throws Exception{
 		    	bill.setTf_FeesInfo(item.getTf_FeesInfo());//收费标准
 		    	bill.setTf_state("0");//收费状态
 		    	bill.addXcode();//物业标示
-		    	String feesType=item.getTf_FeesInfo().getTf_feesTyep();
+		    	String feesType=item.getTf_FeesInfo().getTf_feesType();//收费项目类型
 		    	//费用为抄表类型
-		    	if(FeesInfo.FB.equals(feesType)){
-		    		//////////////////////查找当月的 电表 水表 煤气表 //////////////////////////////
+		    	debug("收费标准类型:"+feesType);
+		    	switch (feesType) {
+		    	//抄表 度数计量类型
+				case FeesInfo.FB:{
+					//////////////////////查找当月的 电表 水表 煤气表 //////////////////////////////
 			    	String mhql="from MeterInfo where 1=1 and  tf_rendDate='"+m+"' and tf_FeesInfo="+item.getTf_FeesInfo().getTf_feesid()+" and tf_ResidentInfo="+rid;
 			    	List<MeterInfo> mlist= (List<MeterInfo>) ebi.queryByHql(mhql);
 			    	if(mlist!=null&&mlist.size()>0){
 			    		MeterInfo meterInfo=mlist.get(0);
 			    		bill.setTf_MeterInfo(meterInfo);
+			    		debug(m+"查询到一条抄表费用");	
 			    	}else{
+			    		debug(m+"没有抄表信息");	
 			    		continue;
 			    	}
-		    		
-		    	}else if(FeesInfo.FC.equals(feesType)){
+				}
+			    break;
+		     //////////////////////////////////////////////////////////	    
+				//单价*建筑面积类型	
+		        case FeesInfo.FC:{
 		    		//非抄表类型只算单价作为收费金额
-		    		String hql=" from MeterInfo where 1=1 and tf_mtype='"+MeterInfo.FEES_TYPE_NOBLL+"' and tf_rendDate"+m+"'and tf_FeesInfo="+item.getTf_FeesInfo().getTf_feesid();
+		    		String hql=" from MeterInfo where 1=1 and tf_mtype='"+MeterInfo.FEES_TYPE_UNITE+"' and tf_rendDate='"+m+"'and tf_FeesInfo="+item.getTf_FeesInfo().getTf_feesid();
 		    		List<MeterInfo> mlist= (List<MeterInfo>) ebi.queryByHql(hql);
 		    		if(mlist!=null&&mlist.size()>0){
 			    		MeterInfo meterInfo=mlist.get(0);
 			    		bill.setTf_MeterInfo(meterInfo);
+			    		debug(m+"查询到一条单价*建筑面积类型费用");	
 			    		}else{
 			    			MeterInfo meterInfo=new MeterInfo();
-			    			meterInfo.setTf_acount(item.getTf_FeesInfo ().getTf_price());
-			    			meterInfo.setTf_mtermane(item.getTf_FeesInfo().getTf_freesName());
-			    			meterInfo.setTf_FeesInfo(item.getTf_FeesInfo());
-			    			ResidentInfo residentInfo=new ResidentInfo();
-			    			residentInfo.setTf_residentId(rid);
+			    			meterInfo.setTf_mtermane(item.getTf_FeesInfo().getTf_freesName());//项目名称
+			    			meterInfo.setTf_FeesInfo(item.getTf_FeesInfo());//收费标准
+			    			ResidentInfo residentInfo= ebi.findById(ResidentInfo.class, rid);
 			    			meterInfo.setTf_ResidentInfo(residentInfo);
+			    			meterInfo.setTf_acount(residentInfo.getTf_builArea());//建筑面积
+			    			meterInfo.setTf_mtype(MeterInfo.FEES_TYPE_UNITE);
+			    			meterInfo.setTf_rendDate(m);//收费周期
 			    			ebi.save(meterInfo);
+			    			debug("插入一条/单价*建筑面积类型收费信息");		
 			    			bill.setTf_MeterInfo(meterInfo);
 			    		}
-		    		    ebi.save(bill);
-					    bills.add(bill);
-		    	}
+				}
+				break;
+				/////////////////////////////////////////////////////////////
+				//直收金额类型	
+		        case FeesInfo.FM:{
+		        	String hql=" from MeterInfo where 1=1 and tf_mtype='"+MeterInfo.FEES_TYPE_NOUNITE+"' and tf_rendDate"+m+"'and tf_FeesInfo="+item.getTf_FeesInfo().getTf_feesid();
+		        	List<MeterInfo> mlist= (List<MeterInfo>) ebi.queryByHql(hql);
+		    		if(mlist!=null&&mlist.size()>0){
+			    		MeterInfo meterInfo=mlist.get(0);
+			    		bill.setTf_MeterInfo(meterInfo);
+			    		debug(m+"查询到一条直收金额类型类型费用");	
+			    		}else{
+			    			MeterInfo meterInfo=new MeterInfo();
+			    			meterInfo.setTf_mtermane(item.getTf_FeesInfo().getTf_freesName());//项目名称
+			    			meterInfo.setTf_FeesInfo(item.getTf_FeesInfo());//收费标准
+			    			meterInfo.setTf_mtype(MeterInfo.FEES_TYPE_NOUNITE);
+			    			ResidentInfo residentInfo= ebi.findById(ResidentInfo.class, rid);
+			    			meterInfo.setTf_ResidentInfo(residentInfo);
+			    			meterInfo.setTf_rendDate(m);//收费周期
+			    			ebi.save(meterInfo);
+			    			debug("插入一条直收金额类型收费信息");	
+			    			bill.setTf_MeterInfo(meterInfo);
+			    		}
+		        	
+		        	
+		    				}
+		    	break;		
+				////////////////////////////////////////////////////////////////	
+				}
+		    	  ebi.save(bill);
+		    	  debug("插入业主欠费信息");	
+		    	  bills.add(bill);
+		   
 		    }
 		 }
 		} catch (Exception e) {
@@ -176,7 +219,7 @@ public 	DataFetchResponseInfo addUniteFees(int rid) throws Exception{
 		}
 	}
 	});
-	
+	System.out.println("获取收费信息:"+bills.size());
 	reuslt.setTotalRows(bills.size());
 	reuslt.setMatchingObjects(bills);
 	return reuslt;
