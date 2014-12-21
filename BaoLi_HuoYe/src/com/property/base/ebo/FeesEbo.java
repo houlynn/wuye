@@ -16,6 +16,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONSerializer;
 import net.sf.json.JsonConfig;
 
+import com.model.hibernate.property.LevelInfo;
 import com.model.hibernate.property.MeterInfo;
 import com.model.hibernate.property.SettingRendInfo;
 import com.property.base.ebi.FeesEbi;
@@ -88,8 +89,14 @@ public class FeesEbo implements FeesEbi,CommonException {
 		
 		
 	}
-	
-	public void updateAcount(String rendate,String type) throws Exception{
+	/**
+	 * 结束抄表
+	 * @param rendate 抄表周期
+	 * @param type  抄表类型
+	 * @param leveid 栋
+	 * @throws Exception
+	 */
+	public void updateAcount(String rendate,String type,int leveid) throws Exception{
 		SimpleDateFormat datefd=new SimpleDateFormat("yyyy-MM-dd");
 		SimpleDateFormat datefm=new SimpleDateFormat("yyyy-MM");
 		Date  rdate=datefd.parse(rendate);
@@ -97,20 +104,24 @@ public class FeesEbo implements FeesEbi,CommonException {
 		Date endDate=AppUtils.getMonthEnd(rdate);
 		String startStr=datefd.format(startDate);
 		String endStr=datefd.format(endDate);
-	    String setHsql=" select count(*) from SettingRendInfo where 1=1 and tf_rendDate='"+datefm.format(rdate)+"' and tf_mtype='"+type+"'"+getCurrentXcodeSql();
+	    String setHsql=" select count(*) from SettingRendInfo where 1=1 and tf_rendDate='"+datefm.format(rdate)+"' and tf_mtype='"+type+"' and tf_LevelInfo="+leveid;
 	    Integer count= ebi.getCount(setHsql);
 	    if(count==0){
 	    	SettingRendInfo  settingRendInfo=new SettingRendInfo();
 	    	settingRendInfo.addXcode();
 	    	settingRendInfo.setTf_rendDate(datefm.format(rdate));
 	    	settingRendInfo.setTf_mtype(type);
+	    	LevelInfo levelInfo=new LevelInfo();
+	    	levelInfo.setTf_leveId(leveid);
+	    	settingRendInfo.setTf_LevelInfo(levelInfo);
 	    	ebi.save(settingRendInfo);
 	    }else{
 	    	getAppException("fees", datefm.format(rdate)+"已经结束抄表，请不要重复操作", ResponseErrorInfo.STATUS_APP_BAN);
 	    	
 	    }
-		String hql=" from MeterInfo where 1=1 and  tf_mtype='"+type+"' and tf_meterdate between '"+startStr+"' and '"+endStr+"'"+getCurrentXcodeSql();
+		String hql=" from MeterInfo where 1=1 and  tf_mtype='"+type+"' and tf_meterdate between '"+startStr+"' and '"+endStr+"' and tf_ResidentInfo.tf_levelInfo.tf_parent="+leveid;
 	    List<MeterInfo> list= (List<MeterInfo>) ebi.queryByHql(hql);
+	    //批量更新抄表状态 设置抄表周期
 	    list.stream().forEach(item->{
 	    	  double startM=item.getTf_startnumber();
 	    	  double endN=item.getTf_endnumber();

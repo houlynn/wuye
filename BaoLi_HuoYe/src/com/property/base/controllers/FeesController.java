@@ -190,16 +190,32 @@ public class FeesController implements LogerManager, CommonException {
 		return lists;
 	}
 
+	/**
+	 * 结束抄表
+	 * @param rendate
+	 * @param type
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping("/acount")
 	public @ResponseBody DataInsertResponseInfo setAcount(
 			@RequestParam(value = "rendate", required = true) String rendate,
-			@RequestParam(value = "type", required = true) String type)
+			@RequestParam(value = "type", required = true) String type,
+			@RequestParam(value = "leveid", required = true) int leveid
+			)
 			throws Exception {
 		DataInsertResponseInfo resutl = new DataInsertResponseInfo();
-		feeEbi.updateAcount(rendate, type);
+		feeEbi.updateAcount(rendate, type,leveid);
 		return resutl;
 	}
-
+	    /**
+		 * 并联收费项目
+		 * @param type
+		 * @param vid
+		 * @param feessid
+		 * @return
+		 * @throws Exception
+		 */
 	@RequestMapping("/linkFess")
 	public @ResponseBody DataInsertResponseInfo makeFessItme(String type,
 			int vid, int feessid) throws Exception {

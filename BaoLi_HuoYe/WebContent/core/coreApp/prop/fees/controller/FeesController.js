@@ -7,7 +7,7 @@ init:function(){
 	var self=this
 	this.control({
 		/**
-		 * 添加
+		 * 添加 抄水表信息
 		 */
 			"container[xtype=fees.gridModue] button[ref=addButton]":{
 							click : function (btn){
@@ -31,7 +31,7 @@ init:function(){
 							 
 						     var model = Ext.create(modulegrid.getStore().model);
 			                 model.set(model.idProperty, null); 
-			                 model.set("tf_mtype","001");
+			                 model.set("tf_mtype","B001");
 			                 
 			          var tree= btn.ownerCt.ownerCt.ownerCt.down("container[xtype=fees.levelTree]");
    		     	      	 var commbox=tree.down("basecombobox[ref=vicombobox]");
@@ -83,14 +83,32 @@ init:function(){
 	       window.show();
 				}
 			},	
+		/**
+		 * 结束整栋楼抄表 
+		 */
 		"form[xtype=fees.settingform] #save":{
 		  click:function(btn){
-		   	 var form= btn.up("form[xtype=fees.settingform]");
-		   	 var rendField=form.down("#reddate");
-		   	 var reddate=rendField.getValue();
-		   	 var resObj=self.ajax({url:"/201/acount.action",params:{rendate:reddate,type:"001"}});
-		   	 form.grid.reloade();
-
+			   	 var form= btn.up("form[xtype=fees.settingform]");
+			   	 var rendField=form.down("#reddate");
+			   	 var reddate=rendField.getValue();
+              var tree=form.grid.ownerCt.down("container[xtype=fees.levelTree]");
+              var selection=tree.getSelectionModel().getSelection();
+              if(!selection&&selection.length==0){
+               return ;
+              }else{
+                 if(selection[0].get("nodeInfoType")!="0"){
+                 system.errorInfo("请选择对应的栋数进行结束抄表","错误提示");
+                 return ;
+                }
+              }
+			  var leveid=selection[0].get("code");
+				Ext.MessageBox.confirm('结束抄表', '确定' +selection[0].get("text")+" "+ Ext.Date.format(new Date(reddate),'Y-m')+"结束抄表",
+						function(btn) {
+							if (btn == 'yes') {
+							   	 var resObj=self.ajax({url:"/201/acount.action",params:{rendate:reddate,type:"B001",leveid:leveid}});
+							   	 form.grid.reloade();
+								
+							}});
 		  }
 		},
 			
@@ -218,6 +236,9 @@ init:function(){
 						
 					}
 				*/
+					if("ResidentInfo"!=node.raw.nodeInfo){
+						return;
+					}
 					var navigate={
                 			moduleName:node.raw.nodeInfo,
                 			tableAsName:"_t"+modue.tf_moduleId,
@@ -294,7 +315,7 @@ init:function(){
 	           			 var comm=from.down("#feeeItemCombobox");
 	           			 var feessid=comm.getValue();
 	         	  	     var vid=from.vid;
-                       	 var resObj=self.ajax({url:"/201/linkFess.action",params:{vid:vid,type:"001",feessid:feessid}});	           	
+                       	 var resObj=self.ajax({url:"/201/linkFess.action",params:{vid:vid,type:"B001",feessid:feessid}});	           	
 	           	
 	           	}
 	           }, 

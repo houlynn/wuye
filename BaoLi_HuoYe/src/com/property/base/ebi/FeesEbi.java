@@ -6,5 +6,5 @@ import com.ufo.framework.system.shared.module.DataFetchResponseInfo;
 
 public interface FeesEbi extends LogerManager,XcodeInterface {
 	public  DataFetchResponseInfo fetchData(String moduleName, Integer start, Integer limit, String sort,String query, String navigates,String nodeInfoType) throws Exception;
-	public void updateAcount(String rendate,String type) throws Exception;
+	public void updateAcount(String rendate,String type,int leveid) throws Exception;
 }

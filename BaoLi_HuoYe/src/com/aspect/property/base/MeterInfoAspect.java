@@ -12,6 +12,7 @@ import com.model.hibernate.property.ResidentInfo;
 import com.model.hibernate.property.Village;
 import com.model.hibernate.system._Module;
 import com.ufo.framework.common.core.exception.ResponseErrorInfo;
+import com.ufo.framework.common.core.web.KeysValuesInfo;
 import com.ufo.framework.common.core.web.SpringContextHolder;
 import com.ufo.framework.system.ebi.CommonException;
 import com.ufo.framework.system.ebi.Ebi;
@@ -27,12 +28,44 @@ public class MeterInfoAspect implements ModuleAspect ,XcodeInterface,CommonExcep
 	@Override
 	public void loadBefore(DataFetchRequestInfo dsRequest,
 			SqlGenerator generator) throws Exception {
-		
 	   _Module module = ApplicationService.getModuleWithName(dsRequest.getModuleName());
-		String whereSql=getCurrentXcodeSql(module)+" and "+module.getTableAsName()+".tf_mtype='001'";
+        KeysValuesInfo[] keysvalues= KeysValuesInfo.changeToKeysValue(dsRequest.getTag());
+        String whereSql="";//" and "+module.getTableAsName()+".tf_mtype='"+dsRequest.getTag()+"'";
+        if(keysvalues!=null&&keysvalues.length>0){
+        	for(KeysValuesInfo kv:keysvalues){
+                String value=kv.getValue();
+                String  key=kv.getKey();
+                if("nodeInfoType".equals(key)&&"2".endsWith(value)){
+                	whereSql+= " and "+module.getTableAsName()+".tf_residentId="+value;
+                }
+                if("tf_mtype".endsWith(key)){
+                	whereSql+=" and "+module.getTableAsName()+".tf_mtype="+value;
+                }
+                }
+ /*       		switch (kv.getKey()) {
+				case "0":
+					
+					SqlModuleFilter nav=navigateFilters.get(0);
+					whereSql+=" and  tf_ResidentInfo.tf_levelInfo.tf_parent="+nav.getEqualsValue();
+					break;
+		        case "1":
+		        	SqlModuleFilter nav=navigateFilters.get(0);
+					whereSql+=" and  tf_ResidentInfo.tf_levelInfo="+nav.getEqualsValue();
+					break;
+		        case "2":
+		    		SqlModuleFilter nav=navigateFilters.get(0);
+					whereSql+=" and  tf_ResidentInfo="+nav.getEqualsValue();
+					break;
+        	}*/
+        	//String key=keysvalues
+        	
+        }
+        
+    //	String whereSql=" and "+module.getTableAsName()+".tf_mtype='"+dsRequest.getTag()+"'";
 		generator.setSearchText(whereSql);
-		
-/*		String hql=" from MeterInfo where 1=1 and tf_mtype='"+FEES_TYPE_WATER+"'"+getCurrentXcodeSql();
+        
+	/*	
+	 String hql=" from MeterInfo where 1=1 and tf_mtype='"+FEES_TYPE_WATER+"'"+getCurrentXcodeSql();
 		String whereSql="";
 		if("0".equals(nodeInfoType)){
 			SqlModuleFilter nav=navigateFilters.get(0);
@@ -68,12 +101,12 @@ public class MeterInfoAspect implements ModuleAspect ,XcodeInterface,CommonExcep
 		Ebi ebi=SpringContextHolder.getBean("ebo");
 		ResidentInfo res= (ResidentInfo) ebi.findById(ResidentInfo.class, rid);
 		Village vill=  res.getTf_levelInfo().getTf_parent().getTf_village();
-		String hql=" select count(*) from FeesItemLink where 1=1 and tf_Village="+vill.getTf_viid()+" and tf_type='001'";
+		String hql=" select count(*) from FeesItemLink where 1=1 and tf_Village="+vill.getTf_viid()+" and tf_type='B001'";
 		Integer count= ebi.getCount(hql);
 		if(count==0){
 			getAppException(moduleName, "收费标准未并联需要手动设置", ResponseErrorInfo.STATUS_CUSTOM_WARM);
 		}else{
-			String hqlfee=" from FeesItemLink where 1=1 and tf_Village="+vill.getTf_viid()+" and tf_type='001'";
+			String hqlfee=" from FeesItemLink where 1=1 and tf_Village="+vill.getTf_viid()+" and tf_type='B001'";
 			List<FeesItemLink> list=(List<FeesItemLink>) ebi.queryByHql(hqlfee);
 			if(list!=null&&list.size()>0){
 				FeesItemLink itemLink=list.get(0);

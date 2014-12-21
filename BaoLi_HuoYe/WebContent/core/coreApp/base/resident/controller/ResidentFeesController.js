@@ -5,7 +5,6 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 	},
 	init : function() {
 		var self = this
-		alert(0);
 		// 事件注册
 		this.control({
 			"container[xtype=resident.unitlevelTree]":{

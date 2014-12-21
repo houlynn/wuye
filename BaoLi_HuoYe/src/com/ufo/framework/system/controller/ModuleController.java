@@ -83,10 +83,10 @@ public class ModuleController implements LogerManager,CommonException {
 	@RequestMapping(value = "/fetchdata", method = RequestMethod.GET)
 	public @ResponseBody
 	Map<String, Object> fetchData(String moduleName, Integer start, Integer limit, String sort,
-			String query, String columns, String navigates, String parentFilter,
+			String query, String columns, String navigates, String parentFilter,String tag,
 			HttpServletRequest request) throws Exception {
 		DataFetchResponseInfo response = moduleService.fetchDataInner(moduleName, start, limit, sort,
-				query, columns, navigates, parentFilter, (SqlModuleFilter) null, request);
+				query, columns, navigates, parentFilter, (SqlModuleFilter) null, tag, request);
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("records", response.getMatchingObjects());
 		result.put("totalCount", response.getTotalRows());

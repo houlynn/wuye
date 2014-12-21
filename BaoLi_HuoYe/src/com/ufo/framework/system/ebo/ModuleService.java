@@ -67,14 +67,11 @@ public class ModuleService extends Ebo implements ModelEbi {
 	 */
 	@Override
 	public Map<String, Object> fetchData(String moduleName, Integer start, Integer limit,
-			String sort, String query, String columns, String navigates, String parentFilter,
+			String sort, String query, String columns, String navigates, String parentFilter,String tag,
 			HttpServletRequest request) throws Exception {
-		
 		DataFetchResponseInfo response = fetchDataInner(moduleName, start, limit, sort, query, columns,
-				navigates, parentFilter, (SqlModuleFilter) null, request);
+				navigates, parentFilter, (SqlModuleFilter) null,tag, request);
 		Map<String, Object> result = new HashMap<String, Object>();
-		
-		
 		result.put("records", response.getMatchingObjects());
 		result.put("totalCount", response.getTotalRows());
 		return result;
@@ -86,9 +83,7 @@ public class ModuleService extends Ebo implements ModelEbi {
 	@Override
 	public DataFetchResponseInfo fetchDataInner(String moduleName, Integer start, Integer limit,
 			String sort, String query, String columns, String navigates, String parentFilter,
-			SqlModuleFilter additionFilter, HttpServletRequest request) throws Exception {
-		System.out.println("sort: "+sort+"query :"+query+" columns: "+columns +" navigates ："+navigates +" parentFilter ");
-	    System.out.println(parentFilter);
+			SqlModuleFilter additionFilter, String tag, HttpServletRequest request) throws Exception {
 		SortParameter sorts[] = SortParameter.changeToSortParameters(sort);
 		List<SqlModuleFilter> navigateFilters = changeToNavigateFilters(navigates);
 		SqlModuleFilter pFilter = null;
@@ -97,7 +92,7 @@ public class ModuleService extends Ebo implements ModelEbi {
 			pFilter = (SqlModuleFilter) JSONObject.toBean(jo, SqlModuleFilter.class);
 		}
 		return fetchDataInner(moduleName, start, limit, sorts, query, columns, navigateFilters,
-				pFilter, additionFilter, request);
+				pFilter, additionFilter,tag, request);
 	}
 
 	/* (non-Javadoc)
@@ -106,7 +101,7 @@ public class ModuleService extends Ebo implements ModelEbi {
 	@Override
 	public DataFetchResponseInfo fetchDataInner(String moduleName, Integer start, Integer limit,
 			String sort, String query, String columns, String navigates, String parentFilter,
-			List<SqlModuleFilter> additionFilters, HttpServletRequest request) throws Exception {
+			List<SqlModuleFilter> additionFilters, String tag, HttpServletRequest request) throws Exception {
 		SortParameter sorts[] = SortParameter.changeToSortParameters(sort);
 		List<SqlModuleFilter> navigateFilters = changeToNavigateFilters(navigates);
 		navigateFilters.addAll(additionFilters);
@@ -116,7 +111,7 @@ public class ModuleService extends Ebo implements ModelEbi {
 			pFilter = (SqlModuleFilter) JSONObject.toBean(jo, SqlModuleFilter.class);
 		}
 		return fetchDataInner(moduleName, start, limit, sorts, query, columns, navigateFilters,
-				pFilter, null, request);
+				pFilter, null,tag, request);
 	}
 
 	/* (non-Javadoc)
@@ -125,14 +120,14 @@ public class ModuleService extends Ebo implements ModelEbi {
 	@Override
 	public DataFetchResponseInfo fetchDataInner(String moduleName, Integer start, Integer limit,
 			SortParameter sorts[], String query, String columns, List<SqlModuleFilter> navigateFilters,
-			SqlModuleFilter pFilter, SqlModuleFilter additionFilter, HttpServletRequest request) throws Exception {
-
+			SqlModuleFilter pFilter, SqlModuleFilter additionFilter,String tag, HttpServletRequest request) throws Exception {
 		DataFetchRequestInfo dsRequest = new DataFetchRequestInfo();
 		dsRequest.setModuleName(moduleName);
 		dsRequest.setStartRow(start);
 		dsRequest.setEndRow(start + limit - 1);
 		dsRequest.setSorts(sorts);
 		dsRequest.setModuleFilters(navigateFilters);
+		dsRequest.setTag(tag);
 		GridFilterData gridFilterData = new GridFilterData();
 		if (pFilter != null) {
 			gridFilterData.setParentModuleFilter(pFilter);
@@ -140,21 +135,6 @@ public class ModuleService extends Ebo implements ModelEbi {
 		gridFilterData.setSearchText(query);
 		if (columns != null)
 			gridFilterData.setGridColumnNames(columns.split(","));
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		DataFetchResponseInfo response = moduleDAO.getModuleData(moduleName, dsRequest, gridFilterData);
 		return response;
 	}
@@ -169,13 +149,10 @@ public class ModuleService extends Ebo implements ModelEbi {
 
 		Map<String, Object> result = new HashMap<String, Object>();
 		List<SqlModuleFilter> navigateFilters = changeToNavigateFilters(navigates);
-
 		// 父模块约束的加入
 		GridFilterData gridFilterData = new GridFilterData();
-
 		// 导航值的加入，某些模块的初始值，需要使用到导航值
 		request.setAttribute("navigate", navigateFilters);
-
 		// gridFilterData.setNavigateTreeSelected(navigateTreeSelected)
 		if (parentFilter != null && parentFilter.length() > 1) {
 			JSONObject jo = JSONObject.fromObject(parentFilter);

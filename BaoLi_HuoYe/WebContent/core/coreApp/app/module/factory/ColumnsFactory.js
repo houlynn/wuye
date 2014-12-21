@@ -126,6 +126,20 @@ Ext.define('core.app.module.factory.ColumnsFactory', {
 							             }
 									});
 							break;
+						case 'basecombobox' :
+							Ext.apply(field, {
+										align : 'right',
+										width : 150,
+										 columnType : "basecombobox",
+										 ddCode : fd.tf_otherSetting,
+							             editor:{
+									           xtype : "basecombobox",
+									       	   ddCode : fd.tf_otherSetting,
+					                           allowBlank : false,
+					                           hideTrigger : false
+							             }
+									});
+							break;
 
 						case 'Integer' :
 							Ext.apply(field, {

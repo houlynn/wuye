@@ -21,9 +21,9 @@ import com.ufo.framework.common.model.BaseEntity;
 @Entity
 public class FeesItemLink extends BaseEntity {
 	
-	public static final String FESS_WATER="001";
-	public static final String FESS_POER="002";
-	public static final String FESS_COAL="003";
+	public static final String FESS_WATER="B001";
+	public static final String FESS_POER="B002";
+	public static final String FESS_COAL="B003";
 	@Id
 	@GeneratedValue(generator = "increment")
 	@GenericGenerator(name = "increment", strategy = "increment")

@@ -19,7 +19,7 @@ public interface ModelEbi extends Ebi{
 	// @Override
 	public abstract Map<String, Object> fetchData(String moduleName,
 			Integer start, Integer limit, String sort, String query,
-			String columns, String navigates, String parentFilter,
+			String columns, String navigates, String parentFilter,String tag,
 			HttpServletRequest request) throws Exception;
 
 	/**
@@ -41,17 +41,17 @@ public interface ModelEbi extends Ebi{
 	public abstract DataFetchResponseInfo fetchDataInner(String moduleName,
 			Integer start, Integer limit, String sort, String query,
 			String columns, String navigates, String parentFilter,
-			SqlModuleFilter additionFilter, HttpServletRequest request) throws Exception;
+			SqlModuleFilter additionFilter,String tag,  HttpServletRequest request) throws Exception;
 
 	public abstract DataFetchResponseInfo fetchDataInner(String moduleName,
 			Integer start, Integer limit, String sort, String query,
 			String columns, String navigates, String parentFilter,
-			List<SqlModuleFilter> additionFilters, HttpServletRequest request) throws Exception;
+			List<SqlModuleFilter> additionFilters, String tag, HttpServletRequest request) throws Exception;
 
 	public abstract DataFetchResponseInfo fetchDataInner(String moduleName,
 			Integer start, Integer limit, SortParameter sorts[], String query,
 			String columns, List<SqlModuleFilter> navigateFilters,
-			SqlModuleFilter pFilter, SqlModuleFilter additionFilter,
+			SqlModuleFilter pFilter, SqlModuleFilter additionFilter,String tag,
 			HttpServletRequest request) throws Exception;
 
 	// @Override

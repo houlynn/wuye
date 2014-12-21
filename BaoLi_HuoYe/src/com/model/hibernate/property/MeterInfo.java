@@ -33,9 +33,10 @@ import com.ufo.framework.common.model.BaseEntity;
 public class MeterInfo extends BaseEntity {
 	public static final String  FEES_TYPE_UNITE="000";//单位*建筑面积
 	public static final String  FEES_TYPE_NOUNITE="004";//金额收取
-	public static final String  FEES_TYPE_WATER="001";//水费
-	public static final String  FEES_TYPE_POWER="002";//电费
-	public static final String  FEES_TYPE_COAL="003";//煤气费
+	
+	public static final String  FEES_TYPE_WATER="B001";//水费
+	public static final String  FEES_TYPE_POWER="B002";//电费
+	public static final String  FEES_TYPE_COAL="B003";//煤气费
 	
     public static final String FEES_TYPE_LL="005";//临时性收费
 	

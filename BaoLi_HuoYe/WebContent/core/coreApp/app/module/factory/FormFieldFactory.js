@@ -82,6 +82,14 @@ Ext.define('core.app.module.factory.FormFieldFactory', {
 							xtype : 'checkboxfield',
 							inputValue : 'true'
 						};
+					case 'basecombobox' :
+						return {
+							xtype : 'basecombobox',
+							beforeLabelTextTpl : comm.get('required'),
+							emptyText :fieldDefine.tf_title,
+							allowBlank : false,
+							ddCode : fieldDefine.tf_otherSetting,
+						};	
 					case 'Integer' :
 						return {
 							minValue : -9999999999,
