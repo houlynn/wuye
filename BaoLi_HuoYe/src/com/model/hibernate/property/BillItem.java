@@ -67,7 +67,7 @@ public class BillItem extends BaseEntity {
 	@FieldInfo(title = "止码", number =70)
 	private String tf_endNuber;
 	@FieldInfo(title = "数量", number =70)
-	private String tf_count;
+	private double tf_count;
 	@FieldInfo(title = "小计", number =80)
 	private double tf_acount;
 	public int getTf_billitemid() {
@@ -137,12 +137,6 @@ public class BillItem extends BaseEntity {
 	public void setTf_endNuber(String tf_endNuber) {
 		this.tf_endNuber = tf_endNuber;
 	}
-	public String getTf_count() {
-		return tf_count;
-	}
-	public void setTf_count(String tf_count) {
-		this.tf_count = tf_count;
-	}
 	public double getTf_acount() {
 		return tf_acount;
 	}
@@ -154,6 +148,12 @@ public class BillItem extends BaseEntity {
 	}
 	public void setTf_price(double tf_price) {
 		this.tf_price = tf_price;
+	}
+	public double getTf_count() {
+		return tf_count;
+	}
+	public void setTf_count(double tf_count) {
+		this.tf_count = tf_count;
 	}
 
 }

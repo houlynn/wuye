@@ -48,7 +48,6 @@ Ext.define('core.app.module.factory.ModelFactory', {
 							var  errorInfo = Ext.decode(response.responseText, true);
 							   proxy.errorInfo=errorInfo;
 							   var resutlCode=errorInfo.errorInfo.resultCode;
-							   alert(resutlCode);
 							    switch(resutlCode){
 							    case 300:{
 							    	system.warnInfo(errorInfo.errorInfo.errorMessage.error,"警告");

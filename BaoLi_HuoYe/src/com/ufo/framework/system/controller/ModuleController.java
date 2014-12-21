@@ -29,6 +29,7 @@ import com.ufo.framework.annotation.TableInfo;
 import com.ufo.framework.annotation.TreeItemName;
 import com.ufo.framework.annotation.TreeItemValue;
 import com.ufo.framework.common.constant.CommConstants;
+import com.ufo.framework.common.core.exception.DeleteException;
 import com.ufo.framework.common.core.exception.ResponseErrorInfo;
 import com.ufo.framework.common.core.exception.UpdateException;
 import com.ufo.framework.common.core.utils.EntityUtil;
@@ -246,23 +247,20 @@ public class ModuleController implements LogerManager,CommonException {
 	 * @param id
 	 * @param request
 	 * @return
+	 * @throws Exception 
 	 */
 	@RequestMapping(value = "/remove.do/{id}", method = RequestMethod.DELETE)
 	public @ResponseBody
 	DataDeleteResponseInfo remove(String moduleName, @PathVariable String id,
-			HttpServletRequest request) {
-		DataDeleteResponseInfo result = null;
+			HttpServletRequest request) throws Exception {
+		DataDeleteResponseInfo  result = new DataDeleteResponseInfo();
 		try {
 			result = moduleService.remove(moduleName, id, request);
 		} catch (DataAccessException e) {
-			result = new DataDeleteResponseInfo();
 			String errormessage = ModuleServiceFunction.addPK_ConstraintMessage(e, moduleName);
-			result.setResultMessage(-1, errormessage != null ? errormessage
-					: "请检查与本记录相关联的其他数据是否全部清空！<br/>");
-		} catch (Exception e) {
-			result = new DataDeleteResponseInfo();
-			result.setResultMessage(-1, e.getMessage());
-		}
+			errormessage= errormessage != null ? errormessage: "请检查与本记录相关联的其他数据是否全部清空！<br/>";
+			getDeleteException(moduleName, errormessage, -1, e);
+		} 
 		return result;
 	}
 

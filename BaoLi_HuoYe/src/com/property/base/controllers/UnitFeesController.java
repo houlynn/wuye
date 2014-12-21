@@ -1,10 +1,12 @@
 package com.property.base.controllers;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 
 
 
@@ -16,11 +18,13 @@ import javax.annotation.Resource;
 
 
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 
 
 
@@ -81,7 +85,7 @@ public class UnitFeesController  implements LogerManager{
 		DataFetchResponseInfo response= uebi.addUniteFees(rid);
 		SimpleDateFormat sdd=new SimpleDateFormat("yyyy-MM-dd");
 		List<BillItem> listData=(List<BillItem>) response.getMatchingObjects();
-		listData.parallelStream().map(item->{
+		listData.stream().map(item->{
 		  FeesInfo feesInfo=item.getTf_FeesInfo();
 		  MeterInfo meterInfo=  item.getTf_MeterInfo();
 		  item.setTf_feesType("周期性收费");
@@ -99,10 +103,10 @@ public class UnitFeesController  implements LogerManager{
           item.setTf_feesName(feesInfo.getTf_freesName());
            item.setTf_startNuber(String.valueOf(meterInfo.getTf_startnumber()));
            item.setTf_endNuber(String.valueOf(meterInfo.getTf_endnumber()));
-           item.setTf_price(String.valueOf(feesInfo.getTf_price()));
-           item.setTf_count(String.valueOf(meterInfo.getTf_acount()));
+       /*    item.setTf_price(String.valueOf(feesInfo.getTf_price()));
            double sumAcount=feesInfo.getTf_price()*meterInfo.getTf_acount();
-           item.setTf_aacount(String.valueOf(sumAcount));
+           item.setTf_aacount(String.valueOf(sumAcount));*/
+           //item.setTf_count(meterInfo.getTf_acount());
 			return item;
 		}).collect(Collectors.toList());
 		Object obj= response.getMatchingObjects();
@@ -112,7 +116,12 @@ public class UnitFeesController  implements LogerManager{
 		return result;
 	}
 	
-	
+	public static void main(String[] args) throws ParseException {
+		SimpleDateFormat sdd=new SimpleDateFormat("yyyy-MM-dd");
+		String startDate= sdd.format( AppUtils.getMonthStart(sdd.parse("2010-01-01")));
+		System.out.println(startDate);
+		
+	}
 	
 	
 	

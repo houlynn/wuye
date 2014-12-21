@@ -18,6 +18,7 @@ import com.model.hibernate.property.ResidentInfo;
 import com.property.base.ebi.UnitFeesEbi;
 import com.property.base.vo.UnitViewInfo;
 import com.ufo.framework.common.core.utils.AppUtils;
+import com.ufo.framework.common.core.utils.StringUtil;
 import com.ufo.framework.common.core.web.ModuleServiceFunction;
 import com.ufo.framework.common.core.web.SortParameter;
 import com.ufo.framework.system.ebi.Ebi;
@@ -82,7 +83,7 @@ public class UniteFeesEbo implements UnitFeesEbi {
 	}
 	
 	/**
-	 * 产生用欠费信息
+	 * 产生用欠费信息 如果收费标准有调整可以MeterInfo来调整单价也金额
 	 * @throws Exception 
 	 */
 public 	DataFetchResponseInfo addUniteFees(int rid) throws Exception{
@@ -104,7 +105,7 @@ public 	DataFetchResponseInfo addUniteFees(int rid) throws Exception{
 	//开始时间	
 	String start=item.getTf_beginDate();
 	//结束时间
-	String end=item.getTf_endDate();
+	String end=StringUtil.isEmpty(item.getTf_endDate())?endTime:item.getTf_endDate();
 	int reslut= endMonth.compareTo(end);
 	String startDate=start+"-01";
 	String endDate=end+"-01";
@@ -118,7 +119,7 @@ public 	DataFetchResponseInfo addUniteFees(int rid) throws Exception{
 		String nchql=" select count(*) from BillItem where 1=1 and tf_state='1' and tf_FeesInfo="+feesid+" and tf_feesDate='"+m+"'";
 		//未收项目
 		String ochql=" select count(*) from BillItem where 1=1 and tf_state='0'  and tf_FeesInfo="+feesid+" and tf_feesDate='"+m+"'";
-		String ohql="from BillItem where 1=1 and tf_state='0' and tf_FeesInfo="+feesid+"  and tf_feesDate='"+m+"'";
+		String ohql="from BillItem where 1=1 and tf_state='0' and tf_FeesInfo="+feesid+"  and tf_feesDate='"+m+"' order by tf_feesDate desc,tf_FeesInfo";
 		Integer count=0;
 		try {
 		 count=ebi.getCount(nchql);
@@ -149,6 +150,9 @@ public 	DataFetchResponseInfo addUniteFees(int rid) throws Exception{
 			    	if(mlist!=null&&mlist.size()>0){
 			    		MeterInfo meterInfo=mlist.get(0);
 			    		bill.setTf_MeterInfo(meterInfo);
+			    		bill.setTf_count(meterInfo.getTf_endnumber()- meterInfo.getTf_startnumber());
+			    		bill.setTf_acount(bill.getTf_count()*item.getTf_FeesInfo().getTf_price());
+			    		bill.setTf_price(item.getTf_FeesInfo().getTf_price());
 			    		debug(m+"查询到一条抄表费用");	
 			    	}else{
 			    		debug(m+"没有抄表信息");	
@@ -175,6 +179,10 @@ public 	DataFetchResponseInfo addUniteFees(int rid) throws Exception{
 			    			meterInfo.setTf_acount(residentInfo.getTf_builArea());//建筑面积
 			    			meterInfo.setTf_mtype(MeterInfo.FEES_TYPE_UNITE);
 			    			meterInfo.setTf_rendDate(m);//收费周期
+			    			meterInfo.addXcode();
+			    			meterInfo.setTf_meterdate(AppUtils.getCurDate());
+			    			bill.setTf_price(item.getTf_FeesInfo().getTf_price());//设置单价
+			    			bill.setTf_acount(item.getTf_FeesInfo().getTf_price()*meterInfo.getTf_acount());//计算金额
 			    			ebi.save(meterInfo);
 			    			debug("插入一条/单价*建筑面积类型收费信息");		
 			    			bill.setTf_MeterInfo(meterInfo);
@@ -198,12 +206,13 @@ public 	DataFetchResponseInfo addUniteFees(int rid) throws Exception{
 			    			ResidentInfo residentInfo= ebi.findById(ResidentInfo.class, rid);
 			    			meterInfo.setTf_ResidentInfo(residentInfo);
 			    			meterInfo.setTf_rendDate(m);//收费周期
+			    			meterInfo.addXcode();
+			    			meterInfo.setTf_meterdate(AppUtils.getCurDate());
 			    			ebi.save(meterInfo);
 			    			debug("插入一条直收金额类型收费信息");	
 			    			bill.setTf_MeterInfo(meterInfo);
+			    			bill.setTf_acount(item.getTf_FeesInfo().getTf_price());//设置
 			    		}
-		        	
-		        	
 		    				}
 		    	break;		
 				////////////////////////////////////////////////////////////////	
@@ -219,7 +228,6 @@ public 	DataFetchResponseInfo addUniteFees(int rid) throws Exception{
 		}
 	}
 	});
-	System.out.println("获取收费信息:"+bills.size());
 	reuslt.setTotalRows(bills.size());
 	reuslt.setMatchingObjects(bills);
 	return reuslt;

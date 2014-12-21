@@ -60,7 +60,7 @@ public class FeesEbo implements FeesEbi,CommonException {
 		  try {
 			List<MeterInfo> rows= (List<MeterInfo>) ebi.queryByHql(hql+whereSql, start, limit);
 			List<Map<String,Object>> views=new ArrayList<>();
-			views=rows.parallelStream().map(item->{
+			views=rows.stream().map(item->{
 				Map<String,Object> itemView=new HashMap<>();
 				itemView.put("tf_startnumber", item.getTf_startnumber());
 				itemView.put("tf_MeterId", item.getTf_MeterId());
@@ -111,7 +111,7 @@ public class FeesEbo implements FeesEbi,CommonException {
 	    }
 		String hql=" from MeterInfo where 1=1 and  tf_mtype='"+type+"' and tf_meterdate between '"+startStr+"' and '"+endStr+"'"+getCurrentXcodeSql();
 	    List<MeterInfo> list= (List<MeterInfo>) ebi.queryByHql(hql);
-	    list.parallelStream().forEach(item->{
+	    list.stream().forEach(item->{
 	    	  double startM=item.getTf_startnumber();
 	    	  double endN=item.getTf_endnumber();
 	    	  double acount=endN-startM;

@@ -139,28 +139,40 @@ Ext.define("core.app.controller.BasisController",{
 						if (btn == 'yes') {
 							modulegrid.getStore().remove(modulegrid.getSelectionModel().getSelection());
 							modulegrid.getStore().sync();
-							 Ext.toast({
-										title : '删除成功',
-										html : moduletitle + infoMessage + '已成功删除！',
-										bodyStyle : 'background-color:#7bbfea;',
-										header : {
-											border : 1,
+						    var errorInfo=modulegrid.getStore().getProxy().errorInfo
+						    		var task = new Ext.util.DelayedTask(function() {
+						    			if(errorInfo){
+						    				modulegrid.getStore().reload();
+						    				delete odulegrid.getStore().getProxy().errorInfo;
+						    				alert(odulegrid.getStore().getProxy().errorInfo);
+							    			return;
+							    		}
+							    
+							   		 Ext.toast({
+											title : '删除成功',
+											html : moduletitle + infoMessage + '已成功删除！',
+											bodyStyle : 'background-color:#7bbfea;',
+											header : {
+												border : 1,
+												style : {
+													borderColor : '#9b95c9'
+												}
+											},
+											border : true,
 											style : {
 												borderColor : '#9b95c9'
-											}
-										},
-										border : true,
-										style : {
-											borderColor : '#9b95c9'
-										},
-										saveDelay : 10,
-										align : 'tr',
-										closable : true,
-										minWidth : 200,
-										maxheight:250,
-										useXAxis : true,
-										slideInDuration : 500
-									});
+											},
+											saveDelay : 10,
+											align : 'tr',
+											closable : true,
+											minWidth : 200,
+											maxheight:250,
+											useXAxis : true,
+											slideInDuration : 500
+										});
+						    	});
+						    	task.delay(500);
+							
 						}
 					})
 					
