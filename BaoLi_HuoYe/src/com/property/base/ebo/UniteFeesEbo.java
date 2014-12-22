@@ -285,12 +285,14 @@ public  DataUpdateResponseInfo adduniteFees(
  */
 public double getUniteFeesAcount(int rid){
 	double sumAcount=0;
-	String ohql="select sum(b.tf_acount) from BillItem b, MeterInfo  m, ResidentInfo r where 1=1 and b.tf_state='1' and "
+	String ohql="select sum(b.tf_acount) from BillItem b, MeterInfo  m, ResidentInfo r where 1=1 and b.tf_state='0' and "
 			+ " m.tf_MeterId=b.tf_MeterId and "
 			+ "  m.tf_residentId="+rid;
 	 sumAcount =ebi.sum(ohql);
    	return sumAcount;
 }
+
+
 
 
 	

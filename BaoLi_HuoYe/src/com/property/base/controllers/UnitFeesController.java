@@ -13,14 +13,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.portlet.bind.annotation.RenderMapping;
-
 import com.model.hibernate.property.BillItem;
 import com.model.hibernate.property.FeesInfo;
 import com.model.hibernate.property.MeterInfo;
 import com.property.base.ebi.UnitFeesEbi;
 import com.ufo.framework.common.core.utils.AppUtils;
 import com.ufo.framework.common.log.LogerManager;
+import com.ufo.framework.system.ebi.Ebi;
 import com.ufo.framework.system.irepertory.IModelRepertory;
 import com.ufo.framework.system.shared.module.DataFetchResponseInfo;
 import com.ufo.framework.system.shared.module.DataUpdateResponseInfo;
@@ -37,6 +36,8 @@ public class UnitFeesController  implements LogerManager{
 	private IModelRepertory moduleDAO;
 	@Autowired
 	private UnitFeesEbi uebi;
+	@Resource(name="ebo")
+	private Ebi ebi;
 	
 	public UnitFeesEbi getUebi() {
 		return uebi;
@@ -130,9 +131,52 @@ public class UnitFeesController  implements LogerManager{
 		  return uebi.getUniteFeesAcount(rid);
 		
 	}
-		
+		/**
+		 * 收费历史
+		 * @param rid
+		 * @return
+		 */
 	
-	
+		public DataFetchResponseInfo  getFees(
+	    	@RequestParam(value="orderSql",required=false,defaultValue=" order by tf_feesTime desc") String orderSql,
+	    	@RequestParam(value="start",required=false,defaultValue="0") int start,
+	    	@RequestParam(value="limit",required=false,defaultValue="20") int limit,
+	    	@RequestParam(value="whereSql",required=false ) String whereSql,
+	    	@RequestParam(value="rid",required=true ) int rid) throws Exception{
+			SimpleDateFormat sdd=new SimpleDateFormat("yyyy-MM-dd");
+			DataFetchResponseInfo result=new DataFetchResponseInfo();
+		    whereSql+=" and b.tf_BillContext.tf_ResidentInfo="+rid;		
+		    StringBuffer hql=new StringBuffer(" from BillItem b where 1=1");
+		    StringBuffer countHql =new StringBuffer("select count(*) from  BillItem b  where 1=1 ");
+			hql.append(whereSql);
+			countHql.append(whereSql);
+			Integer count =  ebi.getCount(countHql.toString()).intValue();
+			hql.append(orderSql);
+			List<BillItem> rows =  (List<BillItem>) ebi.queryByHql(hql.toString(), Integer.valueOf(start),Integer.valueOf(limit));
+			rows=rows.stream().map(item->{
+				  FeesInfo feesInfo=item.getTf_FeesInfo();
+				  MeterInfo meterInfo=  item.getTf_MeterInfo();
+				  item.setTf_feesType("周期性收费");
+				  if(meterInfo.getTf_mtype().equals(MeterInfo.FEES_TYPE_LL)){
+					  item.setTf_feesType("临时性收费");
+				  }
+		          try {
+					String startDate= sdd.format( AppUtils.getMonthStart(sdd.parse(item.getTf_feesDate()+"-01")));
+					String endDate= sdd.format( AppUtils.getMonthEnd(sdd.parse(item.getTf_feesDate()+"-01")));
+					item.setTf_startDate(startDate);
+					item.setTf_endDate(endDate);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+		          item.setTf_feesName(feesInfo.getTf_freesName());
+		           item.setTf_startNuber(String.valueOf(meterInfo.getTf_startnumber()));
+		           item.setTf_endNuber(String.valueOf(meterInfo.getTf_endnumber()));
+				return item;
+			}).collect(Collectors.toList());
+			result.setTotalRows(count);
+			result.setMatchingObjects(rows);
+	        return result;
+		}
 	
 	
 	
