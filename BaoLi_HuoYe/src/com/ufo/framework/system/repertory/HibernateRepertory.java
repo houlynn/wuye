@@ -1,6 +1,8 @@
 package com.ufo.framework.system.repertory;
 
 import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -414,6 +416,21 @@ public class HibernateRepertory implements ICommonRepertory {
 		
 	}
 	
+	public  float sum(String sql){
+		 StringBuffer buffer=new StringBuffer();
+		  sf.getCurrentSession().doWork(conn->{
+				 Statement smnt= conn.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_UPDATABLE);
+				ResultSet resut= smnt.executeQuery(sql);
+			     if(resut.next()){
+			    	 buffer.append(resut.getObject(1));
+			     }
+	});
+		  if(StringUtil.isEmpty(buffer.toString())){
+			  return 0;
+		  }else{
+		 return Float.parseFloat( buffer.toString());
+		  }
+	}
 	
 	
 	

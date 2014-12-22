@@ -1,8 +1,10 @@
 package com.property.base.ebo;
 import com.model.hibernate.property.BillItem;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,20 +12,26 @@ import java.util.stream.Collectors;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.model.hibernate.property.BillContext;
 import com.model.hibernate.property.FeesInfo;
 import com.model.hibernate.property.FeesTypeItem;
 import com.model.hibernate.property.MeterInfo;
 import com.model.hibernate.property.ResidentInfo;
+import com.model.hibernate.system.shared.EndUser;
 import com.property.base.ebi.UnitFeesEbi;
 import com.property.base.vo.UnitViewInfo;
 import com.ufo.framework.common.core.utils.AppUtils;
 import com.ufo.framework.common.core.utils.StringUtil;
 import com.ufo.framework.common.core.web.ModuleServiceFunction;
 import com.ufo.framework.common.core.web.SortParameter;
+import com.ufo.framework.common.model.Model;
 import com.ufo.framework.system.ebi.Ebi;
 import com.ufo.framework.system.repertory.SqlModuleFilter;
 import com.ufo.framework.system.shared.module.DataFetchResponseInfo;
+import com.ufo.framework.system.shared.module.DataUpdateResponseInfo;
+import com.ufo.framework.system.web.SecurityUserHolder;
 
 @Service
 public class UniteFeesEbo implements UnitFeesEbi {
@@ -86,7 +94,8 @@ public class UniteFeesEbo implements UnitFeesEbi {
 	 * 产生用欠费信息 如果收费标准有调整可以MeterInfo来调整单价也金额
 	 * @throws Exception 
 	 */
-public 	DataFetchResponseInfo addUniteFees(int rid) throws Exception{
+public 	DataFetchResponseInfo addUniteFees(int rid
+		) throws Exception{
 	DataFetchResponseInfo reuslt=new DataFetchResponseInfo();
 	String hql_ft=" from FeesTypeItem where 1=1 and tf_ResidentInfo="+rid;
 	SimpleDateFormat sdd=new SimpleDateFormat("yyyy-MM-dd");
@@ -220,7 +229,6 @@ public 	DataFetchResponseInfo addUniteFees(int rid) throws Exception{
 		    	  ebi.save(bill);
 		    	  debug("插入业主欠费信息");	
 		    	  bills.add(bill);
-		   
 		    }
 		 }
 		} catch (Exception e) {
@@ -233,5 +241,57 @@ public 	DataFetchResponseInfo addUniteFees(int rid) throws Exception{
 	return reuslt;
 }
 	
+
+/**
+ * 应收金额
+ * @param tf_shouldCount
+ * 实收金额
+ * @param tf_realACount
+ * 收费条目ID[]
+ * @param vid
+ * @return
+ */
+
+public  DataUpdateResponseInfo adduniteFees(
+		double tf_shouldCount,
+		double tf_realACount,
+		int rid,
+		String tf_remark,
+		int[] bids) throws Exception{
+	DataUpdateResponseInfo result=new DataUpdateResponseInfo();
+	BillContext bc=new BillContext();//构建长发
+	EndUser endUser=SecurityUserHolder.getCurrentUser();
+	bc.setTf_EndUser(endUser);//收费人
+	bc.setTf_feesTime(AppUtils.getCurrentTime());//设置是收费时间
+	ResidentInfo resinInf=new ResidentInfo();
+	resinInf.setTf_residentId(rid);//业主
+	bc.setTf_ResidentInfo(resinInf);
+	bc.setTf_remark(tf_remark);//备注
+	bc.setTf_month(AppUtils.getCurDate());
+	ebi.save(bc);
+	////////////////////////收费条目/////////////////////////////////////
+	for(int bid :bids){
+		BillItem bitem=ebi.findById(BillItem.class, bid);
+		bitem.setTf_state(Model.MODEL_AUDIT);
+		bitem.setTf_BillContext(bc);
+        ebi.update(bitem);		
+	}
+	return result;
+}
+
+/**
+ * 获取业主欠费总金额
+ * @return
+ */
+public double getUniteFeesAcount(int rid){
+	double sumAcount=0;
+	String ohql="select sum(b.tf_acount) from BillItem b, MeterInfo  m, ResidentInfo r where 1=1 and b.tf_state='1' and "
+			+ " m.tf_MeterId=b.tf_MeterId and "
+			+ "  m.tf_residentId="+rid;
+	 sumAcount =ebi.sum(ohql);
+   	return sumAcount;
+}
+
+
 	
 }

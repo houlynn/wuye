@@ -53,7 +53,7 @@ public class UserController extends SimpleBaseController<EndUser> {
 	}
 	@RequestMapping("/getCurrentUser")
 	public void getCurrentUser(HttpServletRequest request,
-			HttpServletResponse response) {
+			HttpServletResponse response) throws Exception {
 		EndUser user = SecurityUserHolder.getCurrentUser();
 		if (user != null) {
 			toWrite(response,

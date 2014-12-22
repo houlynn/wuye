@@ -45,7 +45,42 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 											
 				}
 			},
-
+		   "grid[xtype=unite.unitefeesgrid] #uniteFees":{
+				click:function(btn){
+						var grid=btn.up("grid[xtype=unite.unitefeesgrid]");
+						var sm= grid.getSelectionModel().getSelection();
+						 if(sm.length==0){
+	   		     	      		system.warnInfo("请选择至少一条业主信息进行操作!")
+	   		     	      	 return;
+	   		     	     }
+	   		     	      var form=grid.ownerCt.ownerCt.ownerCt;
+	   		     	   	   var tf_shouldCount=form.down("#tf_shouldCount").getValue();
+	   		     	   	   var tf_realACount=form.down("#tf_realACount").getValue();
+	   		     	   	   var tf_remark=form.down("#tf_remark").getValue();
+	   		     	   	   if(!tf_realACount){
+	   		     	   	     system.warnInfo("请填写实收金额!");
+	   		     	   	     return;
+	   		     	   	   }
+	   		     	   	     if(!tf_shouldCount){
+	   		     	   	      system.warnInfo("应收金额不能为空!");
+	   		     	   	     return;
+	   		     	   	   }
+	   		     	  var bids=[];
+	   		     	  for(var i=0;i<sm.length;i++){
+	   		     	  bids.push(sm[i].get("tf_billitemid"));
+	   		     	  }
+	   		     	   	   
+   		     	   	   var params={
+   		     	   	   tf_shouldCount:tf_shouldCount,
+   		     	   	   tf_realACount:tf_realACount,
+   		     	   	   tf_remark:tf_remark,
+   		     	   	   bids:bids,
+   		     	   	   rid:form.rid
+   		     	   	   };
+   		     	  var resObj=self.ajax({url:"/unite/fees.action",params:params});  
+					
+					}
+		   },
 		"dataview[xtype=nuit.dataview]" : {
 		    render: function() {
                                   Ext.getBody().on("contextmenu", Ext.emptyFn,null, {preventDefault: true});
@@ -138,12 +173,8 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 		                 var rid=record.raw.rid;
 		                 var viewModel=system.getViewModel(104);
 		                 var model=core.app.module.factory.ModelFactory.getModelByModule(viewModel.data);
-		                 
-		                 
-		          
 		            },    
-		              
-		              
+		         
 					}
 				});
 	},
@@ -175,28 +206,26 @@ function uniteFees(record,view){
 	    module: 0,
 	    autoScroll : false,
 	  	items:[{
-	  	 xtype:"unite.unitefeesfrom"
+	  	 xtype:"unite.unitefeesfrom",
+	  	 rid:record.get("rid"),
 	  	}],
 	  });
 	  win.show();
 	  var niteFeesGrid=win.down("form[xtype=unite.unitefeesfrom]").down("grid[xtype=unite.unitefeesgrid]");
 	 var  store=niteFeesGrid.getStore();
-	 var proxy=store.getProxy();
+	/// store.rid=rid;
+	  var proxy=store.getProxy();
 	  proxy.extraParams.rid=record.get("rid");
-	  store.reload();	
+	  var form=win.down("form[xtype=unite.unitefeesfrom]");
+      var tf_shouldCount=form.down("#tf_shouldCount");
+	  store.load(function(){
+	        var sum=store.sum;
+	         tf_shouldCount.setValue(sum);
+	         tf_shouldCount.setDisabled(true);
+	  
+	  });
 	  win.setTitle( record.get("number")+"--"+record.get("rname"));
+ 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
 

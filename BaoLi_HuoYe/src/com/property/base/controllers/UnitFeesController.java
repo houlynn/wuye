@@ -1,34 +1,19 @@
 package com.property.base.controllers;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
-
-
-
-
 import javax.annotation.Resource;
-
-
-
-
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-
-
-
-
+import org.springframework.web.portlet.bind.annotation.RenderMapping;
 
 import com.model.hibernate.property.BillItem;
 import com.model.hibernate.property.FeesInfo;
@@ -38,6 +23,7 @@ import com.ufo.framework.common.core.utils.AppUtils;
 import com.ufo.framework.common.log.LogerManager;
 import com.ufo.framework.system.irepertory.IModelRepertory;
 import com.ufo.framework.system.shared.module.DataFetchResponseInfo;
+import com.ufo.framework.system.shared.module.DataUpdateResponseInfo;
 /**
 * @author HouLynn
 * @date 2014年12月20日
@@ -115,13 +101,40 @@ public class UnitFeesController  implements LogerManager{
 		result.put("totalCount", response.getTotalRows());
 		return result;
 	}
-	
-	public static void main(String[] args) throws ParseException {
-		SimpleDateFormat sdd=new SimpleDateFormat("yyyy-MM-dd");
-		String startDate= sdd.format( AppUtils.getMonthStart(sdd.parse("2010-01-01")));
-		System.out.println(startDate);
+	/**
+	 * 业主收费
+	 *
+	 */
+	@RequestMapping("/fees")
+  public @ResponseBody DataUpdateResponseInfo audite( 
+			@RequestParam(value = "tf_shouldCount", required =true)   double tf_shouldCount,
+			@RequestParam(value = "tf_realACount", required =true)   double tf_realACount,
+			@RequestParam(value = "rid", required =true)   int rid,
+			String tf_remark,
+			@RequestParam(value = "bids", required =true)   int[] bids
+		  ) throws Exception
+		  {
+	   DataUpdateResponseInfo resutl=new DataUpdateResponseInfo();
+	   uebi.adduniteFees(tf_shouldCount, tf_realACount, rid, tf_remark, bids);
+	  return resutl;
+  }
+	  /**
+	   * 统计欠费金额
+	   * @param rid
+	   * @return
+	   */
+		@RequestMapping("/sum")	
+	   public @ResponseBody double getSum(
+			  @RequestParam(value = "rid", required =true)   int rid
+			){
+		  return uebi.getUniteFeesAcount(rid);
 		
 	}
+		
+	
+	
+	
+	
 	
 	
 	

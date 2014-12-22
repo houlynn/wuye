@@ -10,6 +10,9 @@ import com.ufo.framework.system.web.SecurityUserHolder;
 
 
 public interface Model  extends Serializable{
+	
+	public final String MODEL_AUDIT="1";
+	public final String MODEL_NOTAUDIT="0";
 	default  void  addXcode() throws Exception{
 		      BaseEntity baseEntity=(BaseEntity)this;
 		      baseEntity.setXcode(SecurityUserHolder.getIdentification());
@@ -102,7 +105,4 @@ public interface Model  extends Serializable{
 		}
 		return buf.toString();
 	}
-	
-	
-
 }

@@ -328,6 +328,6 @@ public interface ICommonRepertory  extends LogerManager{
 	
 	public <T extends Model> T update(Class<T> clazz,Serializable pk,String updateStr) throws Exception;
 	
-
+	public  float sum(String sql);
 
 }

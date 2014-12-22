@@ -246,5 +246,10 @@ public class Ebo implements Ebi {
 		// TODO Auto-generated method stub
 		return repertory.update(clazz, pk, updateStr);
 	}
+	@Override
+	public float sum(String sql) {
+		// TODO Auto-generated method stub
+		return repertory.sum(sql);
+	}
 
 }

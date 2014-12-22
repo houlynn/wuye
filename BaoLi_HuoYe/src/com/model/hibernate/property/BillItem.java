@@ -17,6 +17,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.ufo.framework.annotation.FieldInfo;
 import com.ufo.framework.annotation.TableInfo;
+import com.ufo.framework.common.core.ext.ExtFieldType;
 import com.ufo.framework.common.model.BaseEntity;
 
 @Entity
@@ -27,7 +28,7 @@ public class BillItem extends BaseEntity {
 	@Id
 	@GeneratedValue(generator = "increment")
 	@GenericGenerator(name = "increment", strategy = "increment")
-	@FieldInfo(title = "ID号", number = 90, hidden = true)
+	@FieldInfo(title = "ID号", number = 90, hidden = true,type=ExtFieldType.ID)
 	private int tf_billitemid;
 	
 	@JsonIgnore
@@ -45,7 +46,6 @@ public class BillItem extends BaseEntity {
 	@Column(length=25,nullable=false)
 	@FieldInfo(title = "收费周期", number =130)
 	private String tf_feesDate;
-	
 	@Transient
 	@FieldInfo(title = "类型", number =10)
 	private String tf_feesType;
@@ -70,6 +70,12 @@ public class BillItem extends BaseEntity {
 	private double tf_count;
 	@FieldInfo(title = "小计", number =80)
 	private double tf_acount;
+	
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+	@JoinColumn(name = "tf_billid")
+	@FieldInfo(title = "抄表主表", number =1010)
+	private BillContext tf_BillContext;
+	
 	public int getTf_billitemid() {
 		return tf_billitemid;
 	}
@@ -154,6 +160,12 @@ public class BillItem extends BaseEntity {
 	}
 	public void setTf_count(double tf_count) {
 		this.tf_count = tf_count;
+	}
+	public BillContext getTf_BillContext() {
+		return tf_BillContext;
+	}
+	public void setTf_BillContext(BillContext tf_BillContext) {
+		this.tf_BillContext = tf_BillContext;
 	}
 
 }

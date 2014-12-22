@@ -8,23 +8,27 @@ import com.model.hibernate.system.shared.EndUser;
 import com.ufo.framework.common.core.exception.DeleteException;
 import com.ufo.framework.common.core.exception.ResponseErrorInfo;
 import com.ufo.framework.common.core.exception.TimeoutException;
+import com.ufo.framework.system.ebi.CommonException;
 
 /**
  * 
  * @author 作者 yingqu:
  * @version 创建时间：2014年7月4日 上午8:32:03 version 1.0
  */
-public class SecurityUserHolder {
-	public static EndUser getCurrentUser() {
+public class SecurityUserHolder implements CommonException {
+	public static EndUser getCurrentUser() throws Exception {
 		Subject currentUser = SecurityUtils.getSubject();
 		if (currentUser.isAuthenticated()) {
 			EndUser user = (EndUser) currentUser.getSession().getAttribute(
 					"currentUser");
 			return user;
 		} else {
-			EndUser  user=new EndUser();
-			user.setUserCode("GUEST");
-			return user; 
+			TimeoutException exception=	 new TimeoutException(); 
+			 ResponseErrorInfo errorInfo= new ResponseErrorInfo();
+			 errorInfo.getErrorMessage().put("error", "用户未登陆，或回话过期!");
+			 errorInfo.setResultCode(ResponseErrorInfo.STATUS_TIME_OUT);
+			 exception.setErrorInfo(errorInfo);
+			 throw exception;
 		}
 	}
 

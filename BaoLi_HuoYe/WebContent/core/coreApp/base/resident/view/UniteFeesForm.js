@@ -35,21 +35,26 @@ Ext.define('core.base.resident.view.UniteFeesForm', {
 													xtype : "numberfield",
 													labelWidth : 60,
 												    fieldLabel : "应收金额",
+												    itemId:"tf_shouldCount",
 													name : "tf_shouldCount",
 													 decimalPrecision:2,
-													behindText : '元'
+													behindText : '元',
+													 allowBlank : false,
 												}, {
 													xtype : "numberfield",
 													labelWidth : 60,
 													fieldLabel : "实收金额",
 													 decimalPrecision:2,
 													name : "tf_realACount",
-													behindText : '元'
+													itemId:"tf_realACount",
+													behindText : '元',
+													allowBlank : false,
 												}]
 												},{
 												   xtype : 'textareafield',  
                                                    grow: true,  
                                                    name:"tf_remark",
+                                                   itemId:"tf_remark",
 												   fieldLabel: '备注',  
                                                    anchor    : '100%',  
                                                    maxLength : 100,   //设置多行文本框的最大长度为100  
