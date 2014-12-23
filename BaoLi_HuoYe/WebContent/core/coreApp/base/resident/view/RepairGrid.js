@@ -83,15 +83,7 @@ style:'border-width:0 0 0 0;',
 							glyph : 0xf014,
 							ref:"removeButton",
 							itemId : 'delete'
-						},
-						 {
-							text : '设置收费项目',
-							glyph : 0xf014,
-							ref:"seting",
-							itemId : 'setting'
 						}
-						
-						
 						, '-',  '-', '筛选', {
 							width : 60,
 							xtype : 'gridsearchfield',

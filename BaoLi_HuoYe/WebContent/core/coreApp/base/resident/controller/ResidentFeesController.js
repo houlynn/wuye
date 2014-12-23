@@ -7,6 +7,9 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 		var self = this
 		// 事件注册
 		this.control({
+			/**
+			 * 加载业主
+			 */
 			"container[xtype=resident.unitlevelTree]":{
 				itemclick:function(treeview,node,item,index,e,eOpts){
 					var tree=treeview.ownerCt;
@@ -33,7 +36,9 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 					store.load();	  
 				}
 			},
-			
+			/**
+			 * 加载小区
+			 */
 			"container[xtype=resident.unitlevelTree] basecombobox[ref=vicombobox]":{
 				 select:function(combo,record,opts) {  
 				 	 var  vid=record[0].get("itemCode");
@@ -45,6 +50,9 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 											
 				}
 			},
+			/**
+			 * 点击收费按钮
+			 */
 		   "grid[xtype=unite.unitefeesgrid] #uniteFees":{
 				click:function(btn){
 						var grid=btn.up("grid[xtype=unite.unitefeesgrid]");
@@ -185,13 +193,97 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 											proxy.extraParams.rtype="001";
 											store.load();	
 		                 
-		                 
-		                 
-		                 
-		                 
-		            },    
-		         
-					}
+		            }   
+					},
+					
+/////////////////////////////////////////保修修单操作////////////////////////////////////////////////////					
+     "grid[xtype=unite.repairgrid] #new":{
+       click:function(btn){
+       	                   var modulegrid = btn.up("grid[xtype=unite.repairgrid]");	
+							 var store=modulegrid.getStore();
+							 alert(store);
+							 var panel=modulegrid.ownerCt.ownerCt.ownerCt.ownerCt;
+							 var tree= panel.down("container[xtype=resident.unitlevelTree]");
+			                 var selection=tree.getSelectionModel().getSelection();
+			                 if(!selection&&selection.length==0){
+			                  return ;
+			                 }else{
+			                    if(selection[0].get("nodeInfoType")=="0"){
+			                    system.errorInfo("请选择对应的楼层再进行添加","错误提示");
+			                    return ;
+			                   }
+			                 }
+			          var dataView= Ext.getCmp("phones");
+				     var records=dataView. getSelectionModel().getSelection();
+					 if(records.length==0){
+					 system.warnInfo("请选中房号进行查看");
+					 return;
+					 }
+					 var  record= records[0]
+			         var rid=record.get("rid");
+					var viewModel=system.getViewModel(302);
+				    var modue=system.getModuleDefine("ResidentInfo");
+					var navigate={
+                			moduleName:"ResidentInfo",
+                			tableAsName:"_t"+modue.tf_moduleId,
+                			text:record.get("rname"),
+                			primarykey:modue.tf_primaryKey,
+                		    fieldtitle:"001",
+                		    equalsValue:rid,
+                		    isCodeLevel:false
+                	};
+                	if(store.navigates){
+                		store.navigates.splice(0,store.navigates.length);
+                		store.navigates.push(navigate);
+                	}
+                	var proxy=store.getProxy();
+                  	proxy.extraParams.navigates=Ext.encode(store.navigates);
+				   var model = Ext.create(modulegrid.getStore().model);
+			                 model.set(model.idProperty, null); // 设置主键为null,可自动
+			                 var viewModel=system.getViewModel(302)
+			                 var window = Ext.create('core.app.view.region.BaseWindow', {
+				                           viewModel:viewModel,
+				                            grid:modulegrid
+			                                 });
+			                    window.down('baseform').setData(model);
+			                    window.setTitle(record.get("number")+" "+record.get("rname"));
+	                            window.show();
+								}, // 这里不要用handler，而要用click,因为下面要发送click事件
+								// 删除按钮在渲染后加入可以Drop的功能
+								render : function(btn) {
+									// 可以使Grid中选中的记录拖到到此按钮上来进行复制新增
+									var modulegrid= btn.up("resident.gridModue");
+									btn.dropZone = new Ext.dd.DropZone(btn.getEl(), {
+												// 此处的ddGroup需要与Grid中设置的一致
+												ddGroup : 'DD_grid_' + viewModel.get('tf_moduleName'),
+												getTargetFromEvent : function(e) {
+													return e.getTarget('');
+												},
+												// 用户拖动选中的记录经过了此按钮
+												onNodeOver : function(target, dd, e, data) {
+													return Ext.dd.DropZone.prototype.dropAllowed;
+												},
+												// 用户放开了鼠标键，删除记录
+												onNodeDrop : function(target, dd, e, data) {
+													var b = btn.menu.down('#newwithcopy');
+													b.fireEvent('click', b);
+												}
+											})
+       	
+       	
+       	
+       }
+     },	
+         "grid[xtype=unite.repairgrid] #edit":{
+       click:function(btn){
+       }
+     },		
+         "grid[xtype=unite.repairgrid] #delete":{
+       click:function(btn){
+       }
+     },		
+/////////////////////////////////////////保修单操作////////////////////////////////////////////////////						
+					
 				});
 	},
 	views : ["core.base.resident.view.ResidentUnit",

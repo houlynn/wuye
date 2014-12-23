@@ -42,6 +42,8 @@
 		   <mapping class="com.model.hibernate.property.FeesItemLink"/>
 		    <mapping class="com.model.hibernate.property.BillItem"/>
 		    <mapping class="com.model.hibernate.property.BillContext"/>
+		   <mapping class="com.model.hibernate.property.RepairInfo"/>
+		    
 		  
 		  
 		  
