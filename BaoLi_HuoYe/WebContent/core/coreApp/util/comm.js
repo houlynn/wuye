@@ -90,6 +90,11 @@ var ajax = function(config) {
 					return '<span style="color:#a40;">'
 							+ Ext.util.Format.date(val, 'Y-m-d') + '</span>';
 				},
+				// 日期
+				datetimeRenderer : function(val) {
+					return '<span style="color:#a40;">'
+							+ Ext.util.Format.date(val, 'Y-m-d H:i:s') + '</span>';
+				},
 
 				// 整型变量
 				floatRenderer : function(val, rd, model, row, col, store, gridview) {
@@ -102,7 +107,12 @@ var ajax = function(config) {
 					return '<span style="color:' + (val > 0 ? 'blue' : 'red')
 							+ ';float:right;">' + (val == 0 ? '' : val) + '</span>';
 				},
-
+				// 日期
+				ddRenderer : function(val) {
+					 val=this.getText(val);
+					 alert(val);
+				     return val;
+				},
 				// 百分比
 				percentRenderer : function(v, rd, model) {
 					v = v * 100;

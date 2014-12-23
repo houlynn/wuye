@@ -47,10 +47,10 @@ Ext.define('core.app.module.factory.FormFieldFactory', {
 			// 是否是必添字段
 			if (fieldDefine.tf_isRequired)
 				Ext.apply(field, {
-							allowBlank : false
+							allowBlank : false,
+							beforeLabelTextTpl : comm.get('required')
 						});
 
-		console.log("============构建每个field========")	
          console.log(field);
 			return field;
 		},
@@ -59,7 +59,6 @@ Ext.define('core.app.module.factory.FormFieldFactory', {
 		 * 判断字段类型
 		 */
 		getFieldXType : function(fieldDefine, field) {
-			    console.log("=========fieldDefine========getFieldXType==================");
 		        console.log(fieldDefine.tf_fieldType);
 			
 			
@@ -67,12 +66,14 @@ Ext.define('core.app.module.factory.FormFieldFactory', {
 					case 'Date' :
 						return {
 							size : this.dateDefaultSize,
+						    width:300,
 							format : 'Y-m-d',
 							xtype : 'datefield',
 							submitFormat : 'Y-m-d'
 						}
 					case 'Datetime' :
 						return {
+						    width:300,
 							size : this.dateDefaultSize,
 							format : 'Y-m-d H:i:s',
 							xtype : 'datetimefield'

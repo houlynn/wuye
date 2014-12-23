@@ -1,3 +1,6 @@
+/**
+ * 业主欠费表格
+ */
 Ext.define("core.base.resident.view.UniteFeesGrid",{
 extend:"Ext.grid.Panel",
 	alias : 'widget.unite.unitefeesgrid',

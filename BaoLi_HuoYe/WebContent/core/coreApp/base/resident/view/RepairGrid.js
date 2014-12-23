@@ -1,3 +1,6 @@
+/**
+ * 报修单
+ */
 Ext.define("core.base.resident.view.RepairGrid",{
 	extend : 'Ext.grid.Panel',
 	alias : 'widget.unite.repairgrid',
@@ -7,27 +10,6 @@ style:'border-width:0 0 0 0;',
 	multiSelect : true,
 	width:"100%",
 	enableLocking : true, // 使grid可以锁定列
-    	listeners : {
-		 selectionChange : function(model, selected, eOpts){
-			var viewModel=this.viewModel;
-			// 设置删除按钮的状态
-		   this.down('toolbar button#delete')[selected.length > 0
-					? 'enable'
-					: 'disable']();
-			// 下面将组织选中的记录的name显示在title上，有二种方案可供选择，一种是用下面的MVVM特性，第二种是调用refreshTitle()
-			var selectedNames =viewModel.get("tf_title");
-			if (selected.length > 0) {
-				if (!!selected[0].getNameValue()){
-					selectedNames = selectedNames + '　『<em>' + selected[0].getNameValue()
-							+ '</em>'
-							+ (selected.length > 1 ? ' 等' + selected.length + '条' : '') + '』';
-				this.setTitle(selectedNames);
-				}
-			}
-			
-		 	
-		}
-	},
    initComponent : function() {
    	  var self=this;
    	   var  thar = [

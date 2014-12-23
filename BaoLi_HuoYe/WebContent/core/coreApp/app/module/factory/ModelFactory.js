@@ -170,12 +170,14 @@ Ext.define('core.app.module.factory.ModelFactory', {
 				case 'Date' :
 					return 'date';
 				case 'Datetime' :
-					return 'date';
+					return 'string';
 				case 'Double' :
 					return 'double';
 				case 'Money' :
 				case 'Percent' :
 					return 'float';
+				case 'basecombobox' :
+					return 'string';
 				default :
 					return 'string';
 			}

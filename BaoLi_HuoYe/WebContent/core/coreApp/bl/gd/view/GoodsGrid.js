@@ -89,7 +89,7 @@ Ext.define("core.bl.gd.view.GoodsGrid", {
 		text:"发布时间",
 		dataIndex:"releasetime",
 		width : 120,
-		 columnType:"textfield",
+		columnType:"textfield",
 		field:{
 			 xtype:"datetimefield",
 		      dateType:"date",

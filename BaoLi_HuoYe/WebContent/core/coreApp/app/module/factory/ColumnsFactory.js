@@ -102,10 +102,14 @@ Ext.define('core.app.module.factory.ColumnsFactory', {
 
 						case 'Datetime' :
 							Ext.apply(field, {
-								xtype : 'datecolumn',
 								align : 'center',
-								width : 130,
-								renderer : Ext.util.Format.dateRenderer
+								width : 150,
+								renderer:Ext.util.Format.datetimeRenderer, 
+								editor : { // 如果需要行内修改，需要加入此属性
+									xtype : 'datetimefield',
+									format : 'Y-m-d H:i:s',
+									editable : false
+								}
 								});
 							break;
 
@@ -129,9 +133,10 @@ Ext.define('core.app.module.factory.ColumnsFactory', {
 						case 'basecombobox' :
 							Ext.apply(field, {
 										align : 'right',
-										width : 150,
-										 columnType : "basecombobox",
-										 ddCode : fd.tf_otherSetting,
+										 width : 150,
+										  columnType : "basecombobox",
+										  ddCode : fd.tf_otherSetting,
+										 renderer:Ext.util.Format.ddRenderer, 
 							             editor:{
 									           xtype : "basecombobox",
 									       	   ddCode : fd.tf_otherSetting,
