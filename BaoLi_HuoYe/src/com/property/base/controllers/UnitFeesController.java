@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.model.hibernate.property.BillItem;
 import com.model.hibernate.property.FeesInfo;
 import com.model.hibernate.property.MeterInfo;
@@ -31,6 +32,9 @@ import com.ufo.framework.system.shared.module.DataUpdateResponseInfo;
 @Controller
 @RequestMapping("/unite")
 public class UnitFeesController  implements LogerManager{
+	
+	private static final String RTYPE_HIS="001";
+	private static final String RTYPE_FEES="002";
 	
 	@Resource
 	private IModelRepertory moduleDAO;
@@ -67,8 +71,23 @@ public class UnitFeesController  implements LogerManager{
 	 */
 	@RequestMapping("/loadUniteFees")
 	public @ResponseBody Map<String,Object> loadUniteFees(
-			@RequestParam(value = "rid", required =true) int rid
+			@RequestParam(value = "rid", required =true) int rid,
+			@RequestParam(value = "rtype", required =false,defaultValue="002") String rtype,
+	    	@RequestParam(value="orderSql",required=false,defaultValue=" order by tf_feesTime desc") String orderSql,
+	    	@RequestParam(value="start",required=false,defaultValue="0") int start,
+	    	@RequestParam(value="limit",required=false,defaultValue="20") int limit,
+	    	@RequestParam(value="whereSql",required=false ,defaultValue="" ) String whereSql
 			) throws Exception{
+				switch (rtype) {
+					case RTYPE_HIS: //收费历史
+					 	return getFees(orderSql, start, limit, whereSql, rid);
+					case RTYPE_FEES://欠费
+					   return loadFees(rid);
+				}
+		    return  null;
+	}
+
+	private Map<String, Object> loadFees(int rid) throws Exception {
 		DataFetchResponseInfo response= uebi.addUniteFees(rid);
 		SimpleDateFormat sdd=new SimpleDateFormat("yyyy-MM-dd");
 		List<BillItem> listData=(List<BillItem>) response.getMatchingObjects();
@@ -131,20 +150,21 @@ public class UnitFeesController  implements LogerManager{
 		  return uebi.getUniteFeesAcount(rid);
 		
 	}
+		
 		/**
 		 * 收费历史
 		 * @param rid
 		 * @return
 		 */
 	
-		public DataFetchResponseInfo  getFees(
+		public Map<String, Object>   getFees(
 	    	@RequestParam(value="orderSql",required=false,defaultValue=" order by tf_feesTime desc") String orderSql,
 	    	@RequestParam(value="start",required=false,defaultValue="0") int start,
 	    	@RequestParam(value="limit",required=false,defaultValue="20") int limit,
 	    	@RequestParam(value="whereSql",required=false ) String whereSql,
 	    	@RequestParam(value="rid",required=true ) int rid) throws Exception{
 			SimpleDateFormat sdd=new SimpleDateFormat("yyyy-MM-dd");
-			DataFetchResponseInfo result=new DataFetchResponseInfo();
+			Map<String, Object>  result=new HashMap<String, Object>();
 		    whereSql+=" and b.tf_BillContext.tf_ResidentInfo="+rid;		
 		    StringBuffer hql=new StringBuffer(" from BillItem b where 1=1");
 		    StringBuffer countHql =new StringBuffer("select count(*) from  BillItem b  where 1=1 ");
@@ -173,14 +193,9 @@ public class UnitFeesController  implements LogerManager{
 		           item.setTf_endNuber(String.valueOf(meterInfo.getTf_endnumber()));
 				return item;
 			}).collect(Collectors.toList());
-			result.setTotalRows(count);
-			result.setMatchingObjects(rows);
+			result.put("records", rows);
+			result.put("totalCount",count );
 	        return result;
 		}
-	
-	
-	
-	
-	
 
 }

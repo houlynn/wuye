@@ -48,8 +48,12 @@ public class RepairInfo extends BaseEntity {
 	private String tf_dowithDate;
 	@FieldInfo(title = "处理人员", number =70)
 	private String tf_repairMan;
-	@FieldInfo(title = "附加说明", number =80)
+	@FieldInfo(title = "处理等级", number =80)
+	private int tf_levf;
+	@FieldInfo(title = "附加说明", number =90)
 	private String tf_remark;
+	
+	
 	public int getTf_repairId() {
 		return tf_repairId;
 	}

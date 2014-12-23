@@ -190,11 +190,12 @@ public 	DataFetchResponseInfo addUniteFees(int rid
 			    			meterInfo.setTf_rendDate(m);//收费周期
 			    			meterInfo.addXcode();
 			    			meterInfo.setTf_meterdate(AppUtils.getCurDate());
-			    			bill.setTf_price(item.getTf_FeesInfo().getTf_price());//设置单价
-			    			bill.setTf_acount(item.getTf_FeesInfo().getTf_price()*meterInfo.getTf_acount());//计算金额
 			    			ebi.save(meterInfo);
 			    			debug("插入一条/单价*建筑面积类型收费信息");		
 			    			bill.setTf_MeterInfo(meterInfo);
+			    			bill.setTf_count(meterInfo.getTf_acount());
+			    			bill.setTf_price(item.getTf_FeesInfo().getTf_price());//设置单价
+			    			bill.setTf_acount(item.getTf_FeesInfo().getTf_price()*meterInfo.getTf_acount());//计算金额
 			    		}
 				}
 				break;
@@ -285,9 +286,10 @@ public  DataUpdateResponseInfo adduniteFees(
  */
 public double getUniteFeesAcount(int rid){
 	double sumAcount=0;
-	String ohql="select sum(b.tf_acount) from BillItem b, MeterInfo  m, ResidentInfo r where 1=1 and b.tf_state='0' and "
-			+ " m.tf_MeterId=b.tf_MeterId and "
-			+ "  m.tf_residentId="+rid;
+	String ohql="select sum(b.tf_acount) from BillItem b "+
+ "inner join MeterInfo m on m.tf_MeterId=b.tf_MeterId "+
+ " where b.tf_state='0'"+
+ " and m.tf_residentId="+rid;
 	 sumAcount =ebi.sum(ohql);
    	return sumAcount;
 }

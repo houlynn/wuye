@@ -1,12 +1,12 @@
-Ext.define("core.base.resident.view.ResidentGrid",{
+Ext.define("core.base.resident.view.RepairGrid",{
 	extend : 'Ext.grid.Panel',
-	alias : 'widget.resident.gridModue',
-	style:'border-width:0 0 0 0;',
-   columnLines : true, // 加上表格线
+	alias : 'widget.unite.repairgrid',
+autoHeight:true,
+style:'border-width:0 0 0 0;',
+ columnLines : true, // 加上表格线
 	multiSelect : true,
 	width:"100%",
 	enableLocking : true, // 使grid可以锁定列
-    tools : [{type : 'gear'}],
     	listeners : {
 		 selectionChange : function(model, selected, eOpts){
 			var viewModel=this.viewModel;
@@ -108,7 +108,7 @@ Ext.define("core.base.resident.view.ResidentGrid",{
 	}else{
 	 barItem=Ext.apply(thar,this.thar);
 	}
-   	var viewModel=system.getViewModel(this.code)
+   	var viewModel=system.getViewModel(302)
    		this.model = core.app.module.factory.ModelFactory.getModelByModule(viewModel.data,{destroy : 'rest/102/remove.do'});
 				this.store = Ext.create('core.app.store.GridStore', {
 							model : this.model,
@@ -134,8 +134,8 @@ Ext.define("core.base.resident.view.ResidentGrid",{
 				}];	
 		this.store.modulegrid = this;
 		this.viewModel=viewModel;
-		var title = viewModel.get('tf_title');
-		this.setTitle(title);
+	/*	var title = viewModel.get('tf_title');
+		this.setTitle(title);*/
 		// 可以在grid中进行行编辑的设置
 		this.rowEditing = new Ext.grid.plugin.RowEditing({
 			     saveBtnText: '保存', 

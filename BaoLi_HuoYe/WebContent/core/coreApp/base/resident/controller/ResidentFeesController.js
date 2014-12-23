@@ -54,7 +54,8 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 	   		     	      	 return;
 	   		     	     }
 	   		     	      var form=grid.ownerCt.ownerCt.ownerCt;
-	   		     	   	   var tf_shouldCount=form.down("#tf_shouldCount").getValue();
+	   		     	       var  tf_shouldCountF=  form.down("#tf_shouldCount");
+	   		     	   	   var tf_shouldCount=tf_shouldCountF.getValue();
 	   		     	   	   var tf_realACount=form.down("#tf_realACount").getValue();
 	   		     	   	   var tf_remark=form.down("#tf_remark").getValue();
 	   		     	   	   if(!tf_realACount){
@@ -78,6 +79,12 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
    		     	   	   rid:form.rid
    		     	   	   };
    		     	  var resObj=self.ajax({url:"/unite/fees.action",params:params});  
+   		     	  grid.getStore().load(function(){
+   		          var sum=store.sum;
+	             tf_shouldCountF.setValue(sum);
+	             tf_shouldCount.setDisabled(true);
+   		     	  	
+   		     	  });
 					
 					}
 		   },
@@ -142,8 +149,8 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 												if(records.length==0){
 											   system.warnInfo("请选中房号进行查看");
 											   return;
+											   
 											}
-											
 										}
 									}, '-', {
 										text : '查看报修单',
@@ -171,8 +178,17 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 		                 var uniteDatail= unitePanel.down("#uniteDetail");
 		                 var  from=unitePanel.down("#uniteFrom");
 		                 var rid=record.raw.rid;
-		                 var viewModel=system.getViewModel(104);
-		                 var model=core.app.module.factory.ModelFactory.getModelByModule(viewModel.data);
+		                  var feesGrid=unitePanel.down("grid[xtype=unite.unitefeesgrid]");
+		                 var store=feesGrid.store;
+				   	     var proxy=store.getProxy();
+											proxy.extraParams.rid=rid;
+											proxy.extraParams.rtype="001";
+											store.load();	
+		                 
+		                 
+		                 
+		                 
+		                 
 		            },    
 		         
 					}
@@ -183,7 +199,8 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 	          "core.base.resident.view.UnitLevelTree",
 			"core.base.resident.view.UnitDataView",
 			 "core.base.resident.view.UniteFeesForm",
-			 "core.base.resident.view.UniteFeesGrid"
+			 "core.base.resident.view.UniteFeesGrid",
+			 "core.base.resident.view.RepairGrid"
 			],
 	stores : ["core.base.resident.store.UnitStore",'core.base.resident.store.LevelStore',]
 });

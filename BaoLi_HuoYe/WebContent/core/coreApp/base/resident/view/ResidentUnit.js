@@ -19,23 +19,27 @@ Ext.define("core.base.resident.view.ResidentUnit", {
 									code : 104
 								}, {
 									xtype : "tabpanel",
-									region : "south",
-									height:300,
-									items : [/*{
-												title : "客户详细信息",
-												itemId:"uniteDetail",
-												items:[{
-												xtype : 'baseform',
-												itemId:"uniteFrom",
-							                    viewModel : system.getViewModel(104),
-							                    formScheme : system.getViewModel(104).get('tf_formSchemes')[0]
-												}]
-											},*/
+									 region : "south",
+									 height:300,
+									 items:[
 											{
-												title : "收费历史"
+												title : "收费历史",
+												 layout : 'fit',
+											     items:[
+											     {
+											       xtype:"unite.unitefeesgrid",
+											       viewBar:true,
+											     }
+											     ],
 											},
 											{
-												title : "报修单"
+												title : "报修单",
+												layout : 'fit',
+											   items:[
+										       {
+										        xtype:"unite.repairgrid",
+											    }
+											     ]
 											},
 											]
 								}]
