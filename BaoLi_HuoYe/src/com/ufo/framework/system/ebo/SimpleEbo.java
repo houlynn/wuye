@@ -17,11 +17,10 @@ import com.ufo.framework.system.irepertory.ISimpleRepertory;
 
 public  abstract class  SimpleEbo<M extends Model> implements SimpleEbi<M>,LogerManager {
 	
-	private static Logger logger;
 	
       protected SimpleEbo(Class<?> clazz)
       {
-		logger=AppLoggerFactory.getyingquLogger(clazz); 
+		//logger=AppLoggerFactory.getyingquLogger(clazz); 
       }
 	
 	@Autowired

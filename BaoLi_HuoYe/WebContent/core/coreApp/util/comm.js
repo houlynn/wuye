@@ -109,8 +109,9 @@ var ajax = function(config) {
 				},
 				// 日期
 				ddRenderer : function(val) {
-					 val=this.getText(val);
-					 alert(val);
+					console.log(this);
+					/* val=this.getText(val);
+					 alert(val);*/
 				     return val;
 				},
 				// 百分比

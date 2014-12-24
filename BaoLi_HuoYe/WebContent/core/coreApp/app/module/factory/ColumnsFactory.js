@@ -136,7 +136,13 @@ Ext.define('core.app.module.factory.ColumnsFactory', {
 										 width : 150,
 										  columnType : "basecombobox",
 										  ddCode : fd.tf_otherSetting,
-										 renderer:Ext.util.Format.ddRenderer, 
+										  renderer:function(val,rd,model,row,col){
+										  	//console.log(rd);
+										  	  	console.log(model);
+										  	  	  	//console.log(rd);
+										   return val;
+										  },
+										 //renderer:Ext.util.Format.ddRenderer, 
 							             editor:{
 									           xtype : "basecombobox",
 									       	   ddCode : fd.tf_otherSetting,

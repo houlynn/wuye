@@ -12,7 +12,7 @@ import com.ufo.framework.system.ebi.CommonException;
 
 /**
  * 
- * @author 作者 yingqu:
+ * @author 作者 HouLynn
  * @version 创建时间：2014年7月4日 上午8:32:03 version 1.0
  */
 public class SecurityUserHolder implements CommonException {
@@ -21,6 +21,16 @@ public class SecurityUserHolder implements CommonException {
 		if (currentUser.isAuthenticated()) {
 			EndUser user = (EndUser) currentUser.getSession().getAttribute(
 					"currentUser");
+		     if(!user.getXcode().equals(EndUser.MARKING_XCODE)&&user.getSystemToken()==null){
+		    		TimeoutException exception=	 new TimeoutException(); 
+					 ResponseErrorInfo errorInfo= new ResponseErrorInfo();
+					 errorInfo.getErrorMessage().put("error", "非法用户!");
+					 errorInfo.setResultCode(ResponseErrorInfo.STATUS_TIME_OUT);
+					 exception.setErrorInfo(errorInfo);
+					 throw exception;
+		     }
+			
+			
 			return user;
 		} else {
 			TimeoutException exception=	 new TimeoutException(); 
@@ -81,7 +91,19 @@ public class SecurityUserHolder implements CommonException {
 		if (currentUser.isAuthenticated()) {
 			EndUser user = (EndUser) currentUser.getSession().getAttribute(
 					"currentUser");
-			indent=user.getXcode();
+			if(user.getSystemToken()==null&&user.getXcode().endsWith(EndUser.MARKING_XCODE)){
+				indent=EndUser.MARKING_XCODE;
+			}else if(user.getSystemToken()!=null){
+				indent=user.getSystemToken().getXcode();
+			}else if(user.getSystemToken()==null){
+				 TimeoutException exception=	 new TimeoutException(); 
+				 ResponseErrorInfo errorInfo= new ResponseErrorInfo();
+				 errorInfo.getErrorMessage().put("error", "非法用户!");
+				 errorInfo.setResultCode(ResponseErrorInfo.STATUS_TIME_OUT);
+				 exception.setErrorInfo(errorInfo);
+				 throw exception;
+			}
+			
 		}else{
 			TimeoutException exception=	 new TimeoutException(); 
 			 ResponseErrorInfo errorInfo= new ResponseErrorInfo();
@@ -91,8 +113,7 @@ public class SecurityUserHolder implements CommonException {
 			 throw exception;
 			
 		}
-		return "7DA9BE06-14B0-DBAC-F5EF-FD2E3C600E59";
-		
+		return indent;
 	}
 	 
 

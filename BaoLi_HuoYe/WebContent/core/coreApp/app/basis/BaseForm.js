@@ -1,4 +1,4 @@
-/
+
 Ext.define('core.app.view.basis.BaseForm', {
 			extend : 'Ext.form.Panel',
 			style:'border-width:0 0 0 0;',

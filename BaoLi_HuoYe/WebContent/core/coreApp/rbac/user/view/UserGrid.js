@@ -28,21 +28,17 @@ Ext.define("core.rbac.user.view.UserGrid",{
 			xtype:"textfield"
 		}		
 	},{
-		text:"密码",
-		dataIndex:"password",
-		field:{
-			xtype:"textfield"
-		}
-	},{
 		text:"性别",
 		dataIndex:"sex",
-		width:80,
+		columnType:"basecombobox",
+		ddCode:"SEX",
 		field:{
-			xtype:"textfield"
+			xtype:"basecombobox",
+			ddCode:"SEX"
 		}
 	},{
-		text:"出生日期",
-		dataIndex:"birthday",
+		text:"创建日期",
+		dataIndex:"createTime",
 		width:150,
 		field:{
 			xtype:"datetimefield",

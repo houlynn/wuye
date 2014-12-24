@@ -43,6 +43,7 @@
 		    <mapping class="com.model.hibernate.property.BillItem"/>
 		    <mapping class="com.model.hibernate.property.BillContext"/>
 		   <mapping class="com.model.hibernate.property.RepairInfo"/>
+		    <mapping class="com.model.hibernate.system.shared.SystemToken"/>
 		    
 		  
 		  

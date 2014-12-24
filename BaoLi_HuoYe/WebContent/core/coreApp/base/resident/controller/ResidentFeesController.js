@@ -30,10 +30,11 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
                 		store.navigates.push(navigate);
                 	}
                   	var proxy=store.getProxy();
-                  	console.log(proxy.extraParams);
 					proxy.extraParams.navigates=Ext.encode(store.navigates);
 					proxy.extraParams.moduleType=node.raw.nodeInfoType
-					store.load();	  
+					store.load();
+					var unitePanel=tree.ownerCt;
+					
 				}
 			},
 			/**
@@ -186,17 +187,42 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 		                 var uniteDatail= unitePanel.down("#uniteDetail");
 		                 var  from=unitePanel.down("#uniteFrom");
 		                 var rid=record.raw.rid;
+		                 /**
+		                  * 加载收费历史数据
+		                  */
 		                  var feesGrid=unitePanel.down("grid[xtype=unite.unitefeesgrid]");
-		                 var store=feesGrid.store;
-				   	     var proxy=store.getProxy();
+		                  var store=feesGrid.store;
+				   	      var proxy=store.getProxy();
 											proxy.extraParams.rid=rid;
 											proxy.extraParams.rtype="001";
 											store.load();	
-		                 
+					  /**
+					   * 加载保修数据
+						*/
+					var modue=system.getModuleDefine("ResidentInfo");						
+					var  repairgrepairgrid=	unitePanel.down("grid[xtype=unite.repairgrid]");
+					        var navigate={
+                			moduleName:"ResidentInfo",
+                			tableAsName:"_t"+modue.tf_moduleId,
+                			text:"",
+                			primarykey:modue.tf_primaryKey,
+                		    fieldtitle:"",
+                		    equalsValue:rid,
+                		    isCodeLevel:false
+                	};
+                	var repairStroe=repairgrepairgrid.store;
+                	if(store.navigates){
+                		store.navigates.splice(0,store.navigates.length);
+                		store.navigates.push(navigate);
+                	}
+                  	var proxy=repairStroe.getProxy();
+					proxy.extraParams.navigates=Ext.encode(store.navigates);
+					repairStroe.load();	
+					
 		            }   
 					},
 					
-/////////////////////////////////////////保修修单操作////////////////////////////////////////////////////					
+/////////////////////////////////////////保修单操作////////////////////////////////////////////////////					
      "grid[xtype=unite.repairgrid] #new":{
        click:function(btn){
        	                   var modulegrid = btn.up("grid[xtype=unite.repairgrid]");	
@@ -276,13 +302,91 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
      },	
          "grid[xtype=unite.repairgrid] #edit":{
        click:function(btn){
+       		var modulegrid = btn.up("grid[xtype=unite.repairgrid]");	
+			var viewModel=system.getViewModel(302);
+			var window = Ext.create('core.app.view.region.BaseWindow', {
+				viewModel:viewModel,
+				grid:modulegrid
+			});
+	       window.down('baseform').setData(modulegrid.getSelectionModel().getSelection()[0]);
+	       window.show();
+       	
        }
      },		
          "grid[xtype=unite.repairgrid] #delete":{
-       click:function(btn){
-       }
+         click:function(btn){
+         	var modulegrid=btn.up("grid[xtype=unite.repairgrid]");
+         	var viewModel=system.getViewModel(302);
+			var selection=modulegrid.getSelectionModel().getSelection();
+			var message='';
+			var infoMessage='';
+			if (selection.length == 1) { // 如果只选择了一条
+				message = ' 『' + selection[0].getNameValue() + '』 吗?';
+				infoMessage = '『' + selection[0].getNameValue() + '』';
+			} else { // 选择了多条记录
+				message = '<ol>';
+				Ext.Array.each(selection, function(record) {
+							message += '<li>' + record.getNameValue() + '</li>';
+						});
+				message += '</ol>';
+				infoMessage = message;
+				message = '以下 ' + selection.length + ' 条记录吗?' + message;
+			}
+			var moduletitle = '<strong>' + viewModel.get('tf_title')
+					+ '</strong>';
+			Ext.MessageBox.confirm('确定删除', '确定要删除 ' + moduletitle + ' 中的' + message,
+					function(btn) {
+						if (btn == 'yes') {
+							modulegrid.getStore().remove(modulegrid.getSelectionModel().getSelection());
+							modulegrid.getStore().sync();
+							 Ext.toast({
+										title : '删除成功',
+										html : moduletitle + infoMessage + '已成功删除！',
+										bodyStyle : 'background-color:#7bbfea;',
+										header : {
+											border : 1,
+											style : {
+												borderColor : '#9b95c9'
+											}
+										},
+										border : true,
+										style : {
+											borderColor : '#9b95c9'
+										},
+										saveDelay : 10,
+										align : 'tr',
+										closable : true,
+										minWidth : 200,
+										maxheight:250,
+										useXAxis : true,
+										slideInDuration : 500
+									});
+						}
+					})
+					
+				},
+					render : function(button) {
+									// 可以使Grid中选中的记录拖到到此按钮上来进行删除
+									button.dropZone = new Ext.dd.DropZone(button.getEl(), {
+												// 此处的ddGroup需要与Grid中设置的一致
+												ddGroup : 'DD_grid_' + viewModel.get('tf_moduleName'),
+												// 这个函数没弄明白是啥意思,没有还不行
+												getTargetFromEvent : function(e) {
+													return e.getTarget('');
+												},
+												// 用户拖动选中的记录经过了此按钮
+												onNodeOver : function(target, dd, e, data) {
+													return Ext.dd.DropZone.prototype.dropAllowed;
+												},
+												// 用户放开了鼠标键，删除记录
+												onNodeDrop : function(target, dd, e, data) {
+													button.fireEvent('click', button); // 执行删除按钮的click事件
+												}
+											})
+								}
+         	
      },		
-/////////////////////////////////////////保修单操作////////////////////////////////////////////////////						
+/////////////////////////////////////////保修单操作结束////////////////////////////////////////////////////						
 					
 				});
 	},

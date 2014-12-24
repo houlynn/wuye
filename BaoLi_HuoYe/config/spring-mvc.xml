@@ -85,6 +85,42 @@
                 <ref bean="mappingJacksonHttpMessageConverter" />
             </list>
         </property>
- 
     </bean>
+    
+    
+    
+	
+	<bean id="sayHelloServiceExporter" class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter" >
+		<property name="service" 			ref="testImpl" />
+		<property name="serviceInterface" 	value="com.property.base.invoker.serviceinterface.Test" />
+	</bean>
+		
+	<bean id="simpleUrlHandlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+	   	<property name="urlMap">
+			<map>
+			  <entry key="/test.action" value-ref="sayHelloServiceExporter" />
+			</map>
+		</property>
+	</bean>	
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 </beans>

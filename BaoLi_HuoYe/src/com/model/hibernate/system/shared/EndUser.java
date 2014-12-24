@@ -1,9 +1,6 @@
 package com.model.hibernate.system.shared;
-
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,7 +18,6 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
-
 import com.ufo.framework.annotation.DDItemCode;
 import com.ufo.framework.annotation.DDItemName;
 import com.ufo.framework.annotation.FieldInfo;
@@ -32,7 +28,7 @@ import com.ufo.framework.common.model.BaseEntity;
 
 /**
  * 人员表
-* @author 作者 yingqu: 
+* @author 作者 HouLynn: 
 * @version 创建时间：2014年6月21日 下午10:33:58 
 * version 1.0
  */
@@ -42,6 +38,8 @@ import com.ufo.framework.common.model.BaseEntity;
 @TableInfo(group = "系统模块", id = 9951, title = "用户管理")
 @GenericGenerator(name="systemUUID",strategy="uuid")
 public class EndUser extends BaseEntity {
+	
+	public static final String MARKING_XCODE="7DA9BE06-14B0-DBAC-F5EF-FD2E3C600E59";
 	
 	@FieldInfo(name="主键",type=ExtFieldType.ID,title = "ID号", number = 10, hidden = true)
 	@DDItemCode
@@ -76,7 +74,18 @@ public class EndUser extends BaseEntity {
 	private String admins;
 	@FieldInfo(name="是否启用")
 	private String enabled;
+	private SystemToken systemToken;
 	
+	@JsonIgnore //构建json数据的时候排除此字段
+	@ManyToOne(optional=false, fetch=FetchType.LAZY, cascade={CascadeType.MERGE})
+	@JoinColumn(name="tf_codeId",nullable=true)
+	@LazyCollection(LazyCollectionOption.TRUE)
+	public SystemToken getSystemToken() {
+		return systemToken;
+	}
+	public void setSystemToken(SystemToken systemToken) {
+		this.systemToken = systemToken;
+	}
 	public String getEnabled() {
 		return enabled;
 	}
@@ -89,13 +98,7 @@ public class EndUser extends BaseEntity {
 	private Department department=new Department();
 	
 	@FieldInfo(title = "创建时间", number = 190)
-	private Date createTime;
-	
-	
-
-	
-	
-	
+	private String  createTime;
 	@Id
 	@GeneratedValue(generator="systemUUID")
 	@Column(length=50)
@@ -200,10 +203,10 @@ public class EndUser extends BaseEntity {
 	public void setAdmins(String admins) {
 		this.admins = admins;
 	}
-	public Date getCreateTime() {
+	public String getCreateTime() {
 		return createTime;
 	}
-	public void setCreateTime(Date createTime) {
+	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
 	}
 	

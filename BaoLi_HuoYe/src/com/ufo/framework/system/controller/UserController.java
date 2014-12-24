@@ -28,6 +28,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.model.hibernate.system.shared.Department;
 import com.model.hibernate.system.shared.EndUser;
+import com.ufo.framework.common.core.utils.AppUtils;
 import com.ufo.framework.common.core.utils.MD5Util;
 import com.ufo.framework.common.core.utils.StringUtil;
 import com.ufo.framework.common.core.web.VerifyCodeUtil;
@@ -48,6 +49,18 @@ public class UserController extends SimpleBaseController<EndUser> {
 	public void doSave(EndUser model, HttpServletRequest request,
 			HttpServletResponse response) {
 		model.setPassword(MD5Util.md5(model.getPassword()));
+		model.setCreateTime(AppUtils.getCurrentTime());
+		String hql=" select max(u.orderIndex) from EndUser u ";
+		try {
+			int max= ebi.getCount(hql);
+			model.setOrderIndex(max);
+			model.setSex("1");
+			model.setEnabled("1");
+			model.setSystemToken(SecurityUserHolder.getCurrentUser().getSystemToken());
+			model.setXcode(SecurityUserHolder.getIdentification());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	//	model.setEnabled("1");
 		super.doSave(model, request, response);
 	}

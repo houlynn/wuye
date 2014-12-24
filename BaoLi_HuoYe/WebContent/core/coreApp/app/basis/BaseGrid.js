@@ -1,22 +1,47 @@
 /**
- * 报修单
+ * 表格基础组件
  */
-Ext.define("core.base.resident.view.RepairGrid",{
-	extend : 'core.app.basis.BaseGrid',
-	alias : 'widget.unite.repairgrid',
-	funData:{
-	code:302,
+
+Ext.define("core.app.basis.BaseGrid",{
+	 extend : 'Ext.grid.Panel',
+     autoHeight:true,
+     style:'border-width:0 0 0 0;',
+     columnLines : true, // 加上表格线
+	 multiSelect : true,
+	 width:"100%",
+	 tools : [{type : 'gear'}],
+    listeners : {
+		    selectionChange : function(model, selected, eOpts){
+			var viewModel=this.viewModel;
+		    this.down('toolbar button#delete')[selected.length > 0? 'enable': 'disable']();
+			var selectedNames =viewModel.get("tf_title");
+			if (selected.length > 0) {
+				if (!!selected[0].getNameValue()){
+					selectedNames = selectedNames + '　『<em>' + selected[0].getNameValue()+ '</em>'+ (selected.length > 1 ? ' 等' + selected.length + '条' : '') + '』';
+					if(!this.funData.showTitle==false){
+				     this.setTitle(selectedNames);
+					}
+				}
+			}
+		}
 	},
-/*autoHeight:true,
-style:'border-width:0 0 0 0;',
- columnLines : true, // 加上表格线
-	multiSelect : true,
-	width:"100%",
-	enableLocking : true, // 使grid可以锁定列
-   initComponent : function() {
-   	
+	 enableLocking : true, // 使grid可以锁定列
+     initComponent : function() {
    	  var self=this;
-   	   var  thar = [
+   	  var  funData={
+	  api:{
+	         read : 'rest/module/fetchdata.do',
+		     update : 'rest/module/update.do',
+			 create : 'rest/module/create.do',
+			 destroy : 'rest/module/remove.do'
+	 },
+	 showTitle:false,
+	 code:00
+	 	
+	}
+   	 Ext.apply(funData,this.funData);
+   	 this.funData=funData;
+	   var  thar = [
    		{text : '新增',   ref:'addButton', xtype : 'splitbutton',itemId : 'new',glyph : 0xf016,menu : [{text : '复制新增', ref:'copyadd', tooltip : '新增时先将当前记录添入到新记录中',itemId : 'newwithcopy',glyph : 0xf0c5,
 				  listeners : {
 								click:function(){
@@ -44,7 +69,7 @@ style:'border-width:0 0 0 0;',
 													useXAxis : true,
 													slideInDuration : 500
 												});
-										return;get
+										return;
 									}
 									var model = Ext.create(grid.getStore().model);
 									Ext.Array.each(model.fields.keys, function(field) { // 将选中记录的model都赋给值新的记录
@@ -80,19 +105,23 @@ style:'border-width:0 0 0 0;',
 										}
 									})
 						}];
+			
+						
+						
 	var  barItem=[];
 	if(!this.thar){
 	  barItem=thar
 	}else{
 	 barItem=Ext.apply(thar,this.thar);
 	}
-   	var viewModel=system.getViewModel(302)
-   		this.model = core.app.module.factory.ModelFactory.getModelByModule(viewModel.data,{destroy : 'rest/102/remove.do'});
+   	var viewModel=system.getViewModel(funData.code)
+   		this.model = core.app.module.factory.ModelFactory.getModelByModule(viewModel.data,funData.api);
 				this.store = Ext.create('core.app.store.GridStore', {
 							model : this.model,
 							gridModue : this
 						});
 		this.columns = core.app.module.factory.ColumnsFactory.getColumns(viewModel);	
+	
 					this.dockedItems = [{
 					xtype : 'toolbar', // 按钮toolbar
 					dock : 'top',
@@ -123,7 +152,7 @@ style:'border-width:0 0 0 0;',
 		this.plugins = [this.rowEditing];
 		this.selType = 'rowmodel';
 		
-		
+	
 		this.on('edit', function(editor, e) {
 					// 每一行编辑完保存之后，都提交数据
 			// 每一行编辑完保存之后，都提交数据
@@ -153,11 +182,7 @@ style:'border-width:0 0 0 0;',
 					}]
 
 			};
-		
-		
-		
-		
-		var columns=new Array();
+	var columns=new Array();
 		Ext.each(this.columns,function(col){
 			if(col.columnType=="basecombobox" || (col.field && col.field.xtype && col.field.xtype=="basecombobox")){
 				col.renderer=function(value,data,record){
@@ -195,6 +220,9 @@ style:'border-width:0 0 0 0;',
 			columns.push(col);
 		});
 		this.columns=columns;
-		this.callParent(arguments);
-   }*/
+		this.title=null;
+		this.tools=null;
+	   this.callParent(arguments);
+		
+   }
 })
