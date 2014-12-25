@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.model.hibernate.system.shared.Department;
 import com.model.hibernate.system.shared.EndUser;
+import com.model.hibernate.system.shared.XCodeInfo;
 import com.ufo.framework.common.core.utils.StringUtil;
 import com.ufo.framework.system.ebi.SimpleEbi;
 import com.ufo.framework.system.web.SecurityUserHolder;
@@ -57,6 +58,12 @@ public class AppController {
 			if (StringUtil.isNotEmpty(currentUser.getUserCode())) {
 				currentUser.setDeptId(SecurityUserHolder.getCurrentDept()
 						.getDeptId());
+				if(EndUser.MARKING_XCODE.equals(currentUser.getXcode())&&EndUser.MARKING_XCODE.equals(currentUser.getCodeId())){
+					currentUser.setXcodeInfo(null);
+				}else{
+					XCodeInfo codeInfo=(XCodeInfo) ebi.findById(XCodeInfo.class, currentUser.getCodeId());
+					currentUser.setXcodeInfo(codeInfo);
+				}
 				SecurityUserHolder.setSession("currentUser", currentUser);
 				Cookie userCodeCookie = new Cookie("loginUserCode",
 						currentUser.getUserCode());

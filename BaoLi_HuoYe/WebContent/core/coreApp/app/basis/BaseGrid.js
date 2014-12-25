@@ -4,6 +4,7 @@
 
 Ext.define("core.app.basis.BaseGrid",{
 	 extend : 'Ext.grid.Panel',
+	 alias:"widget.ufogrid",
      autoHeight:true,
      style:'border-width:0 0 0 0;',
      columnLines : true, // 加上表格线
@@ -25,7 +26,7 @@ Ext.define("core.app.basis.BaseGrid",{
 			}
 		}
 	},
-	 enableLocking : true, // 使grid可以锁定列
+	// enableLocking : true, // 使grid可以锁定列  列锁定后alias无效
      initComponent : function() {
    	  var self=this;
    	  var  funData={
@@ -220,8 +221,10 @@ Ext.define("core.app.basis.BaseGrid",{
 			columns.push(col);
 		});
 		this.columns=columns;
+		if(this.funData.showTitle==false){
 		this.title=null;
 		this.tools=null;
+		}
 	   this.callParent(arguments);
 		
    }

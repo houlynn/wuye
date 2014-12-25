@@ -105,15 +105,6 @@ public class PermissionEbo extends SimpleEbo<Permission> implements PermissionEb
 		String[] addIdsArray=addIds.split(StringVeriable.STR_SPLIT);
 		/**删除权限的操作*/
 		String[] delIdsArray=delIds.split(StringVeriable.STR_SPLIT);
-         System.out.println("打印===============================需要增加的权限============================================");
-         Arrays.asList(addIdsArray).parallelStream().forEach(item->System.out.println(item));
-         System.out.println("打印===============================需要删除的权限============================================");
-         Arrays.asList(delIdsArray).parallelStream().forEach(item->System.out.println(item));
-         System.out.println("打印===========================================================================");
-         
-		
-		
-		
 		/**增加权限的操作*/
 		for(String addId:addIdsArray){
 			if(StringUtil.isEmpty(addId)){
@@ -136,7 +127,6 @@ public class PermissionEbo extends SimpleEbo<Permission> implements PermissionEb
 				
 			}
 		}
-	
 		for(String delId:delIdsArray){
 			if(StringUtil.isEmpty(delId)){
 				continue;

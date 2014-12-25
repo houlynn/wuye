@@ -146,6 +146,16 @@ public class UserRealm extends AuthorizingRealm {
 		currentUser.setBirthday(user.getBirthday());
 		currentUser.setSex(user.getSex());
 		currentUser.setPassword(user.getPassword());
+		currentUser.setAdmins(user.getAdmins());
+		currentUser.setBirthday(user.getBirthday());
+		currentUser.setCodeId(user.getCodeId());
+		currentUser.setCreateTime(user.getCreateTime());
+		currentUser.setXcode(user.getXcode());
+		currentUser.setEnabled(user.getEnabled());
+		currentUser.setOrderIndex(user.getOrderIndex());
+		currentUser.setIcon(user.getIcon());
+		currentUser.setRemark(user.getRemark());
+		currentUser.setXcode(user.getXcode());
 		Department dept = user.getDepartment();
 		// 为登录用户添加所属部门
 		if (null != dept) {

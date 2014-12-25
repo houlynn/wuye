@@ -39,8 +39,8 @@ import com.ufo.framework.common.model.BaseEntity;
 @GenericGenerator(name="systemUUID",strategy="uuid")
 public class EndUser extends BaseEntity {
 	
-	public static final String MARKING_XCODE="7DA9BE06-14B0-DBAC-F5EF-FD2E3C600E59";
 	
+	public static final String MARKING_XCODE="7DA9BE06-14B0-DBAC-F5EF-FD2E3C600E59";
 	@FieldInfo(name="主键",type=ExtFieldType.ID,title = "ID号", number = 10, hidden = true)
 	@DDItemCode
 	private String userId;
@@ -67,27 +67,26 @@ public class EndUser extends BaseEntity {
 	private String deptName;
 	@FieldInfo(name="部门编码",hidden=true)
 	private String deptCode;
-	
 	@FieldInfo(title = "备注", number =50)
 	@Column(length = 250)
 	private String remark;
 	private String admins;
 	@FieldInfo(name="是否启用")
 	private String enabled;
-	private SystemToken systemToken;
 	
-	@JsonIgnore //构建json数据的时候排除此字段
-	@ManyToOne(optional=false, fetch=FetchType.LAZY, cascade={CascadeType.MERGE})
-	@JoinColumn(name="tf_codeId",nullable=true)
-	@LazyCollection(LazyCollectionOption.TRUE)
-	public SystemToken getSystemToken() {
-		return systemToken;
-	}
-	public void setSystemToken(SystemToken systemToken) {
-		this.systemToken = systemToken;
-	}
+	@Column(length=200,nullable=false)
+	private String  codeId;
+   private XCodeInfo xcodeInfo;
+  
 	public String getEnabled() {
 		return enabled;
+	}
+	@Transient
+	public XCodeInfo getXcodeInfo() {
+		return xcodeInfo;
+	}
+	public void setXcodeInfo(XCodeInfo xcodeInfo) {
+		this.xcodeInfo = xcodeInfo;
 	}
 	public void setEnabled(String enabled) {
 		this.enabled = enabled;
@@ -208,6 +207,12 @@ public class EndUser extends BaseEntity {
 	}
 	public void setCreateTime(String createTime) {
 		this.createTime = createTime;
+	}
+	public String getCodeId() {
+		return codeId;
+	}
+	public void setCodeId(String codeId) {
+		this.codeId = codeId;
 	}
 	
 	

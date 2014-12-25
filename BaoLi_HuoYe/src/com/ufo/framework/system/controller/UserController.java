@@ -56,8 +56,12 @@ public class UserController extends SimpleBaseController<EndUser> {
 			model.setOrderIndex(max);
 			model.setSex("1");
 			model.setEnabled("1");
-			model.setSystemToken(SecurityUserHolder.getCurrentUser().getSystemToken());
 			model.setXcode(SecurityUserHolder.getIdentification());
+			if(EndUser.MARKING_XCODE.equals(SecurityUserHolder.getIdentification())){
+				model.setCodeId(EndUser.MARKING_XCODE);
+			}else{
+				model.setCodeId(SecurityUserHolder.getCurrentUser().getXcodeInfo().getTf_codeId());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

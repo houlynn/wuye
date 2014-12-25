@@ -20,7 +20,7 @@ import com.model.hibernate.property.PropertyCompany;
 
 @Entity
 @GenericGenerator(name="systemUUID",strategy="uuid")
-public class SystemToken {
+public class XCodeInfo {
 	private String  tf_codeId;
 	private String tf_createTime;
 	private  PropertyCompany tf_propertyCompany;

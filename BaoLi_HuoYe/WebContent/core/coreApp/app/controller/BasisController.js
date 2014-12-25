@@ -4,6 +4,16 @@ Ext.define("core.app.controller.BasisController",{
 		var self=this;
 		var basisCtr={
 			
+				"ufogrid button[ref=editButton]":{
+				  click:function(btn){
+				  	
+				  	alert(0);
+				  	
+				  	
+				  }
+				},
+			
+			
 		"container[xtype=gridModue] button[ref=addButton]":{
 							 click : function (btn){
 							 var modulegrid = btn.up("gridModue");	

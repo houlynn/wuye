@@ -21,7 +21,7 @@ public class SecurityUserHolder implements CommonException {
 		if (currentUser.isAuthenticated()) {
 			EndUser user = (EndUser) currentUser.getSession().getAttribute(
 					"currentUser");
-		     if(!user.getXcode().equals(EndUser.MARKING_XCODE)&&user.getSystemToken()==null){
+	      if(EndUser.MARKING_XCODE.equals(user.getXcode())&&!EndUser.MARKING_XCODE.equals(user.getCodeId())){
 		    		TimeoutException exception=	 new TimeoutException(); 
 					 ResponseErrorInfo errorInfo= new ResponseErrorInfo();
 					 errorInfo.getErrorMessage().put("error", "非法用户!");
@@ -29,8 +29,6 @@ public class SecurityUserHolder implements CommonException {
 					 exception.setErrorInfo(errorInfo);
 					 throw exception;
 		     }
-			
-			
 			return user;
 		} else {
 			TimeoutException exception=	 new TimeoutException(); 
@@ -91,11 +89,11 @@ public class SecurityUserHolder implements CommonException {
 		if (currentUser.isAuthenticated()) {
 			EndUser user = (EndUser) currentUser.getSession().getAttribute(
 					"currentUser");
-			if(user.getSystemToken()==null&&user.getXcode().endsWith(EndUser.MARKING_XCODE)){
+		if(user.getXcodeInfo()==null&&EndUser.MARKING_XCODE.equals(user.getXcode())){
 				indent=EndUser.MARKING_XCODE;
-			}else if(user.getSystemToken()!=null){
-				indent=user.getSystemToken().getXcode();
-			}else if(user.getSystemToken()==null){
+			}else if(user.getXcodeInfo()!=null){
+				indent=user.getXcodeInfo().getXcode();
+			}else if(user.getXcodeInfo()==null){
 				 TimeoutException exception=	 new TimeoutException(); 
 				 ResponseErrorInfo errorInfo= new ResponseErrorInfo();
 				 errorInfo.getErrorMessage().put("error", "非法用户!");

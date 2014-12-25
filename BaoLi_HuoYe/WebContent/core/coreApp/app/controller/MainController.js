@@ -38,6 +38,7 @@ Ext.define("core.app.controller.MainController",{
 		"core.app.base.BaseQueryPanel",
 		"core.app.base.BaseCenterPanel",
 		"core.app.basis.BasisGrid",
-		"core.app.basis.BaseGrid"
+		"core.app.basis.BaseGrid",
+		"core.app.basis.BasePanel"
 		]
 });
