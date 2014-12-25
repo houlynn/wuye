@@ -1,9 +1,9 @@
 Ext.define("core.base.pro.view.ProGrid",{
 	extend : 'core.app.basis.BaseGrid',
 	alias : 'widget.pro.progrid',
-	thar:[{text:"add",ref:"ppp"}],
+	code:9903,
 	funData:{
-	code:101,
+	code:9903,
 	showTitle:true
 	}
 });

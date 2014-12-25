@@ -3,19 +3,180 @@ Ext.define("core.app.controller.BasisController",{
 	  	initBasis:function(){
 		var self=this;
 		var basisCtr={
-			
-				"ufogrid button[ref=editButton]":{
+		"ufogrid":{
+			render:function(grid){
+					var panel=grid.up("ufopanel");
+					var funCode=panel.funCode;
+					var funData=panel.funData;
+					grid.funCode=funCode;
+					grid.funData=funData;
+					grid.itemId=funCode+"_ufogrid";
+					 
+				}},
+	   "ufogrid button[ref=addButton]":{
 				  click:function(btn){
-				  	
-				  	alert(0);
-				  	
-				  	
-				  }
+		                     var modulegrid = btn.up("ufogrid");	
+							 var  moduelPanel=modulegrid.up("ufopanel");
+							 var  navigatetree=moduelPanel.down("navigatetree");
+							 var funData=modulegrid.funData;
+							 var store=modulegrid.getStore();
+							 var viewModel=system.getViewModel(funData.code);
+							  var model = Ext.create(modulegrid.getStore().model);
+							 if(funData.navigatesStore&&funData.navigatesStore==true){
+							 	  if(!store.navigates||store.navigates.length==0){
+                	         	  system.errorInfo("请选择导航条目再进行添加操作!","错误提示");
+                	         	 return;
+                	          }else{
+                	         var node=navigatetree.getSelectionModel().getSelection()[0];
+							  if(viewModel.get("tf_linkedModule")){
+                	               model.fields.items.forEach(function(f,index){
+                	                 var fidldName=f.name;
+                	                  if(f.manytoone_TitleName){
+                	                   model.set(fidldName,node.raw.text);
+                	                 }
+                	              });
+							    }
+                	          }
+							 }
+			                 model.set(model.idProperty, null); // 设置主键为null,可自动
+			                 var window = Ext.create('core.app.view.region.BaseWindow', {
+				                          viewModel:viewModel,
+				                            grid:modulegrid
+			                                 });
+			                    window.down('baseform').setData(model);
+	                            window.show();
+								}, // 这里不要用handler，而要用click,因为下面要发送click事件
+								// 删除按钮在渲染后加入可以Drop的功能
+								render : function(btn) {
+									// 可以使Grid中选中的记录拖到到此按钮上来进行复制新增
+									var modulegrid= btn.up("ufogrid");
+									btn.dropZone = new Ext.dd.DropZone(btn.getEl(), {
+												// 此处的ddGroup需要与Grid中设置的一致
+												ddGroup : 'DD_grid_' + modulegrid.viewModel.get('tf_moduleName'),
+												getTargetFromEvent : function(e) {
+													return e.getTarget('');
+												},
+												// 用户拖动选中的记录经过了此按钮
+												onNodeOver : function(target, dd, e, data) {
+													return Ext.dd.DropZone.prototype.dropAllowed;
+												},
+												// 用户放开了鼠标键，删除记录
+												onNodeDrop : function(target, dd, e, data) {
+													var b = btn.menu.down('#newwithcopy');
+													b.fireEvent('click', b);
+												}
+											})
+								}
 				},
-			
+				 "ufogrid button[ref=editButton]":{
+			click:function(btn){
+							var modulegrid = btn.up("ufogrid");	
+						    var funData=modulegrid.funData;
+						    var viewModel=system.getViewModel(funData.code);
+							var sm= modulegrid.getSelectionModel().getSelection();
+							if(sm.length==0){
+							 return;
+							}
+							var window = Ext.create('core.app.view.region.BaseWindow', {
+								viewModel:viewModel,
+								grid:modulegrid
+							});
+					       console.log(modulegrid.getSelectionModel().getSelection()[0]);
+					       console.log(modulegrid.getStore().getAt(0));
+					       window.down('baseform').setData(modulegrid.getSelectionModel().getSelection()[0]);
+					       window.show();
+					  }
+					},	
+				 "ufogrid button[ref=removeButton]":{
+					  click:function(btn){
+			var modulegrid=btn.up("ufogrid");
+			var funData=modulegrid.funData;
+		    var viewModel=system.getViewModel(funData.code);
+			var selection=modulegrid.getSelectionModel().getSelection();
+			var message='';
+			var infoMessage='';
+			if (selection.length == 1) { // 如果只选择了一条
+				message = ' 『' + selection[0].getNameValue() + '』 吗?';
+				infoMessage = '『' + selection[0].getNameValue() + '』';
+			} else { // 选择了多条记录
+				message = '<ol>';
+				Ext.Array.each(selection, function(record) {
+							message += '<li>' + record.getNameValue() + '</li>';
+						});
+				message += '</ol>';
+				infoMessage = message;
+				message = '以下 ' + selection.length + ' 条记录吗?' + message;
+			}
+			var moduletitle = '<strong>' + viewModel.get('tf_title')
+					+ '</strong>';
+			Ext.MessageBox.confirm('确定删除', '确定要删除 ' + moduletitle + ' 中的' + message,
+					function(btn) {
+						if (btn == 'yes') {
+							modulegrid.getStore().remove(modulegrid.getSelectionModel().getSelection());
+							modulegrid.getStore().sync();
+						    var errorInfo=modulegrid.getStore().getProxy().errorInfo
+						    		var task = new Ext.util.DelayedTask(function() {
+						    			if(errorInfo){
+						    				modulegrid.getStore().reload();
+						    				delete odulegrid.getStore().getProxy().errorInfo;
+						    				alert(odulegrid.getStore().getProxy().errorInfo);
+							    			return;
+							    		}
+							    
+							   		 Ext.toast({
+											title : '删除成功',
+											html : moduletitle + infoMessage + '已成功删除！',
+											bodyStyle : 'background-color:#7bbfea;',
+											header : {
+												border : 1,
+												style : {
+													borderColor : '#9b95c9'
+												}
+											},
+											border : true,
+											style : {
+												borderColor : '#9b95c9'
+											},
+											saveDelay : 10,
+											align : 'tr',
+											closable : true,
+											minWidth : 200,
+											maxheight:250,
+											useXAxis : true,
+											slideInDuration : 500
+										});
+						    	});
+						    	task.delay(500);
+							
+						}
+					})
+					
+				},
+					render : function(button) {
+									// 可以使Grid中选中的记录拖到到此按钮上来进行删除
+									button.dropZone = new Ext.dd.DropZone(button.getEl(), {
+												// 此处的ddGroup需要与Grid中设置的一致
+												ddGroup : 'DD_grid_' + viewModel.get('tf_moduleName'),
+												// 这个函数没弄明白是啥意思,没有还不行
+												getTargetFromEvent : function(e) {
+													return e.getTarget('');
+												},
+												// 用户拖动选中的记录经过了此按钮
+												onNodeOver : function(target, dd, e, data) {
+													return Ext.dd.DropZone.prototype.dropAllowed;
+												},
+												// 用户放开了鼠标键，删除记录
+												onNodeDrop : function(target, dd, e, data) {
+													button.fireEvent('click', button); // 执行删除按钮的click事件
+												}
+											})
+					  	
+					  }
+					},			
 			
 		"container[xtype=gridModue] button[ref=addButton]":{
 							 click : function (btn){
+							 
 							 var modulegrid = btn.up("gridModue");	
 							 var  moduelPanel=modulegrid.up("modulepanel");
 							 var  navigatetree=moduelPanel.down("navigatetree");
@@ -92,7 +253,7 @@ Ext.define("core.app.controller.BasisController",{
 			
 			"container[xtype=navigatetree] ":{
                 itemclick: function (view, node, item, index, e, eOpts){
-                	var grid=view.ownerCt.ownerCt.ownerCt.ownerCt.ownerCt.down("gridModue");
+                	var grid=view.ownerCt.ownerCt.ownerCt.ownerCt.ownerCt.down("ufogrid");
                 	var moduelPanel=view.ownerCt.ownerCt.ownerCt.ownerCt.ownerCt;
                 	var code=moduelPanel.code;
                     var viewModel=system.getViewModel(code);

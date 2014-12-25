@@ -29,7 +29,7 @@ Ext.define("core.app.basis.BaseGrid",{
 	// enableLocking : true, // 使grid可以锁定列  列锁定后alias无效
      initComponent : function() {
    	  var self=this;
-   	  var  funData={
+  	  var  funData={
 	  api:{
 	         read : 'rest/module/fetchdata.do',
 		     update : 'rest/module/update.do',
