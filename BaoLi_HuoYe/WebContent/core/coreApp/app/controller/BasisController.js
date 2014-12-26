@@ -18,9 +18,9 @@ Ext.define("core.app.controller.BasisController",{
 		                     var modulegrid = btn.up("ufogrid");	
 							 var  moduelPanel=modulegrid.up("ufopanel");
 							 var  navigatetree=moduelPanel.down("navigatetree");
-							 var funData=modulegrid.funData;
+							 var funData=moduelPanel.funData;
 							 var store=modulegrid.getStore();
-							 var viewModel=system.getViewModel(funData.code);
+							 var viewModel=system.getViewModel(modulegrid.code);
 							  var model = Ext.create(modulegrid.getStore().model);
 							 if(funData.navigatesStore&&funData.navigatesStore==true){
 							 	  if(!store.navigates||store.navigates.length==0){
@@ -40,7 +40,7 @@ Ext.define("core.app.controller.BasisController",{
 							 }
 			                 model.set(model.idProperty, null); // 设置主键为null,可自动
 			                 var window = Ext.create('core.app.view.region.BaseWindow', {
-				                          viewModel:viewModel,
+				                           viewModel:viewModel,
 				                            grid:modulegrid
 			                                 });
 			                    window.down('baseform').setData(model);
@@ -50,9 +50,10 @@ Ext.define("core.app.controller.BasisController",{
 								render : function(btn) {
 									// 可以使Grid中选中的记录拖到到此按钮上来进行复制新增
 									var modulegrid= btn.up("ufogrid");
+									 var viewModel=system.getViewModel(modulegrid.code);
 									btn.dropZone = new Ext.dd.DropZone(btn.getEl(), {
 												// 此处的ddGroup需要与Grid中设置的一致
-												ddGroup : 'DD_grid_' + modulegrid.viewModel.get('tf_moduleName'),
+												ddGroup : 'DD_grid_' + viewModel.get('tf_moduleName'),
 												getTargetFromEvent : function(e) {
 													return e.getTarget('');
 												},
@@ -71,8 +72,7 @@ Ext.define("core.app.controller.BasisController",{
 				 "ufogrid button[ref=editButton]":{
 			click:function(btn){
 							var modulegrid = btn.up("ufogrid");	
-						    var funData=modulegrid.funData;
-						    var viewModel=system.getViewModel(funData.code);
+						    var viewModel=system.getViewModel(modulegrid.code);
 							var sm= modulegrid.getSelectionModel().getSelection();
 							if(sm.length==0){
 							 return;
@@ -90,8 +90,7 @@ Ext.define("core.app.controller.BasisController",{
 				 "ufogrid button[ref=removeButton]":{
 					  click:function(btn){
 			var modulegrid=btn.up("ufogrid");
-			var funData=modulegrid.funData;
-		    var viewModel=system.getViewModel(funData.code);
+		    var viewModel=system.getViewModel(modulegrid.code);
 			var selection=modulegrid.getSelectionModel().getSelection();
 			var message='';
 			var infoMessage='';

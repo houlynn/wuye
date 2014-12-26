@@ -83,6 +83,11 @@ Ext.define('core.app.module.factory.FormFieldFactory', {
 							xtype : 'checkboxfield',
 							inputValue : 'true'
 						};
+						case 'boolean' :
+						return {
+							xtype : 'checkboxfield',
+							inputValue : 'true'
+						};	
 					case 'basecombobox' :
 						return {
 							xtype : 'basecombobox',

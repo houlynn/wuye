@@ -10,16 +10,17 @@ Ext.define("core.app.basis.BaseGrid",{
      columnLines : true, // 加上表格线
 	 multiSelect : true,
 	 width:"100%",
+	 showTitle:true,
 	 tools : [{type : 'gear'}],
-    listeners : {
+     listeners : {
 		    selectionChange : function(model, selected, eOpts){
-			var viewModel=this.viewModel;
+		 	var viewModel=system.getViewModel(this.code)
 		    this.down('toolbar button#delete')[selected.length > 0? 'enable': 'disable']();
 			var selectedNames =viewModel.get("tf_title");
 			if (selected.length > 0) {
 				if (!!selected[0].getNameValue()){
 					selectedNames = selectedNames + '　『<em>' + selected[0].getNameValue()+ '</em>'+ (selected.length > 1 ? ' 等' + selected.length + '条' : '') + '』';
-					if(!this.funData.showTitle==false){
+					if(!this.showTitle==false){
 				     this.setTitle(selectedNames);
 					}
 				}
@@ -29,19 +30,16 @@ Ext.define("core.app.basis.BaseGrid",{
 	// enableLocking : true, // 使grid可以锁定列  列锁定后alias无效
      initComponent : function() {
    	  var self=this;
-  	  var  funData={
-	  api:{
-	         read : 'rest/module/fetchdata.do',
-		     update : 'rest/module/update.do',
-			 create : 'rest/module/create.do',
-			 destroy : 'rest/module/remove.do'
-	 },
-	 showTitle:false,
-	 code:00
-	 	
-	}
-   	 Ext.apply(funData,this.funData);
-   	 this.funData=funData;
+   	  var api= {
+	                read : 'rest/module/fetchdata.do',
+		            update : 'rest/module/update.do',
+			        create : 'rest/module/create.do',
+			       destroy : 'rest/module/remove.do'
+	        };
+	   if(this.api){     
+	    api=Ext.apply(api,this.api);   
+	   }
+	   this.api=api;
 	   var  thar = [
    		{text : '新增',   ref:'addButton', xtype : 'splitbutton',itemId : 'new',glyph : 0xf016,menu : [{text : '复制新增', ref:'copyadd', tooltip : '新增时先将当前记录添入到新记录中',itemId : 'newwithcopy',glyph : 0xf0c5,
 				  listeners : {
@@ -115,14 +113,13 @@ Ext.define("core.app.basis.BaseGrid",{
 	}else{
 	 barItem=Ext.apply(thar,this.thar);
 	}
-   	var viewModel=system.getViewModel(funData.code)
-   		this.model = core.app.module.factory.ModelFactory.getModelByModule(viewModel.data,funData.api);
+     var viewModel=system.getViewModel(this.code)
+   	 this.model = core.app.module.factory.ModelFactory.getModelByModule(viewModel.data,this.api);
 				this.store = Ext.create('core.app.store.GridStore', {
 							model : this.model,
-							gridModue : this
+							modulegrid:this
 						});
 		this.columns = core.app.module.factory.ColumnsFactory.getColumns(viewModel);	
-	
 					this.dockedItems = [{
 					xtype : 'toolbar', // 按钮toolbar
 					dock : 'top',
@@ -131,20 +128,18 @@ Ext.define("core.app.basis.BaseGrid",{
 					viewModel:viewModel
 					
 				}, {
-					xtype : 'pagingtoolbar', // grid数据分页
+					xtype : 'pagingtoolbar',
 					store : this.store,
 					displayInfo : true,
 					prependButtons : true,
 					dock : 'bottom',
-					items : [{ // 在最前面加入grid方案的选择Combo
-						//xtype : 'gridschemecombo'
+					items : [{ 
 					}]
 				}];	
-		this.store.modulegrid = this;
-		this.viewModel=viewModel;
 		var title = viewModel.get('tf_title');
+		if(this.showTitle==true){
 		this.setTitle(title);
-		// 可以在grid中进行行编辑的设置
+		}
 		this.rowEditing = new Ext.grid.plugin.RowEditing({
 			     saveBtnText: '保存', 
                    cancelBtnText: "取消", 
@@ -152,21 +147,16 @@ Ext.define("core.app.basis.BaseGrid",{
 				});
 		this.plugins = [this.rowEditing];
 		this.selType = 'rowmodel';
-		
-	
 		this.on('edit', function(editor, e) {
-					// 每一行编辑完保存之后，都提交数据
-			// 每一行编辑完保存之后，都提交数据
 			e.grid.getStore().sync({
 						callback : function(data,store) {
-							 e.record.commit();
-							  system.smileInfo("保存成功!")
+							   e.record.commit();
+							   //system.smileInfo("保存成功!")
 						}
 					});
 			var proxy= e.grid.getStore().getProxy();
 			var errorInfo=proxy.proxy;
 			if(errorInfo){
-				
 			}else{
 				showMsg("添加信息","添加成功!",1);
 			}
@@ -175,10 +165,9 @@ Ext.define("core.app.basis.BaseGrid",{
 		this.viewConfig = {
 				stripeRows : true, // 奇偶行不同底色
 				enableTextSelection : false,
-				// 加入允许拖动功能
 				plugins : [{
 					ptype : 'gridviewdragdrop',
-					ddGroup : 'DD_grid_' + viewModel.get('tf_moduleName'), // 拖动分组必须设置，这个分组名称为:DD_grid_Global
+					ddGroup : 'DD_grid_' + viewModel.get('tf_moduleName'), 
 					enableDrop : false  // 设为false，不允许在本grid中拖动
 					}]
 
@@ -221,10 +210,6 @@ Ext.define("core.app.basis.BaseGrid",{
 			columns.push(col);
 		});
 		this.columns=columns;
-		if(this.funData.showTitle==false){
-		this.title=null;
-		this.tools=null;
-		}
 	   this.callParent(arguments);
 		
    }

@@ -15,12 +15,9 @@ import org.hibernate.annotations.Type;
 import com.ufo.framework.annotation.DDItemCode;
 import com.ufo.framework.annotation.DDItemName;
 import com.ufo.framework.annotation.FieldInfo;
-import com.ufo.framework.annotation.NodeType;
 import com.ufo.framework.annotation.TableInfo;
 import com.ufo.framework.annotation.TreeItemName;
 import com.ufo.framework.annotation.TreeItemValue;
-import com.ufo.framework.common.core.ext.ExtFieldType;
-import com.ufo.framework.common.core.ext.TreeNodeType;
 import com.ufo.framework.common.model.BaseEntity;
 /**
  * 小区信息
@@ -84,6 +81,9 @@ public class Village extends BaseEntity {
 	private float tf_greenarea;
 	@FieldInfo(title = "接盘时间",number=150)
 	private Date  tf_sales;
+	
+	
+	
 	public int getTf_viid() {
 		return tf_viid;
 	}

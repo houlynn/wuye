@@ -28,7 +28,11 @@ Ext.define('core.app.view.region.BaseForm', {
 							    		var model= button.up('form').getForm().getRecord().save();
 							    		var task = new Ext.util.DelayedTask(function() {
 							    			if(model.getProxy().errorInfo){
-							    			   self.callback(model.getProxy().errorInfo);
+							    			console.log("---------errror-----------------")	
+							    			console.log(model.getProxy().errorInfo);	
+							    			   if( self.callback){	
+							    			      self.callback(model.getProxy().errorInfo);
+							    			   }
 								    			return;
 								    			
 								    		}
@@ -39,6 +43,8 @@ Ext.define('core.app.view.region.BaseForm', {
 							    	task.delay(500);
 							      }
 							}
+							
+							
 						},{
 							text : '关闭',
 							itemId : 'close',

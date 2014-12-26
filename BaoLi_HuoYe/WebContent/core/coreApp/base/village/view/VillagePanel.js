@@ -1,11 +1,11 @@
 Ext.define("core.base.pro.view.ProPanel",{
 	extend : 'core.app.basis.BasePanel',
-	alias : 'widget.pro.propanel',
-	funCode:"PropertyCompany",
+	alias : 'widget.village.villagepanel',
+	funCode:"Village",
 	items:[{ 
-	xtype:"pro.progrid",
+	xtype:"village.grid",
 	region : 'center',
-	code:101,
+	code:102,
 	}]
 	
 });

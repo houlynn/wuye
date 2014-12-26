@@ -108,20 +108,22 @@ public class ResidentInfo  extends BaseEntity{
     private String tf_subsDate;
 	
 	/////////////////房屋状态//////////////////////////////////
-	@FieldInfo(title = "备用状态", number = 170)
+	@FieldInfo(title = "备用状态", number = 260)
 	@Column(length = 25)
     private String tf_state;
+	
+	
     /**
      * 入住状态
      */
-	@FieldInfo(title = "入住状态", number = 170)
+	@FieldInfo(title = "入住状态", number = 270)
 	@Column(length = 25)
 	private String tf_stateOccupancy;
 	
 	/**
 	 * 欠费状态
 	 */
-	@FieldInfo(title = "欠费状态", number = 170)
+	@FieldInfo(title = "欠费状态", number = 280)
 	@Column(length = 25)
 	private String tf_stateFees;
 	
@@ -129,9 +131,24 @@ public class ResidentInfo  extends BaseEntity{
 	/**
 	 * 报修状态
 	 */
-	@FieldInfo(title = "报修状态", number = 170)
+	@FieldInfo(title = "报修状态", number = 290)
 	@Column(length = 25)
 	private String tf_stateRepair;
+	
+
+	@FieldInfo(title = "出租", number = 300)
+	@Column(length = 25)
+	private String tf_rental;
+	
+	@FieldInfo(title = "出售", number = 310)
+	@Column(length = 25)
+	private String tf_sell;
+	
+	@FieldInfo(title = "APP账户", number = 320)
+	@Column(length = 25)
+	private String tf_appPhone;
+	
+	
 	
 	
 	
@@ -140,6 +157,7 @@ public class ResidentInfo  extends BaseEntity{
 	@JoinColumn(name="tf_leveId")
 	@FieldInfo(title = "楼宇", number = 0)
 	private LevelInfo tf_levelInfo;
+	
 	
 	
 	@JsonIgnore

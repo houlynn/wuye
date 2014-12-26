@@ -7,10 +7,9 @@ Ext.define("core.app.basis.BasisGrid",{
 	width:"100%",
 	enableLocking : true, 
     tools : [{type : 'gear'}],
-    
     listeners : {
 		    selectionChange : function(model, selected, eOpts){
-			var viewModel=this.viewModel;
+		    var viewModel=system.getViewModel(this.code)
 		    this.down('toolbar button#delete')[selected.length > 0? 'enable': 'disable']();
 			var selectedNames =viewModel.get("tf_title");
 			if (selected.length > 0) {

@@ -2,12 +2,12 @@
  * 报修单
  */
 Ext.define("core.base.resident.view.RepairGrid",{
-	extend : 'core.app.basis.BaseGrid',
+	extend : 'Ext.grid.Panel',
 	alias : 'widget.unite.repairgrid',
 	funData:{
-	code:302,
+	   code:302,
 	},
-/*autoHeight:true,
+autoHeight:true,
 style:'border-width:0 0 0 0;',
  columnLines : true, // 加上表格线
 	multiSelect : true,
@@ -112,8 +112,8 @@ style:'border-width:0 0 0 0;',
 				}];	
 		this.store.modulegrid = this;
 		this.viewModel=viewModel;
-		var title = viewModel.get('tf_title');
-		this.setTitle(title);
+	/*	var title = viewModel.get('tf_title');
+		this.setTitle(title);*/
 		// 可以在grid中进行行编辑的设置
 		this.rowEditing = new Ext.grid.plugin.RowEditing({
 			     saveBtnText: '保存', 
@@ -196,5 +196,5 @@ style:'border-width:0 0 0 0;',
 		});
 		this.columns=columns;
 		this.callParent(arguments);
-   }*/
+   }
 })
