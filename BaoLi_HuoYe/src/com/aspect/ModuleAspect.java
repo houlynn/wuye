@@ -14,6 +14,10 @@ public interface ModuleAspect {
 	
 	
 	public  void beforeCreate(Object record ,String moduleName,List<SqlModuleFilter> navs) throws Exception;
+
+
+	public void afterCreate(Object record, String moduleName,
+			List<SqlModuleFilter> navs) throws Exception;
 	
 	
 

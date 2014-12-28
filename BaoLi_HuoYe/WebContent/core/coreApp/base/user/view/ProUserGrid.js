@@ -1,18 +1,47 @@
 Ext.define("core.base.user.view.ProUserGrid", {
 			extend : 'Ext.grid.Panel',
-			alias : 'widget.unite.repairgrid',
+			alias : 'widget.user.prouser',
 			autoHeight : true,
 			style : 'border-width:0 0 0 0;',
 			columnLines : true, // 加上表格线
 			multiSelect : true,
 			width : "100%",
 			enableLocking : true, // 使grid可以锁定列
+			store:"core.base.user.store.ProUserStore",
+			title:"分配配管理员" ,
+			columns:[
+		  {text : "Id",
+		     dataIndex : "id",
+		     width : 150,
+		   columnType : "textfield",
+		     hidden:true
+		},
+	  {text : "手机号",
+		     dataIndex : "loginCode",
+		     width : 150,
+		   columnType : "textfield"
+		},
+		{text : "用户名称",
+		dataIndex : "userName",
+		width : 150,
+		columnType : "textfield"
+		},
+				{text : "创建时间",
+		dataIndex : "createTime",
+		width : 320,
+		columnType : "textfield"
+		},		{text : "所属物业",
+		dataIndex : "proid",
+		width : 320,
+		columnType : "textfield"
+		}
+			
+			],
 			initComponent : function() {
 				var self = this;
 				var thar = [{
 							text : '新增',
 							ref : 'addButton',
-							xtype : 'splitbutton',
 							itemId : 'new',
 							glyph : 0xf016
 						}, {
@@ -42,7 +71,6 @@ Ext.define("core.base.user.view.ProUserGrid", {
 							dock : 'top',
 							items : thar,
 							grid : this,
-							viewModel : viewModel
 
 						}, {
 							xtype : 'pagingtoolbar', // grid数据分页

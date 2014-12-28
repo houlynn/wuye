@@ -185,7 +185,7 @@ init:function(){
 			"container[xtype=resident.levelTree] button[ref=treeIns]":{
 				click:function(btn){
 						var tree=btn.ownerCt.ownerCt;
-						var commbox=tree.down("basecombobox[ref=vicombobox]");
+						var commbox=tree.down("combobox[ref=vicombobox]");
 						 var vid=commbox.getValue();
 						 if(!vid){
 						 	system.errorInfo("请选择小区再进行添加操作","错误提示");
@@ -203,7 +203,7 @@ init:function(){
            
 				}
 			},
-			"container[xtype=resident.levelTree] basecombobox[ref=vicombobox]":{
+			"container[xtype=resident.levelTree] combobox[ref=vicombobox]":{
 				 select:function(combo,record,opts) {  
 				 	 var  vid=record[0].get("itemCode");
 				 	 var tree= combo.ownerCt.ownerCt;
@@ -224,7 +224,7 @@ init:function(){
 						return;
 					}
 						var tree=btn.ownerCt.ownerCt;
-						var commbox=tree.down("basecombobox[ref=vicombobox]");
+						var commbox=tree.down("combobox[ref=vicombobox]");
 						 var vid=commbox.getValue();
 						 if(!vid){
 						 	system.errorInfo("请选择小区再进行添加操作","错误提示");
@@ -245,7 +245,7 @@ init:function(){
 		  "container[xtype=resident.gridModue]  button[ref=seting]": {
    		     click:function(btn){
    		     	       var tree= btn.ownerCt.ownerCt.ownerCt.down("container[xtype=resident.levelTree]");
-   		     	      	var commbox=tree.down("basecombobox[ref=vicombobox]");
+   		     	      	var commbox=tree.down("combobox[ref=vicombobox]");
    		     	      	var vid=commbox.getValue();
    		     	      	var grid= btn.ownerCt.ownerCt;
    		     	      	var sm= grid.getSelectionModel().getSelection();
@@ -286,7 +286,7 @@ init:function(){
 			 tf_leveId:records[0].get("id")
 			 };
 			    var resObj=self.ajax({url:"/102/D001.action",params:params});
-				var commbox=tree.down("basecombobox[ref=vicombobox]");
+				var commbox=tree.down("combobox[ref=vicombobox]");
 				var vid=commbox.getValue();
 			    var store=tree.getStore();
                 var proxy=store.getProxy();

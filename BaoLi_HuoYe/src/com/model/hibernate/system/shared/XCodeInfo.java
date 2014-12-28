@@ -16,11 +16,12 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import com.model.hibernate.property.PropertyCompany;
+import com.ufo.framework.common.model.Model;
 
 
 @Entity
 @GenericGenerator(name="systemUUID",strategy="uuid")
-public class XCodeInfo {
+public class XCodeInfo implements Model {
 	private String  tf_codeId;
 	private String tf_createTime;
 	private  PropertyCompany tf_propertyCompany;
@@ -36,9 +37,9 @@ public class XCodeInfo {
 	}
 	
 	@JsonIgnore //构建json数据的时候排除此字段
-	@ManyToOne(optional=false, fetch=FetchType.LAZY, cascade={CascadeType.MERGE})
-	@JoinColumn(name="tf_proid",nullable=false)
-	@LazyCollection(LazyCollectionOption.TRUE)
+	@ManyToOne(optional=false, fetch=FetchType.EAGER, cascade={CascadeType.MERGE})
+	@JoinColumn(name="tf_proid",nullable=false,unique=true)
+	@LazyCollection(LazyCollectionOption.FALSE)
 	public PropertyCompany getTf_propertyCompany() {
 		return tf_propertyCompany;
 	}

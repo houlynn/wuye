@@ -215,8 +215,8 @@ public class ModuleService extends Ebo implements ModelEbi {
 			}
 			
 			Class<ModuleAspect> classAspect=ModuleServiceFunction.getModuleAspectClass(moduleName);
+			ModuleAspect aspect=null;
 			if(classAspect!=null){
-				ModuleAspect aspect;
 				try {
 					aspect = classAspect.newInstance();
 					aspect.beforeCreate(record,moduleName,navs);
@@ -236,6 +236,9 @@ public class ModuleService extends Ebo implements ModelEbi {
 			result.setResultCode(STATUS_SUCCESS);
 			result.setModuleName(moduleName);
 			result.setKey(Ognl.getValue(module.getTf_primaryKey(), record).toString());
+			if(aspect!=null){
+			 aspect.afterCreate(record,moduleName,navs);
+			}
 		   debug("insert返回值：" + result.toString());
 
 		return result;

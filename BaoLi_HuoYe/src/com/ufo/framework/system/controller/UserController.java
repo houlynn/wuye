@@ -3,6 +3,10 @@ package com.ufo.framework.system.controller;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
@@ -22,16 +26,26 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.model.hibernate.system.shared.Department;
 import com.model.hibernate.system.shared.EndUser;
+import com.model.hibernate.system.shared.XCodeInfo;
+import com.property.base.vo.ProUserInfo;
 import com.ufo.framework.common.core.utils.AppUtils;
 import com.ufo.framework.common.core.utils.MD5Util;
 import com.ufo.framework.common.core.utils.StringUtil;
 import com.ufo.framework.common.core.web.VerifyCodeUtil;
+import com.ufo.framework.system.ebi.EndUserEbi;
+import com.ufo.framework.system.repertory.SqlModuleFilter;
+import com.ufo.framework.system.shared.module.DataDeleteResponseInfo;
+import com.ufo.framework.system.shared.module.DataFetchResponseInfo;
+import com.ufo.framework.system.shared.module.DataInsertResponseInfo;
 import com.ufo.framework.system.web.SecurityUserHolder;
 
 /**
@@ -73,8 +87,9 @@ public class UserController extends SimpleBaseController<EndUser> {
 			HttpServletResponse response) throws Exception {
 		EndUser user = SecurityUserHolder.getCurrentUser();
 		if (user != null) {
+			String str=jsonBuilder.toJson(user);
 			toWrite(response,
-					jsonBuilder.returnSuccessJson(jsonBuilder.toJson(user)));
+					jsonBuilder.returnSuccessJson(str));
 		} else {
 			toWrite(response, jsonBuilder.returnFailureJson("'没有得到登录用户'"));
 		}
@@ -186,5 +201,80 @@ public class UserController extends SimpleBaseController<EndUser> {
 		SecurityUtils.getSubject().logout();
 		return InternalResourceViewResolver.REDIRECT_URL_PREFIX + "/";
 	}
+	@RequestMapping(value = "/fetchdata", method = RequestMethod.GET)
+	public @ResponseBody
+	Map<String, Object> fetchData(Integer start, Integer limit,
+			@RequestParam(value="whereSql",required=false,defaultValue="") String whereSql,
+	    	@RequestParam(value="parentSql",required=false,defaultValue="") String parentSql,
+	    	@RequestParam(value="querySql",required=false,defaultValue="") String querySql,
+	    	@RequestParam(value="orderSql",required=false,defaultValue="createTime") String orderSql,
+			HttpServletRequest request) throws Exception {
+		StringBuffer hql = new StringBuffer("from enduser where 1=1 ");
+		StringBuffer countHql = new StringBuffer("select count(*) from EndUser  where 1=1 ");
+		whereSql = whereSql == null ? "" : whereSql;
+		hql.append(whereSql);
+		parentSql = parentSql == null ? "" : parentSql;
+		hql.append(parentSql);
+		querySql = querySql == null ? "" : querySql;
+		hql.append(querySql);
+		orderSql = orderSql == null ? "" : orderSql;
+		countHql.append(whereSql+"  and codeId !='"+EndUser.MARKING_XCODE+"' and admins='1'");
+		countHql.append(querySql);
+		countHql.append(parentSql);
+		Integer count = ebi.getCount(countHql.toString());
+		hql.append(orderSql);
+		List<EndUser> list= (List<EndUser>) this.ebi.queryByHql(hql.toString(), start, limit);
+		 List<ProUserInfo> viewitems= list.stream().map(item->{
+			ProUserInfo pru=new ProUserInfo();
+			pru.setCreateTime(item.getCreateTime());
+			pru.setId(item.getUserId());
+			pru.setLoginCode(item.getUserCode());
+			XCodeInfo xcode=new XCodeInfo();
+			try {
+				xcode = (XCodeInfo) ebi.findById(XCodeInfo.class, item.getCodeId());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			pru.setProid(xcode.getTf_propertyCompany().getTf_name());
+			pru.setPwd(item.getPassword());
+			pru.setUserName(item.getUsername());
+			return pru;
+			
+		}).collect(Collectors.toList());
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("records", viewitems);
+		result.put("totalCount",count );
+		return result;
+	}
+	
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	public @ResponseBody
+	DataInsertResponseInfo addWithNoPrimaryKey(@RequestBody String inserted,
+			HttpServletRequest request) throws Exception {
+	        EndUserEbi uebi=(EndUserEbi)ebi;
+            uebi.addUser(inserted);		
+		    return null;
+	
+	}
+
+	@RequestMapping(value = "/removerecords.do")
+	public @ResponseBody
+	DataDeleteResponseInfo removeRecords(String moduleName, String[] titles,
+			@RequestParam(value="ids",required=false) int[] ids,
+			HttpServletRequest request) {
+		DataDeleteResponseInfo 	result = new DataDeleteResponseInfo();
+		
+		
+		
+		
+		return result;
+	}
+	
+	
+	
+	
+	
+	
+	
 
 }

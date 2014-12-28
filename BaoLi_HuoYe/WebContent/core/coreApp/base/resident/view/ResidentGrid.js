@@ -112,7 +112,8 @@ Ext.define("core.base.resident.view.ResidentGrid",{
    		this.model = core.app.module.factory.ModelFactory.getModelByModule(viewModel.data,{destroy : 'rest/102/remove.do'});
 				this.store = Ext.create('core.app.store.GridStore', {
 							model : this.model,
-							gridModue : this
+							gridModue : this,
+							autoLoad : false
 						});
 		this.columns = core.app.module.factory.ColumnsFactory.getColumns(viewModel);	
 					this.dockedItems = [{

@@ -81,6 +81,7 @@ public class EndUser extends BaseEntity {
 	public String getEnabled() {
 		return enabled;
 	}
+	@JsonIgnore
 	@Transient
 	public XCodeInfo getXcodeInfo() {
 		return xcodeInfo;

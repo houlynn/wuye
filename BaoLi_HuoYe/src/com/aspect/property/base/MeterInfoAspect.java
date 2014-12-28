@@ -116,4 +116,11 @@ public class MeterInfoAspect implements ModuleAspect ,XcodeInterface,CommonExcep
 		}
 	}
 
+	@Override
+	public void afterCreate(Object record, String moduleName,
+			List<SqlModuleFilter> navs) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

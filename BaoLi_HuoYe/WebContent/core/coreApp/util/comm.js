@@ -42,6 +42,8 @@ var errors = Ext.create("Ext.util.MixedCollection");
 	async:false,
 	timeout:4000,
 	success:function(response){
+	alert(response.responseText);
+		return ;
 		data = Ext.decode(Ext.value(response.responseText,'{}'));
 		if(data.success){
 			comm.add("currentUser",data.obj);
@@ -50,7 +52,6 @@ var errors = Ext.create("Ext.util.MixedCollection");
  });
  /**表单必填项样式*/
  comm.add('required','<span style="color:red;font-weight:bold" data-qtip="必填项">*</span>');
- 
 var ajax = function(config) { 
 		Ext.Ajax.request({
 					url : config.url, 

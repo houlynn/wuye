@@ -13,6 +13,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.model.hibernate.system.shared.EndUser;
+import com.ufo.framework.annotation.DDItemCode;
+import com.ufo.framework.annotation.DDItemName;
 import com.ufo.framework.annotation.FieldInfo;
 import com.ufo.framework.annotation.TableInfo;
 import com.ufo.framework.annotation.TreeItemName;
@@ -24,6 +26,7 @@ import com.ufo.framework.common.model.BaseEntity;
 @DynamicUpdate(true)
 @TableInfo(group = "基础信息模块", id =101, title = "物业公司信息管理", shortname = "物业公司信息")
 public class PropertyCompany extends BaseEntity {
+	@DDItemCode
 	@Id
 	@GeneratedValue(generator = "increment")
 	@GenericGenerator(name = "increment", strategy = "increment")
@@ -33,6 +36,7 @@ public class PropertyCompany extends BaseEntity {
 	@Column(length = 200, nullable = false)
 	@FieldInfo(name="物业公司名称",nullAble=false,visible=true)
 	@TreeItemName
+	@DDItemName
 	private String tf_name;
 	@Column(length = 50)
 	@FieldInfo(name="法人代表",visible=true)

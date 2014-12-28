@@ -9,7 +9,7 @@ import javax.persistence.MappedSuperclass;
 public class BaseEntity implements Model {
 	@Column(length = 50,nullable=true)
 	private String xcode;
-	
+	@Column(updatable=false)
 	private int orderIndex;
 
 	public String getXcode() {
