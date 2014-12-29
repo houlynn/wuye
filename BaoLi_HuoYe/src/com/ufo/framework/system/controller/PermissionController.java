@@ -1,6 +1,8 @@
 package com.ufo.framework.system.controller;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.model.hibernate.system.shared.EndUser;
 import com.model.hibernate.system.shared.Permission;
 import com.model.hibernate.system.shared.PermissionQuery;
+import com.model.hibernate.system.shared.Role;
 import com.ufo.framework.common.constant.AuthorType;
 import com.ufo.framework.common.core.ext.TreeVeriable;
 import com.ufo.framework.common.core.ext.model.JSONTreeNode;
@@ -38,7 +41,6 @@ public class PermissionController extends SimpleBaseController<Permission> {
 		node=node==null?"":node;
 		String nodeId=request.getParameter("nodeId");
 		nodeId=nodeId==null?"":nodeId;
-		
 		String isSeeStr=request.getParameter("isSee");
 	     boolean isSee=StringUtil.isEmpty(isSeeStr)==true?false:Boolean.parseBoolean(isSeeStr);
 		String expandedStr=request.getParameter("expanded");
@@ -62,7 +64,22 @@ public class PermissionController extends SimpleBaseController<Permission> {
 		{
 			//得到当前的树形
 		PermissionEbi permissionEbi=(PermissionEbi)this.ebi;
+		System.out.println(" node: "+node+"roleId :"+roleId+"isSee : "+isSee+" expanded:  "+expanded);
 		List<JSONTreeNode> lists=permissionEbi.getPermTree(node, roleId,AuthorType.ROLE, isSee,expanded);
+		if(isSee==false&&expanded==false&&SecurityUserHolder.getIdentification()!=EndUser.MARKING_XCODE){
+			List<JSONTreeNode> nodes=new ArrayList<JSONTreeNode>();
+			  Role proRoel=(Role) ebi.findById(Role.class, Role.PRO_ROLE);
+			  Set<Permission> pers=proRoel.getPermissions();
+			  for(JSONTreeNode js : lists){
+				  for( Permission p :pers){
+					  if(p.getPerCode().equals(js.getId())||js.getId().equals(TreeVeriable.ROOT)){
+						  nodes.add(js);
+					  }
+				  }
+			  }
+			  lists =nodes;
+		}
+		
 		JSONTreeNode root=ebi.buildJSONTreeNode(lists, node);
 		String	strData="";
 		if(node.equalsIgnoreCase(TreeVeriable.ROOT)){
@@ -101,8 +118,8 @@ public class PermissionController extends SimpleBaseController<Permission> {
 	 */
 	@RequestMapping("/getAuthorMenuTree")
 	public void getAuthorMenuTree(HttpServletRequest request,HttpServletResponse response) throws Exception{
-		
 		String node=request.getParameter("node");
+		node=node==null?"":node;
 		node=node==null?"":node;
 		String nodeId=request.getParameter("nodeId");
 		nodeId=nodeId==null?"":nodeId;
@@ -121,6 +138,22 @@ public class PermissionController extends SimpleBaseController<Permission> {
 		EndUser currentUser = SecurityUserHolder.getCurrentUser();
 		PermissionEbi permissionEbi=(PermissionEbi)this.ebi;
 		List<JSONTreeNode> lists=permissionEbi.getPermTree(node, currentUser.getUserId(),AuthorType.USER, true,false);
+		
+		if(isSee==false&&expanded==false&&SecurityUserHolder.getIdentification()!=EndUser.MARKING_XCODE){
+			List<JSONTreeNode> nodes=new ArrayList<JSONTreeNode>();
+			  Role proRoel=(Role) ebi.findById(Role.class, Role.PRO_ROLE);
+			  Set<Permission> pers=proRoel.getPermissions();
+			  for(JSONTreeNode js : lists){
+				  for( Permission p :pers){
+					  if(p.getPerCode().equals(js.getId())||js.getId().equals(TreeVeriable.ROOT)){
+						  nodes.add(js);
+					  }
+				  }
+			  }
+			  lists =nodes;
+		}
+		
+		
 		try
 		{
 		JSONTreeNode root=ebi.buildJSONTreeNode(lists, node);

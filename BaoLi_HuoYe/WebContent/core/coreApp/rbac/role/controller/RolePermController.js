@@ -275,7 +275,7 @@ Ext.define("core.rbac.role.controller.RolePermController",{
 			 */
 			"container[xtype=role.moduletree] button[ref=setPerm]":{
 				click:function(btn){
-					alert(0);
+					alert("query aiaiiai");
 					var mainLayout=btn.up("container[xtype=role.mainlayout]");
 					var roleTree=mainLayout.down("container[xtype=role.roletree]");
 					var selRoles=roleTree.getSelectionModel().getSelection();
