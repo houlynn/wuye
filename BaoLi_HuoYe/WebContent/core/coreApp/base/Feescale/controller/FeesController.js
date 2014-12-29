@@ -1,53 +1,44 @@
-Ext.define("core.prop.fees.controller.FeesController",{
+Ext.define("core.base.Feescale.controller.FeesController",{
 	extend:"Ext.app.Controller",
 	mixins: {
 		suppleUtil:"core.util.SuppleUtil",
 	},
 init:function(){
-	var self=this
+	var self=this;
 	this.control({
-		/**
+
+		
+				/**
 		 * 添加 抄水表信息
 		 */
-			"container[xtype=fees.gridModue] button[ref=addButton]":{
+			"container[xtype=feesv.grid] button[ref=addButton]":{
 							click : function (btn){
-							 var modulegrid = btn.up("grid[xtype=fees.gridModue]");	
+							alert(btn);
+							 var modulegrid = btn.up("grid[xtype=feesv.grid]");	
 							 var store=modulegrid.getStore();
-			                 var tree=modulegrid.ownerCt.down("container[xtype=fees.levelTree]");
+			                 var tree=modulegrid.ownerCt.down("container[xtype=feesv.levelTree]");
 			                 var selection=tree.getSelectionModel().getSelection();
-			                 if(!selection&&selection.length==0){
+			                 if(!selection||selection.length==0){
+			                 	    system.errorInfo("请选择一个小区再进行添加","错误提示");
 			                  return ;
-			                 }else{
-			                    if(selection[0].get("nodeInfoType")=="0"||selection[0].get("nodeInfoType")=="1"){
-			                    system.errorInfo("请选择对应的房号在进行添加","错误提示");
-			                    return ;
-			                   }
 			                 }
-							 var viewModel=system.getViewModel(201);
-                	         if(!store.navigates||store.navigates.length==0){
-                	            system.errorInfo("请选择对应的房号在进行添加","错误提示");
-                	         	return;
-                	          }
-							 
 						     var model = Ext.create(modulegrid.getStore().model);
 			                 model.set(model.idProperty, null); 
-			                 model.set("tf_mtype","B001");
-			                 
-			          var tree= btn.ownerCt.ownerCt.ownerCt.down("container[xtype=fees.levelTree]");
-   		     	      	 var commbox=tree.down("combobox[ref=vicombobox]");
-   		     	      	 var vid=commbox.getValue();
-			             var  window=  Ext.createWidget("fees.window",{
+			              var tree= btn.ownerCt.ownerCt.ownerCt.down("container[xtype=fees.levelTree]");
+			              var vid=selection[0].get("code");
+			               var viewModel=system.getViewModel(106);
+			             var  window=  Ext.createWidget("feesv.window",{
 			                    viewModel:viewModel,
 				                grid:modulegrid,
 				                vid:vid
 			                 });
 			                    window.down('form[xtype=baseform]').setData(model);
-			                    var title=selection[0].get("text")+" 水表信息录入";
+			                    var title=selection[0].get("text")+" 收费标准录入";
 			                    window.setTitle(title);
 	                            window.show();
 								}, 
 								render : function(btn) {
-									var modulegrid= btn.up("resident.gridModue");
+									 var viewModel=system.getViewModel(106);
 									btn.dropZone = new Ext.dd.DropZone(btn.getEl(), {
 												ddGroup : 'DD_grid_' + viewModel.get('tf_moduleName'),
 												getTargetFromEvent : function(e) {
@@ -67,83 +58,30 @@ init:function(){
 			 * 编辑
 			 */	
 				
-			"container[xtype=fees.gridModue]  button[ref=editButton] ":{
+			"container[xtype=feesv.grid]  button[ref=editButton] ":{
 		   click:function(btn){
-			var modulegrid = btn.up("grid[xtype=fees.gridModue]");	
-			 var viewModel=system.getViewModel(201);
-			var  window=  Ext.createWidget("fees.window",{
+			var modulegrid = btn.up("grid[xtype=feesv.grid]");	
+			 var viewModel=system.getViewModel(106);
+			var  window=  Ext.createWidget("feesv.window",{
 			                   viewModel:viewModel,
 				                grid:modulegrid
 			                 });
 			var selection= modulegrid.getSelectionModel().getSelection()                 
 	       window.down('baseform').setData(selection[0]);
-	          var title="修改录入信息";
+	          var title="修改收费标准信息";
 			                    window.setTitle(title);
 	                            window.show();
 	       window.show();
 				}
 			},	
-		/**
-		 * 结束整栋楼抄表 
-		 */
-		"form[xtype=fees.settingform] #save":{
-		  click:function(btn){
-			   	 var form= btn.up("form[xtype=fees.settingform]");
-			   	 var rendField=form.down("#reddate");
-			   	 var reddate=rendField.getValue();
-              var tree=form.grid.ownerCt.down("container[xtype=fees.levelTree]");
-              var selection=tree.getSelectionModel().getSelection();
-              if(!selection&&selection.length==0){
-               return ;
-              }else{
-                 if(selection[0].get("nodeInfoType")!="0"){
-                 system.errorInfo("请选择对应的栋数进行结束抄表","错误提示");
-                 return ;
-                }
-              }
-			  var leveid=selection[0].get("code");
-				Ext.MessageBox.confirm('结束抄表', '确定' +selection[0].get("text")+" "+ Ext.Date.format(new Date(reddate),'Y-m')+"结束抄表",
-						function(btn) {
-							if (btn == 'yes') {
-							   	 var resObj=self.ajax({url:"/201/acount.action",params:{rendate:reddate,type:"B001",leveid:leveid}});
-							   	 form.grid.reloade();
-								
-							}});
-		  }
-		},
 			
-			
-		"container[xtype=fees.gridModue]  button[ref=seting] ":{
-           click:function(btn){
-           	var modulegrid=btn.up("grid[xtype=fees.gridModue]");
-           	 var window= Ext.createWidget("window",{
-           	  title:"结束抄表",
-           	  width:300,
-           	  height:100,
-           	  items:[{xtype:"fees.settingform", grid:modulegrid}]
-           	 });
-           	 window.show();
-           	
-           	/*
-           	      Ext.MessageBox.prompt('结束抄表', '请填入日期', function(btn, leveName) {
-                         if(btn=="ok"){
-         	            var params={vid:vid,leveName:leveName,level:"1",parent:parent.get("id")}
-         	            var resObj=self.ajax({url:"/102/A001.action",params:params});
-         	            var store=tree.getStore();
-                     	var proxy=store.getProxy();
-											proxy.extraParams.vid=vid;
-											store.load();	
-                       } });
-           */
-           }			
-		},	
 			/**
 			 * 删除
 			 */
-		"container[xtype=fees.gridModue]  button[ref=removeButton] ":{
+		"container[xtype=feesv.grid]  button[ref=removeButton] ":{
 			click:function(btn){
-			var modulegrid=btn.up("grid[xtype=fees.gridModue]");
-			var module=modulegrid.viewModel;
+			var modulegrid=btn.up("grid[xtype=feesv.grid]");
+			 var module=system.getViewModel(106);
 			var selection=modulegrid.getSelectionModel().getSelection();
 			var message='';
 			var infoMessage='';
@@ -206,6 +144,7 @@ init:function(){
 					
 				},
 					render : function(button) {
+							       var module=system.getViewModel(106);
 									button.dropZone = new Ext.dd.DropZone(button.getEl(), {
 												ddGroup : 'DD_grid_' + viewModel.get('tf_moduleName'),
 												getTargetFromEvent : function(e) {
@@ -223,22 +162,13 @@ init:function(){
 				/**
 				 * 点击
 				 */
-			"container[xtype=fees.levelTree]":{
+			"container[xtype=feesv.levelTree]":{
 				itemclick:function(treeview,node,item,index,e,eOpts){
 					var tree=treeview.ownerCt;
-					var gridModue=treeview.ownerCt.ownerCt.down("grid[xtype=fees.gridModue]");
+					var gridModue=treeview.ownerCt.ownerCt.down("grid[xtype=feesv.grid]");
 					var modue=system.getModuleDefine(node.raw.nodeInfo);
 					var nodeInfoType=node.raw.nodeInfoType;
 					var fieldtitle=node.raw.descriptionnodeInfoType;
-					/*if(node.raw.descriptionnodeInfoType=="0"){
-						fieldtitle="tf_pid";
-					}else(node.raw.descriptionnodeInfoType=="1"){
-						
-					}
-				*/
-					if("ResidentInfo"!=node.raw.nodeInfo){
-						return;
-					}
 					var navigate={
                 			moduleName:node.raw.nodeInfo,
                 			tableAsName:"_t"+modue.tf_moduleId,
@@ -254,8 +184,6 @@ init:function(){
                 		store.navigates.push(navigate);
                 	}
                   	var proxy=store.getProxy();
-                  	console.log(proxy.extraParams);
-                    proxy.extraParams.nodeInfoType=nodeInfoType;
 					proxy.extraParams.navigates=Ext.encode(store.navigates);
 					store.load();	  
 				}
@@ -322,15 +250,13 @@ init:function(){
 		});
 	},
 	views:[
-	'core.prop.fees.view.MainLayout',
-	'core.prop.fees.view.LevelTree',
-	"core.prop.fees.view.FeesGrid",
-	"core.prop.fees.view.FeeWinodw",
-	"core.prop.fees.view.SettingForm",
-	"core.prop.fees.view.SettingFeesItemForm"
+  "core.base.Feescale.view.FeeWinodw",
+  "core.base.Feescale.view.FeesGrid",
+  "core.base.Feescale.view.LevelTree",
+  "core.base.Feescale.view.MainLayout"
 	],
 	stores:[
-	'core.prop.fees.store.LevelStore'
+	'core.base.Feescale.store.LevelStore',
 	],
     models : []
 });

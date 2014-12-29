@@ -145,7 +145,7 @@ public class EndUserEbo extends SimpleEbo<EndUser> implements EndUserEbi{
 		 executeSql(" insert into ROLE_USER(ROLEID,USERID) values('"+roleId+"','"+userId+"')");
 		// debug("用户并联了角色:"+endUser.getRoles().iterator().next().getRoleId());
 		///给角色授权
-		  Role proRoel=(Role) findById(Role.class, "402881ed499d046a01499d067da90001");
+		  Role proRoel=(Role) findById(Role.class, Role.PRO_ROLE);
 		  Set<Permission> pers=proRoel.getPermissions();
 		  for(Permission p : pers){
 		   String insertSql="insert into ROLE_PERM(roleId,perId) values('"+roleId+"','"+p.getPerId()+"')";

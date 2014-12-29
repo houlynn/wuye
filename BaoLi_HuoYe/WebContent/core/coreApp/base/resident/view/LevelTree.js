@@ -9,7 +9,6 @@ Ext.define("core.base.resident.view.LevelTree",{
        	 xtype: 'toolbar',dock: 'top',layout : 'hbox',items: [
        	 {
        	  	xtype : "moduecombobox",
-		 
 		      width:"100%",
 		      ref:"vicombobox",
 		      ddCode :{
@@ -17,7 +16,6 @@ Ext.define("core.base.resident.view.LevelTree",{
                            marking:'1',
                            identification:'1'
                         }
-		      
        	 }
        	 ]
      	}],

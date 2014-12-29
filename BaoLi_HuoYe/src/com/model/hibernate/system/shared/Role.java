@@ -36,6 +36,8 @@ import com.ufo.framework.common.model.Model;
 @GenericGenerator(name="systemUUID",strategy="uuid")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 public class Role extends BaseEntity{
+	public final static String PRO_ROLE="4028b8814a93f2d0014a93f3d2040000";
+	
 	@FieldInfo(name="主键", type=ExtFieldType.ID)
 	private String roleId;
 	@FieldInfo(name="角色名称")

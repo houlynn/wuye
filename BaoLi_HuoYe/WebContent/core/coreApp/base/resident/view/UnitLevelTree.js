@@ -7,11 +7,15 @@ Ext.define("core.base.resident.view.UnitLevelTree",{
 	title:"楼宇列表",
     dockedItems: [{
        	 xtype: 'toolbar',dock: 'top',layout : 'hbox',items: [
-       	 {
-       	  	xtype : "basecombobox",
-		     ddCode : "VILAGELIST",
+        	 {
+       	  	xtype : "moduecombobox",
 		      width:"100%",
-		      ref:"vicombobox"
+		      ref:"vicombobox",
+		      ddCode :{
+                           modeuName:"Village",
+                           marking:'1',
+                           identification:'1'
+                        }
        	 }
        	 ]
      	}],

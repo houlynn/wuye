@@ -28,7 +28,7 @@ Ext.define('core.prop.fees.view.SettingFeesItemForm', {
                     	 itemId : 'feeeItemCombobox', ddCode :{
                          modeuName:"FeesInfo",
                          marking:'1',
-                         identification:'1',
+                         identification:'0',
                          allowBlank : false,
                       }}
                   ]

@@ -42,7 +42,6 @@ var errors = Ext.create("Ext.util.MixedCollection");
 	async:false,
 	timeout:4000,
 	success:function(response){
-	alert(response.responseText);
 		return ;
 		data = Ext.decode(Ext.value(response.responseText,'{}'));
 		if(data.success){

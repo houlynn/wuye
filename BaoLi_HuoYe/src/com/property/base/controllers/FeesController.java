@@ -150,9 +150,9 @@ public class FeesController implements LogerManager, CommonException {
 						childNode.setDescription("tf_leveName");
 						childNode.setNodeInfoType("1");
 						String hql = " from ResidentInfo where 1=1 and tf_levelInfo="
-								+ childleve.getTf_leveId()
-								+ " and xcode='"
-								+ SecurityUserHolder.getIdentification() + "'";
+								+ childleve.getTf_leveId();
+								/*+ " and xcode='"
+								+ SecurityUserHolder.getIdentification() + "'";*/
 						List<ResidentInfo> residents = (List<ResidentInfo>) ebi
 								.queryByHql(hql);
 						List<JSONTreeNode> rchilds = new ArrayList<JSONTreeNode>();

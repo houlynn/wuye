@@ -40,7 +40,7 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 			/**
 			 * 加载小区
 			 */
-			"container[xtype=resident.unitlevelTree] basecombobox[ref=vicombobox]":{
+			"container[xtype=resident.unitlevelTree] combobox[ref=vicombobox]":{
 				 select:function(combo,record,opts) {  
 				 	 var  vid=record[0].get("itemCode");
 				 	 var tree= combo.ownerCt.ownerCt;

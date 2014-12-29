@@ -40,7 +40,7 @@ public class FeesInfo extends BaseEntity {
 	@FieldInfo(title = "ID号", number = 10, hidden = false)
 	private int tf_feesid;
 	 @FieldInfo(title = "名称", number = 20,uniqueField=true)
-	 @Column(length=120,nullable=false,unique=true)
+	 @Column(length=120,nullable=false,unique=false)
 	 @DDItemName
 	private String tf_freesName;
 	 @FieldInfo(title = "单价", number = 30)

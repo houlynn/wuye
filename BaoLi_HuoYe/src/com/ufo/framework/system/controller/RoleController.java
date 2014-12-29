@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.model.hibernate.system.shared.EndUser;
 import com.model.hibernate.system.shared.Menu;
+import com.model.hibernate.system.shared.Permission;
 import com.model.hibernate.system.shared.Role;
 import com.ufo.framework.common.core.ext.model.JSONTreeNode;
 import com.ufo.framework.common.core.utils.StringUtil;
+import com.ufo.framework.system.web.SecurityUserHolder;
 
 @Controller("RoleAction")
 @Scope("prototype")
@@ -25,6 +27,19 @@ public class RoleController extends SimpleBaseController<Role> {
 	protected RoleController() {
 		super(Role.class);
 	}
+	@Override
+	public void doSave(Role model, HttpServletRequest request,
+			HttpServletResponse response) {
+		// TODO Auto-generated method stub
+		try {
+			model.setXcode(SecurityUserHolder.getIdentification());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		super.doSave(model, request, response);
+	}
+
 	@RequestMapping("/loadUsers")
 	public void loadUsers(Role role, HttpServletRequest request, HttpServletResponse response){
 		try
@@ -98,6 +113,12 @@ public class RoleController extends SimpleBaseController<Role> {
 		StringBuffer countHql=new StringBuffer("select count(*) from "+clazz.getSimpleName()+" where 1=1");
 		String whereSql=request.getParameter("whereSql");
 		whereSql=whereSql==null?"":whereSql;
+		try {
+			whereSql+=" and xcode='"+SecurityUserHolder.getIdentification()+"' ";
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		String orderSql=request.getParameter("orderSql");
 		orderSql=orderSql==null?"":orderSql;
 		String excludes=request.getParameter("excludes");
@@ -138,6 +159,8 @@ public class RoleController extends SimpleBaseController<Role> {
 		{
 		List<Menu> menus=(List<Menu>) ebi.queryBySql(" select * from Menu where parent='ROOT'"+orderSql,Menu.class);
 		List<JSONTreeNode> lists=new ArrayList<JSONTreeNode>();
+		Role proRoel=(Role) ebi.findById(Role.class, Role.PRO_ROLE);
+		  Set<Permission> pers=proRoel.getPermissions();
 		for(Menu menu:menus){
 			JSONTreeNode node=new JSONTreeNode();
 			node.setId(menu.getMenuId());
