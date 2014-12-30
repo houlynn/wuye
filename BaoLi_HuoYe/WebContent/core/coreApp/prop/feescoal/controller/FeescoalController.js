@@ -223,6 +223,7 @@ init:function(){
                   	var proxy=store.getProxy();
                   	console.log(proxy.extraParams);
                     proxy.extraParams.nodeInfoType=nodeInfoType;
+                    proxy.extraParams.type="B003";
 					proxy.extraParams.navigates=Ext.encode(store.navigates);
 					store.load();	  
 				}

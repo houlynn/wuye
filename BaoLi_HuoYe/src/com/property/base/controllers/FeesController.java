@@ -33,10 +33,8 @@ import com.ufo.framework.common.log.LogerManager;
 import com.ufo.framework.system.ebi.CommonException;
 import com.ufo.framework.system.ebi.Ebi;
 import com.ufo.framework.system.ebo.ApplicationService;
-import com.ufo.framework.system.repertory.SqlModuleFilter;
 import com.ufo.framework.system.shared.module.DataFetchResponseInfo;
 import com.ufo.framework.system.shared.module.DataInsertResponseInfo;
-import com.ufo.framework.system.web.SecurityUserHolder;
 
 @Controller
 @RequestMapping("/201")

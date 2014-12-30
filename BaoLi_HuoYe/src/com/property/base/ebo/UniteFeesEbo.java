@@ -202,7 +202,7 @@ public 	DataFetchResponseInfo addUniteFees(int rid
 				/////////////////////////////////////////////////////////////
 				//直收金额类型	
 		        case FeesInfo.FM:{
-		        	String hql=" from MeterInfo where 1=1 and tf_mtype='"+MeterInfo.FEES_TYPE_NOUNITE+"' and tf_rendDate"+m+"'and tf_FeesInfo="+item.getTf_FeesInfo().getTf_feesid();
+		        	String hql=" from MeterInfo where 1=1 and tf_mtype='"+MeterInfo.FEES_TYPE_NOUNITE+"' and tf_rendDate='"+m+"'and tf_FeesInfo="+item.getTf_FeesInfo().getTf_feesid();
 		        	List<MeterInfo> mlist= (List<MeterInfo>) ebi.queryByHql(hql);
 		    		if(mlist!=null&&mlist.size()>0){
 			    		MeterInfo meterInfo=mlist.get(0);

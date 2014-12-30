@@ -154,6 +154,12 @@ Ext.define('core.app.module.factory.ModelFactory', {
 				field.tf_haveAttachment = fd.tf_haveAttachment;
 				fields.push(field);
 			}
+			var itemRemark={
+					name : "itemRemark",
+					title : "附近信息",
+					type : "string"
+			};
+			fields.push(itemRemark);
 			    return fields;
 
 		},

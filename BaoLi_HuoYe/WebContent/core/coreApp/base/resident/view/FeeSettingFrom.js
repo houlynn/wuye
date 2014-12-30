@@ -58,7 +58,7 @@ Ext.define("core.base.resident.view.FeeSettingFrom",{
                         { xtype: "moduecombobox", name: "itemId", fieldLabel: "收费标准", flex: 1, allowBlank : false,	itemId : 'feeeItemCombobox', ddCode :{
                            modeuName:"FeesInfo",
                            marking:'1',
-                           identification:'1'
+                           identification:'0'
                         }}
                     ]
                 },

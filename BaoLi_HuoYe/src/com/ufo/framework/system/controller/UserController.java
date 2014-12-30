@@ -207,23 +207,25 @@ public class UserController extends SimpleBaseController<EndUser> {
 			@RequestParam(value="whereSql",required=false,defaultValue="") String whereSql,
 	    	@RequestParam(value="parentSql",required=false,defaultValue="") String parentSql,
 	    	@RequestParam(value="querySql",required=false,defaultValue="") String querySql,
-	    	@RequestParam(value="orderSql",required=false,defaultValue="createTime") String orderSql,
+	    	@RequestParam(value="orderSql",required=false,defaultValue="order by createTime") String orderSql,
 			HttpServletRequest request) throws Exception {
-		StringBuffer hql = new StringBuffer("from enduser where 1=1 ");
+		StringBuffer hql = new StringBuffer("from EndUser where 1=1  ");
 		StringBuffer countHql = new StringBuffer("select count(*) from EndUser  where 1=1 ");
 		whereSql = whereSql == null ? "" : whereSql;
+		whereSql+="  and codeId !='"+EndUser.MARKING_XCODE+"' and admins='1'";
 		hql.append(whereSql);
 		parentSql = parentSql == null ? "" : parentSql;
 		hql.append(parentSql);
 		querySql = querySql == null ? "" : querySql;
 		hql.append(querySql);
 		orderSql = orderSql == null ? "" : orderSql;
-		countHql.append(whereSql+"  and codeId !='"+EndUser.MARKING_XCODE+"' and admins='1'");
+		countHql.append(whereSql);
 		countHql.append(querySql);
 		countHql.append(parentSql);
 		Integer count = ebi.getCount(countHql.toString());
 		hql.append(orderSql);
 		List<EndUser> list= (List<EndUser>) this.ebi.queryByHql(hql.toString(), start, limit);
+		
 		 List<ProUserInfo> viewitems= list.stream().map(item->{
 			ProUserInfo pru=new ProUserInfo();
 			pru.setCreateTime(item.getCreateTime());

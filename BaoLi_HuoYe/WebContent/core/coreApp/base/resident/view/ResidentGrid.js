@@ -115,7 +115,17 @@ Ext.define("core.base.resident.view.ResidentGrid",{
 							gridModue : this,
 							autoLoad : false
 						});
-		this.columns = core.app.module.factory.ColumnsFactory.getColumns(viewModel);	
+		this.columns = core.app.module.factory.ColumnsFactory.getColumns(viewModel);
+		var feesItem={
+		width : 250,
+		dataIndex:"itemRemark",
+		text :'收费项目',
+		align : 'center',
+		renderer : function(val){
+		  return '<span class="gridNameField"><a onclick="javascript:return false;" href="#">' + val + "</a></span>"
+		}
+		};
+		this.columns.push(feesItem);
 					this.dockedItems = [{
 					xtype : 'toolbar', // 按钮toolbar
 					dock : 'top',

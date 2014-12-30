@@ -66,7 +66,7 @@ Ext.define('core.app.module.factory.FormFieldFactory', {
 					case 'Date' :
 						return {
 							size : this.dateDefaultSize,
-						    width:300,
+						    width:250,
 							format : 'Y-m-d',
 							xtype : 'datefield',
 							submitFormat : 'Y-m-d'

@@ -9,10 +9,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.model.hibernate.system.shared.Department;
+import com.model.hibernate.system.shared.EndUser;
 import com.model.hibernate.system.shared.TreeBaseEntity;
 import com.ufo.framework.common.core.ext.NodeType;
 import com.ufo.framework.common.core.utils.StringUtil;
 import com.ufo.framework.common.model.Model;
+import com.ufo.framework.system.web.SecurityUserHolder;
 /**
  * 
 * @author HouLynn
@@ -49,7 +51,12 @@ public class DeptController extends SimpleBaseController<Department> {
 				return;
 			}
 			//构建创建信息
-			
+			entity.setXcode(SecurityUserHolder.getIdentification());
+			if(!EndUser.MARKING_XCODE.equals(SecurityUserHolder.getIdentification())){
+				Department parent=new Department();
+				parent.setDeptId(entity.getXcode());
+				department.setParent(parent);
+			}
 			//保存实体
 			entity=(Department) ebi.save(entity);
 			Department dept=(Department) entity;
@@ -65,6 +72,13 @@ public class DeptController extends SimpleBaseController<Department> {
 			toWrite(response,jsonBuilder.returnFailureJson("'保存方法出错，错误信息"+e.getMessage()+"'"));
 		}
 	}
+	
+	@Override
+	public void getTree(HttpServletRequest request, HttpServletResponse response) {
+		// TODO Auto-generated method stub
+		super.getTree(request, response);
+	}
+
 	@Override
 	public Department getModel(HttpServletRequest request, Department model) {
 		String parentId=request.getParameter("parentId");

@@ -32,6 +32,8 @@ Ext.define('core.app.view.region.BaseForm', {
 							    			console.log(model.getProxy().errorInfo);	
 							    			   if( self.callback){	
 							    			      self.callback(model.getProxy().errorInfo);
+							    			      delete model.getProxy().errorInfo;
+							    			      alert(model.getProxy().errorInfo)
 							    			   }
 								    			return;
 								    			

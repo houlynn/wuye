@@ -7,7 +7,7 @@ Ext.define("core.base.user.model.ProUserModel", {
 					batchActions : true,
 				    isSynchronous: true,
 					api : {
-					  read : 'rest/module/fetchdata.do',
+					  read : 'rbacUser/fetchdata.action',
 						update : 'rest/module/update.do',
 						create : 'rbacUser/create.action',
 						destroy : 'rest/module/remove.do'

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.model.hibernate.system.shared.Department;
+import com.model.hibernate.system.shared.EndUser;
 import com.model.hibernate.system.shared.TreeBaseEntity;
 import com.ufo.framework.common.constant.StringVeriable;
 import com.ufo.framework.common.core.ext.TreeVeriable;
@@ -300,6 +301,9 @@ public abstract class SimpleBaseController<M extends Model> implements LogerMana
 			// 得到模版类
 			JSONTreeNode template = ModelUtil.getJSONTreeNodeTemplate(c);
 			try {
+				if(!EndUser.MARKING_XCODE.equals(SecurityUserHolder.getIdentification())){
+					node=SecurityUserHolder.getIdentification();
+				}
 				// 递归查询出集合
 				List<JSONTreeNode> lists = ebi.getTreeList(node, entityName,
 						whereSql, template, expand);

@@ -136,6 +136,22 @@ public class ModuleService extends Ebo implements ModelEbi {
 		if (columns != null)
 			gridFilterData.setGridColumnNames(columns.split(","));
 		DataFetchResponseInfo response = moduleDAO.getModuleData(moduleName, dsRequest, gridFilterData);
+		
+		Class<ModuleAspect> classAspect=ModuleServiceFunction.getModuleAspectClass(moduleName);
+		ModuleAspect aspect=null;
+		if(classAspect!=null){
+			try {
+				aspect = classAspect.newInstance();
+				aspect.afterLoad(moduleName, dsRequest, gridFilterData,response);
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		
+		
 		return response;
 	}
 
@@ -219,7 +235,7 @@ public class ModuleService extends Ebo implements ModelEbi {
 			if(classAspect!=null){
 				try {
 					aspect = classAspect.newInstance();
-					aspect.beforeCreate(record,moduleName,navs);
+					aspect.beforeCreate(record,moduleName,navs,request);
 				} catch (InstantiationException e) {
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {

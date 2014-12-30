@@ -242,7 +242,7 @@ init:function(){
 					var navigate={
                 			moduleName:node.raw.nodeInfo,
                 			tableAsName:"_t"+modue.tf_moduleId,
-                			text:node.raw.text,
+                			text:"B001",
                 			primarykey:modue.tf_primaryKey,
                 		    fieldtitle:fieldtitle,
                 		    equalsValue:node.raw.code,
@@ -256,6 +256,7 @@ init:function(){
                   	var proxy=store.getProxy();
                   	console.log(proxy.extraParams);
                     proxy.extraParams.nodeInfoType=nodeInfoType;
+                    proxy.extraParams.type="B001";
 					proxy.extraParams.navigates=Ext.encode(store.navigates);
 					store.load();	  
 				}
@@ -278,6 +279,7 @@ init:function(){
 			beforeclick:function(btn){
 				btn.callback=function(info){
 					var resutlCode= info.errorInfo.resultCode;
+					alert(resutlCode);
 					var vid=btn.up("window[xtype=fees.window]").vid;
 					 if(300==resutlCode){
 						 btn.ownerCt.ownerCt.ownerCt.close();

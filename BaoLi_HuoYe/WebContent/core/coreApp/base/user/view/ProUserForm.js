@@ -52,12 +52,13 @@ Ext.define('core.base.user.view.ProUserForm', {
 		this.getForm().reset();
 	},
 	items : [{
-	          xtype : 'fieldset',
+	           xtype : 'fieldset',
 				autoHeight : true,
 				title : '管理员信息',
+				bodyStyle : 'padding : 5px 5px 5px 5px',
 				items:[
 			    {xtype : "textfield",
-				  fieldLabel : "手机号码",
+				  fieldLabel : "ID",
 				  itemId:"userId",
 				  name : "id",
 				  hidden:true
@@ -81,7 +82,8 @@ Ext.define('core.base.user.view.ProUserForm', {
 				  fieldLabel : "创建时间",
 				  itemId:"createTime",
 				  name : "createTime",
-				  readOnly:true
+				  readOnly:true,
+				   hidden:true
 				},
 					{xtype : "textfield",
 				  fieldLabel : "初始密码",

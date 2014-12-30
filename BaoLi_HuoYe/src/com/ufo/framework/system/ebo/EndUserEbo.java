@@ -18,6 +18,7 @@ import com.property.base.vo.ProUserInfo;
 import com.sun.javafx.geom.transform.BaseTransform.Degree;
 import com.ufo.framework.common.core.exception.ResponseErrorInfo;
 import com.ufo.framework.common.core.utils.AppUtils;
+import com.ufo.framework.common.core.utils.MD5Util;
 import com.ufo.framework.common.core.utils.StringUtil;
 import com.ufo.framework.system.ebi.Ebi;
 import com.ufo.framework.system.ebi.EndUserEbi;
@@ -101,7 +102,7 @@ public class EndUserEbo extends SimpleEbo<EndUser> implements EndUserEbi{
 		
 		endUser.setAdmins("1");
 		endUser.setCreateTime(AppUtils.getCurrentTime());
-		endUser.setPassword(pwd);
+		endUser.setPassword(MD5Util.md5(pwd));
 		endUser.setEnabled("1");
 		endUser.setUserCode(loginCode);
 		endUser.setUsername(userName);
