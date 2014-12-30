@@ -127,15 +127,11 @@ Ext.define("core.prop.feespower.view.FeespowerGrid", {
 					var viewModel = system.getViewModel(this.code)
 					this.viewModel = viewModel;
 						this.model = core.app.module.factory.ModelFactory
-						.getModelByModule(viewModel.data,{
-						read : 'rest/201/fetchdata.do',
-					    update : 'rest/module/update.do',
-						create : 'rest/module/create.do',
-						destroy : 'rest/module/remove.do'
-						});
+						.getModelByModule(viewModel.data);
 					this.store = Ext.create('core.app.store.GridStore', {
 							model : this.model,
-							gridModue : this
+							gridModue : this,
+							autoLoad:false
 						});
 						
 				var thar = [{

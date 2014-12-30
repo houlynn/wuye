@@ -7,7 +7,7 @@ init:function(){
 	var self=this
 	this.control({
 		/**
-		 * 添加
+		 * 添加 抄水表信息
 		 */
 			"container[xtype=feescoal.gridModue] button[ref=addButton]":{
 							click : function (btn){
@@ -31,10 +31,15 @@ init:function(){
 							 
 						     var model = Ext.create(modulegrid.getStore().model);
 			                 model.set(model.idProperty, null); 
-			                 model.set("tf_mtype","001");
-			                 var  window=  Ext.createWidget("feescoal.window",{
-			                   viewModel:viewModel,
-				                grid:modulegrid
+			                 model.set("tf_mtype","B003");
+			                 
+			          var tree= btn.ownerCt.ownerCt.ownerCt.down("container[xtype=feescoal.levelTree]");
+   		     	      	 var commbox=tree.down("combobox[ref=vicombobox]");
+   		     	      	 var vid=commbox.getValue();
+			             var  window=  Ext.createWidget("feescoal.window",{
+			                    viewModel:viewModel,
+				                grid:modulegrid,
+				                vid:vid
 			                 });
 			                    window.down('form[xtype=baseform]').setData(model);
 			                    var title=selection[0].get("text")+" 水表信息录入";
@@ -78,14 +83,32 @@ init:function(){
 	       window.show();
 				}
 			},	
+		/**
+		 * 结束整栋楼抄表 
+		 */
 		"form[xtype=feescoal.settingform] #save":{
 		  click:function(btn){
-		   	 var form= btn.up("form[xtype=feescoal.settingform]");
-		   	 var rendField=form.down("#reddate");
-		   	 var reddate=rendField.getValue();
-		   	 var resObj=self.ajax({url:"/201/acount.action",params:{rendate:reddate,type:"001"}});
-		   	 form.grid.reloade();
-
+			   	 var form= btn.up("form[xtype=feescoal.settingform]");
+			   	 var rendField=form.down("#reddate");
+			   	 var reddate=rendField.getValue();
+              var tree=form.grid.ownerCt.down("container[xtype=feescoal.levelTree]");
+              var selection=tree.getSelectionModel().getSelection();
+              if(!selection&&selection.length==0){
+               return ;
+              }else{
+                 if(selection[0].get("nodeInfoType")!="0"){
+                 system.errorInfo("请选择对应的栋数进行结束抄表","错误提示");
+                 return ;
+                }
+              }
+			  var leveid=selection[0].get("code");
+				Ext.MessageBox.confirm('结束抄表', '确定' +selection[0].get("text")+" "+ Ext.Date.format(new Date(reddate),'Y-m')+"结束抄表",
+						function(btn) {
+							if (btn == 'yes') {
+							   	 var resObj=self.ajax({url:"/201/acount.action",params:{rendate:reddate,type:"B003",leveid:leveid}});
+							   	 form.grid.reloade();
+								
+							}});
 		  }
 		},
 			
@@ -206,12 +229,22 @@ init:function(){
 					var gridModue=treeview.ownerCt.ownerCt.down("grid[xtype=feescoal.gridModue]");
 					var modue=system.getModuleDefine(node.raw.nodeInfo);
 					var nodeInfoType=node.raw.nodeInfoType;
+					var fieldtitle=node.raw.descriptionnodeInfoType;
+					/*if(node.raw.descriptionnodeInfoType=="0"){
+						fieldtitle="tf_pid";
+					}else(node.raw.descriptionnodeInfoType=="1"){
+						
+					}
+				*/
+					if("ResidentInfo"!=node.raw.nodeInfo){
+						return;
+					}
 					var navigate={
                 			moduleName:node.raw.nodeInfo,
                 			tableAsName:"_t"+modue.tf_moduleId,
-                			text:node.raw.text,
+                			text:"B003",
                 			primarykey:modue.tf_primaryKey,
-                		    fieldtitle:node.raw.description,
+                		    fieldtitle:fieldtitle,
                 		    equalsValue:node.raw.code,
                 		    isCodeLevel:false
                 	};
@@ -231,7 +264,7 @@ init:function(){
 			/**
 			 * 加载节点
 			 */
-			"container[xtype=feescoal.levelTree] basecombobox[ref=vicombobox]":{
+			"container[xtype=feescoal.levelTree] combobox[ref=vicombobox]":{
 				 select:function(combo,record,opts) {  
 				 	 var  vid=record[0].get("itemCode");
 				 	 var tree= combo.ownerCt.ownerCt;
@@ -241,10 +274,53 @@ init:function(){
 											store.load();	
 											
 				}
-			}
-		  
-
-
+			},
+		"window[xtype=feescoal.window] baseform #save":{
+			beforeclick:function(btn){
+				btn.callback=function(info){
+					var resutlCode= info.errorInfo.resultCode;
+					alert(resutlCode);
+					var vid=btn.up("window[xtype=feescoal.window]").vid;
+					 if(300==resutlCode){
+						 btn.ownerCt.ownerCt.ownerCt.close();
+				    	 var window= Ext.createWidget("window",{
+				           	  title:"并联收费标准",
+				           	  width:300,
+				           	  height:100,
+				           	  items:[{xtype:"feescoal.feescoalitemform",vid:vid}]
+				           	 });
+				           	 window.show();
+					 }
+				}
+			 }
+			},
+	         /**
+	          * 加载combox数据
+	          */
+	         "form[xtype=feescoal.feescoalitemform] #feeeItemCombobox":{
+	         	  render:function(combo) {
+	         	  	var from= combo.ownerCt;
+	         	  	var vid=from.vid;
+	         	    var ddCode ={
+                          whereSql:' and tf_Village='+vid
+                       }
+                 Ext.apply(combo.ddCode,ddCode);
+                 var store=combo.store;
+                 var proxy=store.getProxy();
+				  proxy.extraParams=combo.ddCode;
+			      store.load();	
+	         	  }
+	         },
+	           "form[xtype=feescoal.feescoalitemform] #save":{
+	           	click:function(btn){
+	           			 var from= btn.ownerCt.ownerCt;
+	           			 var comm=from.down("#feeeItemCombobox");
+	           			 var feescoalsid=comm.getValue();
+	         	  	     var vid=from.vid;
+                       	 var resObj=self.ajax({url:"/201/linkFess.action",params:{vid:vid,type:"B003",feessid:feescoalsid}});	           	
+	           	
+	           	}
+	           }, 
 		});
 	},
 	views:[
@@ -252,7 +328,8 @@ init:function(){
 	'core.prop.feescoal.view.LevelTree',
 	"core.prop.feescoal.view.FeescoalGrid",
 	"core.prop.feescoal.view.FeeWinodw",
-	"core.prop.feescoal.view.SettingForm"
+	"core.prop.feescoal.view.SettingForm",
+	"core.prop.feescoal.view.SettingFeesItemForm"
 	],
 	stores:[
 	'core.prop.feescoal.store.LevelStore',

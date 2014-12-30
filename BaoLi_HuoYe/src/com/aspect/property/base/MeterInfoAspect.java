@@ -113,7 +113,7 @@ public class MeterInfoAspect implements ModuleAspect ,XcodeInterface,CommonExcep
 		String hql=" select count(*) from FeesItemLink where 1=1 and tf_Village="+vill.getTf_viid()+" and tf_type='"+type+"'";
 		Integer count= ebi.getCount(hql);
 		if(count==0){
-			getAppException(moduleName, "收费标准未并联需要手动设置", ResponseErrorInfo.STATUS_CUSTOM_WARM);
+			getAppException(moduleName, "第一录入抄表信息需要关联收费标准,请确认当前录入的抄表信息与关联的收费标准是否相符一旦设定后讲无法更改，请慎重选择！！！", ResponseErrorInfo.STATUS_CUSTOM_WARM);
 		}else{
 			String hqlfee=" from FeesItemLink where 1=1 and tf_Village="+vill.getTf_viid()+" and tf_type='"+type+"'";
 			List<FeesItemLink> list=(List<FeesItemLink>) ebi.queryByHql(hqlfee);
