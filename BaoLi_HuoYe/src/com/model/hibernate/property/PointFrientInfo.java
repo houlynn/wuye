@@ -1,11 +1,19 @@
 package com.model.hibernate.property;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.GenericGenerator;
+
 import com.ufo.framework.annotation.FieldInfo;
 import com.ufo.framework.annotation.TableInfo;
 import com.ufo.framework.common.core.ext.ExtFieldType;
@@ -45,6 +53,14 @@ public class PointFrientInfo extends BaseEntity {
 	@FieldInfo(title = "简历", number =80)
 	@Column(length=500)
 	private String tf_rmark;
+	@JsonIgnore
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+	@JoinColumn(name = "tf_viid",nullable=false)
+	@FieldInfo(title = "小区", number =20)
+    private  Village tf_Village;
+	
+	private String tf_vname;
+	
 	public int getTf_pointId() {
 		return tf_pointId;
 	}
@@ -92,6 +108,19 @@ public class PointFrientInfo extends BaseEntity {
 	}
 	public void setTf_rmark(String tf_rmark) {
 		this.tf_rmark = tf_rmark;
+	}
+	public Village getTf_Village() {
+		return tf_Village;
+	}
+	public void setTf_Village(Village tf_Village) {
+		this.tf_Village = tf_Village;
+	}
+	@Transient
+	public String getTf_vname() {
+		return tf_vname;
+	}
+	public void setTf_vname(String tf_vname) {
+		this.tf_vname = tf_vname;
 	}
 	
 

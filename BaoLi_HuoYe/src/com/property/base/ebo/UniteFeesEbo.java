@@ -72,12 +72,12 @@ public class UniteFeesEbo implements UnitFeesEbi {
 		List<ResidentInfo> list= (List<ResidentInfo>) ebi.queryByHql(hql);
 		views=list.parallelStream().map(item->{
 			UnitViewInfo view=new UnitViewInfo();
-			view.setIamgUrl("images/phones/Audiovox-CDM8600.png");
+			view.setIamgUrl("images/system/resident.jpg");
 			view.setRid(item.getTf_residentId());
 			view.setRname(item.getTf_residentName());
-			view.setStateFees("1".equals(item.getTf_stateFees())?"欠费":"");
-			view.setStateOccupancy("1".equals(item.getTf_stateOccupancy())?"入住":"");
-			view.setStateRepair("1".equals(item.getTf_stateRepair())?"报修":"");
+			view.setStateFees("true".equals(item.getTf_stateFees())?"欠费":"");
+			view.setStateOccupancy("true".equals(item.getTf_stateOccupancy())?"入住":"");
+			view.setStateRepair("true".equals(item.getTf_stateRepair())?"报修":"");
 			view.setNumber(item.getTf_number());
 			return  view;
 		}).collect(Collectors.toList());

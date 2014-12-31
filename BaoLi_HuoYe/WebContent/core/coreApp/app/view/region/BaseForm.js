@@ -21,7 +21,7 @@ Ext.define('core.app.view.region.BaseForm', {
 							handler : function(button){
 								var self=this;
 								var form = button.up('form');
-								console.log(button.up('form').getForm().getRecord());
+								//console.log(button.up('form').getForm().getRecord());
 								button.up('form').updateRecord();
 							    var store= self.up("basewindow").grid.getStore();
 							      if (form.isValid()) {

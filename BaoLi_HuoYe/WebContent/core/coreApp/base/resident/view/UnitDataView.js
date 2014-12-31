@@ -15,7 +15,7 @@ Ext.define("core.base.resident.view.UnitDataView", {
 							: '<div style="width:74px;height:74px;filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=\'{iamgUrl}\',sizingMethod=\'scale\')"></div>'),
 					'<strong>业主姓名：{rname}</strong>',
 					'<span>房号{number}</span>',
-					'<span>房间状态信息:{stateOccupancy} {stateFees} {stateRepair}</span>',
+					'<span>房间状态信息:<font style="color:green;font-weight:bold">{stateOccupancy}</font> <font style="color:red;font-weight:bold">{stateFees} <font/> <font style="color:blue;font-weight:bold">{stateRepair}<font/></span>',
 					'</div>', '</tpl>'),
 	plugins : [Ext.create('Ext.ux.DataView.Animated', {
 				duration : 550,

@@ -231,12 +231,16 @@ public class JsonBuilder {
 				fieldType=ExtFieldType.STRING.getName();				
 			}else if(fieldType.equals("integer")){
 				fieldType=ExtFieldType.INTEGER.getName();				
-			}else if(fieldType.equals("string")){
+			}else if(fieldType.equals("int")){
+				fieldType=ExtFieldType.INTEGER.getName();	
+			}
+			else if(fieldType.equals("string")){
 				fieldType=ExtFieldType.STRING.getName();
 			}
 			else if(fieldType.equals("float")){
 				fieldType=ExtFieldType.FLOAT.getName();
 			}
+			
 			else{
 				excludeFlag=true;
 			}
