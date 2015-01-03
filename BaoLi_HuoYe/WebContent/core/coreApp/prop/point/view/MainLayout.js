@@ -8,7 +8,7 @@ Ext.define("core.prop.point.view.MainLayout",{
 		width:comm.get("clientWidth")*0.18
 	},{
 		xtype:"point.grid",
-		title:'收费标准',
+		title:'终点工',
 		code:106,
 		region:"center"
 	}]

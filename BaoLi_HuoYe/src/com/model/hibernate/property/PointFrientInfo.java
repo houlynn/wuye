@@ -28,6 +28,11 @@ import com.ufo.framework.common.model.BaseEntity;
 @DynamicInsert(true)
 @TableInfo(group = "终点工", id = 303, title = "终点工")
 public class PointFrientInfo extends BaseEntity {
+	
+	public static final String POIN_FRIENT="001";
+	public static final String HOME_MAKING ="002";
+	public static final String SITER_MONTH="003";
+	
 	@Id
 	@GeneratedValue(generator = "increment")
 	@GenericGenerator(name = "increment", strategy = "increment")
@@ -58,9 +63,11 @@ public class PointFrientInfo extends BaseEntity {
 	@JoinColumn(name = "tf_viid",nullable=false)
 	@FieldInfo(title = "小区", number =20)
     private  Village tf_Village;
-	
 	private String tf_vname;
+	@Column(length=10)
+	private String tf_ctype;
 	
+	private String tf_posttime;
 	public int getTf_pointId() {
 		return tf_pointId;
 	}
@@ -121,6 +128,18 @@ public class PointFrientInfo extends BaseEntity {
 	}
 	public void setTf_vname(String tf_vname) {
 		this.tf_vname = tf_vname;
+	}
+	public String getTf_ctype() {
+		return tf_ctype;
+	}
+	public void setTf_ctype(String tf_ctype) {
+		this.tf_ctype = tf_ctype;
+	}
+	public String getTf_posttime() {
+		return tf_posttime;
+	}
+	public void setTf_posttime(String tf_posttime) {
+		this.tf_posttime = tf_posttime;
 	}
 	
 

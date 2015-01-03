@@ -30,26 +30,10 @@ init:function(){
 				                vid:vid
 			                 });
 			                    window.down('form[xtype=point.form]').getForm().loadRecord(model);
-			                    var title=selection[0].get("text")+" 收费标准录入";
+			                    var title=selection[0].get("text")+" 添加终点工信息";
 			                    window.setTitle(title);
 	                            window.show();
 								}, 
-								render : function(btn) {
-									 var viewModel=system.getViewModel(106);
-									    btn.dropZone = new Ext.dd.DropZone(btn.getEl(), {
-												ddGroup : 'DD_grid_' + viewModel.get('tf_moduleName'),
-												getTargetFromEvent : function(e) {
-													return e.getTarget('');
-												},
-												onNodeOver : function(target, dd, e, data) {
-													return Ext.dd.DropZone.prototype.dropAllowed;
-												},
-												onNodeDrop : function(target, dd, e, data) {
-													var b = btn.menu.down('#newwithcopy');
-													b.fireEvent('click', b);
-												}
-											})
-								}
 				},
 			/**
 			 * 编辑
@@ -58,17 +42,14 @@ init:function(){
 			"container[xtype=point.grid]  button[ref=editButton] ":{
 		   click:function(btn){
 			var modulegrid = btn.up("grid[xtype=point.grid]");	
-			 var viewModel=system.getViewModel(106);
 			var  window=  Ext.createWidget("point.window",{
-			                   viewModel:viewModel,
 				                grid:modulegrid
 			                 });
 			var selection= modulegrid.getSelectionModel().getSelection()                 
-	       window.down('baseform').setData(selection[0]);
-	          var title="修改收费标准信息";
+	         window.down('form[xtype=point.form]').getForm().loadRecord(selection[0]);
+			                    var title=selection[0].get("tf_name")+" 修改终点工信息";
 			                    window.setTitle(title);
 	                            window.show();
-	       window.show();
 				}
 			},	
 			
@@ -78,17 +59,16 @@ init:function(){
 		"container[xtype=point.grid]  button[ref=removeButton] ":{
 			click:function(btn){
 			var modulegrid=btn.up("grid[xtype=point.grid]");
-			 var module=system.getViewModel(106);
 			var selection=modulegrid.getSelectionModel().getSelection();
 			var message='';
 			var infoMessage='';
 			if (selection.length == 1) { 
-				message = ' 『' + selection[0].getNameValue() + '』 吗?';
-				infoMessage = '『' + selection[0].getNameValue() + '』';
+				message = ' 『' + selection[0].get("tf_name") + '』 吗?';
+				infoMessage = '『' + selection[0].get("tf_name") + '』';
 			} else { 
 				message = '<ol>';
 				Ext.Array.each(selection, function(record) {
-							message += '<li>' + record.getNameValue() + '</li>';
+							message += '<li>' + record.get("tf_name") + '</li>';
 						});
 				message += '</ol>';
 				infoMessage = message;

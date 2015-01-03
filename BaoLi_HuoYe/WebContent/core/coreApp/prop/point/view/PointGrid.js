@@ -7,6 +7,34 @@ Ext.define("core.prop.point.view.PointGrid", {
 	multiSelect : true,
 	border:false,
 	width : "100%",
+    listeners : {
+				selectionChange : function(model, selected, eOpts) {
+					// 设置删除按钮的状态
+					this.down('toolbar button#delete')[selected.length > 0
+							? 'enable'
+							: 'disable']();
+							
+							// 设置删除按钮的状态
+					this.down('toolbar button#edit')[selected.length > 0
+							? 'enable'
+							: 'disable']();
+							
+							
+					// 下面将组织选中的记录的name显示在title上，有二种方案可供选择，一种是用下面的MVVM特性，第二种是调用refreshTitle()
+					var selectedNames ='终点工信息'
+					if (selected.length > 0) {
+						if (!!selected[0].get("tf_name")) {
+							selectedNames = selectedNames
+									+ '　『<em>'
+									+ selected[0].get("tf_name")
+									+ '</em>'
+									+ (selected.length > 1 ? ' 等'
+											+ selected.length + '条' : '') + '』';
+						}
+					}
+				}
+    },
+	
 	tools : [{
 				type : 'gear'
 			}],
@@ -66,11 +94,12 @@ Ext.define("core.prop.point.view.PointGrid", {
 		var thar = [{
 					text : '新增',
 					ref : 'addButton',
-					xtype : 'splitbutton',
 					glyph : 0xf016
 				}, {
 					text : '修改',
 					glyph : 0xf044,
+					disabled : true,
+					itemId:"edit",
 					ref : "editButton"
 				}, {
 					text : '删除',

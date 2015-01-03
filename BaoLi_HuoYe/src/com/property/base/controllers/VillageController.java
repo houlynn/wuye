@@ -9,22 +9,29 @@ import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.quartz.impl.calendar.BaseCalendar;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.model.hibernate.property.PointFrientInfo;
 import com.model.hibernate.property.Village;
 import com.model.hibernate.system.shared.EndUser;
 import com.model.hibernate.system.shared.XCodeInfo;
 import com.property.base.vo.ProUserInfo;
 import com.ufo.framework.common.core.ext.model.JSONTreeNode;
+import com.ufo.framework.common.core.utils.AppUtils;
+import com.ufo.framework.system.controller.BaseController;
 import com.ufo.framework.system.ebi.Ebi;
+import com.ufo.framework.system.shared.module.DataInsertResponseInfo;
 import com.ufo.framework.system.web.SecurityUserHolder;
 
 @RequestMapping("/vi")
 @Controller
-public class VillageController {
+public class VillageController extends BaseController {
 
 	@Resource(name="ebo")
 	private Ebi ebi;
@@ -56,56 +63,46 @@ public class VillageController {
 	}
 	
 	
-	public @ResponseBody
-	Map<String, Object> fetchData(Integer start, Integer limit,
+	@RequestMapping("/fetchData")
+	public @ResponseBody Map<String, Object> fetchData(Integer start, Integer limit,
 			@RequestParam(value="whereSql",required=false,defaultValue="") String whereSql,
 	    	@RequestParam(value="parentSql",required=false,defaultValue="") String parentSql,
 	    	@RequestParam(value="querySql",required=false,defaultValue="") String querySql,
 	    	@RequestParam(value="orderSql",required=false,defaultValue="") String orderSql,
 	    	@RequestParam(value="vid",required=true,defaultValue="") int vid,
-			HttpServletRequest request) throws Exception {
-		StringBuffer hql = new StringBuffer("from PointFrientInfo where 1=1  ");
-		StringBuffer countHql = new StringBuffer("select count(*) from PointFrientInfo  where 1=1 ");
-		whereSql = whereSql == null ? "" : whereSql;
-		whereSql+=" tf_Village="+vid;
-		hql.append(whereSql);
-		parentSql = parentSql == null ? "" : parentSql;
-		hql.append(parentSql);
-		querySql = querySql == null ? "" : querySql;
-		hql.append(querySql);
-		orderSql = orderSql == null ? "" : orderSql;
-		countHql.append(whereSql);
-		countHql.append(querySql);
-		countHql.append(parentSql);
-		Integer count = ebi.getCount(countHql.toString());
-		hql.append(orderSql);
-		List<EndUser> list= (List<EndUser>) this.ebi.queryByHql(hql.toString(), start, limit);
-		
-		 List<ProUserInfo> viewitems= list.stream().map(item->{
-			ProUserInfo pru=new ProUserInfo();
-			pru.setCreateTime(item.getCreateTime());
-			pru.setId(item.getUserId());
-			pru.setLoginCode(item.getUserCode());
-			XCodeInfo xcode=new XCodeInfo();
-			try {
-				xcode = (XCodeInfo) ebi.findById(XCodeInfo.class, item.getCodeId());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			pru.setProid(xcode.getTf_propertyCompany().getTf_name());
-			pru.setPwd(item.getPassword());
-			pru.setUserName(item.getUsername());
-			return pru;
-			
-		}).collect(Collectors.toList());
-		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("records", viewitems);
-		result.put("totalCount",count );
-		return result;
-		
+			HttpServletRequest request) throws Exception {;
+		whereSql+=" and tf_Village="+vid;
+		return super.fetchData(start, limit, whereSql, parentSql, querySql, orderSql, "PointFrientInfo", request, (list->{
+			List<PointFrientInfo> reusltList=(List<PointFrientInfo>) list;
+			    reusltList=reusltList.stream().map(item->{
+				item.setTf_vname(item.getTf_Village().getTf_name());
+				return item;
+			}).collect(Collectors.toList());
+			return reusltList;
+		}));
 	}
 	
-	
+	@RequestMapping(value = "/create.do", method = RequestMethod.POST)
+	public @ResponseBody
+	DataInsertResponseInfo add(  @RequestBody String inserted,
+			@RequestParam(value="ptype",required=true)
+			String ptype,
+			@RequestParam(value="ctype",required=true)
+			String ctype,
+			@RequestParam(value="vid",required=true)
+			int vid,
+			HttpServletRequest request) throws Exception {
+		return super.add("PointFrientInfo", inserted, PointFrientInfo.class, request, (record->{
+			PointFrientInfo obj=(PointFrientInfo)record;
+			obj.setTf_ctype(ptype);
+			obj.setTf_type(ptype);
+			obj.setTf_posttime(AppUtils.getCurrentTime());
+			Village village=new Village();
+			village.setTf_viid(vid);
+			obj.setTf_Village(village);
+		}));
+	}
+
 	
 	
 	
