@@ -1,6 +1,6 @@
-Ext.define("core.prop.point.view.PointGrid", {
+Ext.define("core.prop.point.view.PointyuesaoGrid", {
 	extend : 'Ext.grid.Panel',
-	alias : 'widget.point.grid',
+	alias : 'widget.pointyuesao.grid',
 	autoHeight : true,
 	style : 'border-width:0 0 0 0;',
 	columnLines : true, // 加上表格线
@@ -23,7 +23,7 @@ Ext.define("core.prop.point.view.PointGrid", {
 							: 'disable']();		
 							
 					// 下面将组织选中的记录的name显示在title上，有二种方案可供选择，一种是用下面的MVVM特性，第二种是调用refreshTitle()
-					var selectedNames ='终点工信息'
+					var selectedNames ='月嫂信息'
 					if (selected.length > 0) {
 						if (!!selected[0].get("tf_name")) {
 							selectedNames = selectedNames

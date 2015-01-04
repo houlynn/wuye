@@ -58,15 +58,26 @@ public class PointFrientInfo extends BaseEntity {
 	@FieldInfo(title = "简历", number =80)
 	@Column(length=500)
 	private String tf_rmark;
+	private String tf_state;
 	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JoinColumn(name = "tf_viid",nullable=false)
 	@FieldInfo(title = "小区", number =20)
     private  Village tf_Village;
+	@Transient
 	private String tf_vname;
 	@Column(length=10)
 	private String tf_ctype;
 	
+	private String tf_topUrl;
+	
+	
+	public String getTf_topUrl() {
+		return tf_topUrl;
+	}
+	public void setTf_topUrl(String tf_topUrl) {
+		this.tf_topUrl = tf_topUrl;
+	}
 	private String tf_posttime;
 	public int getTf_pointId() {
 		return tf_pointId;
@@ -141,6 +152,11 @@ public class PointFrientInfo extends BaseEntity {
 	public void setTf_posttime(String tf_posttime) {
 		this.tf_posttime = tf_posttime;
 	}
-	
+	public String getTf_state() {
+		return tf_state;
+	}
+	public void setTf_state(String tf_state) {
+		this.tf_state = tf_state;
+	}
 
 }

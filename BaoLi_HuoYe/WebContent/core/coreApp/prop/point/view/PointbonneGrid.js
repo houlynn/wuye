@@ -1,6 +1,6 @@
-Ext.define("core.prop.point.view.PointGrid", {
+Ext.define("core.prop.point.view.PointbonneGrid", {
 	extend : 'Ext.grid.Panel',
-	alias : 'widget.point.grid',
+	alias : 'widget.pointbonne.grid',
 	autoHeight : true,
 	style : 'border-width:0 0 0 0;',
 	columnLines : true, // 加上表格线

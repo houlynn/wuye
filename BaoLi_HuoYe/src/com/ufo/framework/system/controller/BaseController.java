@@ -37,18 +37,18 @@ public class BaseController  implements LogerManager,CommonException{
 	private ModelEbi moduleService;
 	
 	
-	private interface  PrepareReuslt{ public 	List<?>  prepare(List<?> list);}
-	private interface  PrepareAdd{ public 	void  prepare(Object record);}
-	private interface  PrepareLoad{ public void  prepare(Object record);}
-	private interface  PrepareUpdate{ public void  prepare(Object record);}
+	protected interface  PrepareReuslt{ public List<?>  prepare(List<?> dataList);}
+	protected interface  PrepareAdd{ public 	void  prepare(Object record);}
+	protected interface  PrepareLoad{ public void  prepare(Object record);}
+	protected interface  PrepareUpdate{ public void  prepare(Object record);}
 	
-	public @ResponseBody Map<String, Object> fetchData(Integer start, Integer limit,
-			@RequestParam(value="whereSql",required=false,defaultValue="") String whereSql,
-	    	@RequestParam(value="parentSql",required=false,defaultValue="") String parentSql,
-	    	@RequestParam(value="querySql",required=false,defaultValue="") String querySql,
-	    	@RequestParam(value="orderSql",required=false,defaultValue="") String orderSql,
-	    	@RequestParam(value="moduleName", required=true) String moduleName,
-			HttpServletRequest request,PrepareReuslt prepareReuslt) throws Exception {
+	public  Map<String, Object> load(Integer start, Integer limit,
+			 String whereSql,
+	         String parentSql,
+	    	 String querySql,
+	    	 String orderSql,
+	    	 String moduleName,
+		HttpServletRequest request,PrepareReuslt prepareReuslt) throws Exception {
 		StringBuffer hql = new StringBuffer("from "+moduleName+" where 1=1  ");
 		StringBuffer countHql = new StringBuffer("select count(*) from "+moduleName+"  where 1=1 ");
 		hql.append(whereSql);
@@ -59,18 +59,17 @@ public class BaseController  implements LogerManager,CommonException{
 		countHql.append(parentSql);
 		Integer count = ebi.getCount(countHql.toString());
 		hql.append(orderSql);
-		List<?> list= this.ebi.queryByHql(hql.toString(), start, limit);
-		List<?> viewitems=new ArrayList<>();
-		if(prepareReuslt!=null){
-			viewitems=prepareReuslt.prepare(list);
-		}else{
-			viewitems=list;
-		}
 		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("records", viewitems);
+		List<?> dataList= this.ebi.queryByHql(hql.toString(), start, limit);
+		List<?> viewList=new ArrayList<>();
+		if(prepareReuslt!=null){
+			viewList= prepareReuslt.prepare(dataList);
+		}else{
+			viewList=dataList;
+		}
+		result.put("records", viewList);
 		result.put("totalCount",count );
 		return result;
-		
 	}
 	
 	

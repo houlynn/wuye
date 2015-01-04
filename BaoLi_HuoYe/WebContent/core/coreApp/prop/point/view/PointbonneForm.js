@@ -1,6 +1,6 @@
-Ext.define('core.prop.point.view.PointForm', {
+Ext.define('core.prop.point.view.PointbonneForm', {
 	extend : "Ext.form.Panel",
-	alias : 'widget.point.form',
+	alias : 'widget.pointbonne.form',
 	border:!1,
 	title:null,
 	autoHeight:true,  

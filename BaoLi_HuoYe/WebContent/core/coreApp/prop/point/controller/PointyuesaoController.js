@@ -1,4 +1,4 @@
-Ext.define("core.prop.point.controller.PointController",{
+Ext.define("core.prop.point.controller.PointyuesaoController",{
 	extend:"Ext.app.Controller",
 	mixins: {
 		suppleUtil:"core.util.SuppleUtil",
@@ -210,11 +210,11 @@ init:function(){
 		});
 	},
 	views:[
-  "core.prop.point.view.MainLayout",
-  "core.prop.point.view.LevelTree",
-  "core.prop.point.view.PointGrid",
-  "core.prop.point.view.PointWinodw",
-  "core.prop.point.view.PointForm"
+  "core.prop.point.view.PointyuesaoMainLayout",
+  "core.prop.point.view.PointyuesaoLevelTree",
+  "core.prop.point.view.PointyuesaoGrid",
+  "core.prop.point.view.PointyuesaoWinodw",
+  "core.prop.point.view.PointyuesaoForm"
 	],
 	stores:[
 	'core.prop.point.store.LevelStore',

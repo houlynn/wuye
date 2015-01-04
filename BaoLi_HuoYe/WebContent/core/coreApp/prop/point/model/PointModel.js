@@ -1,16 +1,16 @@
 Ext.define("core.prop.point.model.PointModel", {
 		extend : 'Ext.data.Model',
-		  idProperty : "id",//主键
+		  idProperty : "tf_pointId",//主键
 	    fields:factory.ModelFactory.getFields({modelName:"com.model.hibernate.property.PointFrientInfo",excludes:""}),
 		proxy : {
 					type : 'rest',
 					batchActions : true,
 				    isSynchronous: true,
 					api : {
-					    read : 'rbacUser/fetchdata.action',
-						update : 'rest/module/update.do',
-						create : 'rbacUser/create.action',
-						destroy : 'rest/module/remove.do'
+					    read : 'vi/loadPoint.action',
+						update : 'vid/updatePoint.action',
+						create : 'vi/createPoint.action',
+						destroy : 'vi/removePoint.action'
 					
 					},
 					actionMethods : {

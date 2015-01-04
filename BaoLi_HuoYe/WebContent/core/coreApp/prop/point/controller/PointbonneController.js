@@ -1,4 +1,4 @@
-Ext.define("core.prop.point.controller.PointController",{
+Ext.define("core.prop.point.controller.PointbonneController",{
 	extend:"Ext.app.Controller",
 	mixins: {
 		suppleUtil:"core.util.SuppleUtil",
@@ -9,11 +9,11 @@ init:function(){
 				/**
 		 * 添加 抄水表信息
 		 */
-			"container[xtype=point.grid] button[ref=addButton]":{
+			"container[xtype=pointbonne.grid] button[ref=addButton]":{
 							click : function (btn){
-							 var modulegrid = btn.up("grid[xtype=point.grid]");	
+							 var modulegrid = btn.up("grid[xtype=pointbonne.grid]");	
 							 var store=modulegrid.getStore();
-			                 var tree=modulegrid.ownerCt.down("container[xtype=point.levelTree]");
+			                 var tree=modulegrid.ownerCt.down("container[xtype=pointbonne.levelTree]");
 			                 var selection=tree.getSelectionModel().getSelection();
 			                 if(!selection||selection.length==0){
 			                 	    system.errorInfo("请选择一个小区再进行添加","错误提示");
@@ -21,13 +21,13 @@ init:function(){
 			                 }
 						     var model = Ext.create(modulegrid.getStore().model);
 			                 model.set(model.idProperty, null); 
-			              var tree= btn.ownerCt.ownerCt.ownerCt.down("container[xtype=point.levelTree]");
+			              var tree= btn.ownerCt.ownerCt.ownerCt.down("container[xtype=pointbonne.levelTree]");
 			              var vid=selection[0].get("code");
-			             var  window=  Ext.createWidget("point.window",{
+			             var  window=  Ext.createWidget("pointbonne.window",{
 				                grid:modulegrid,
 				                vid:vid
 			                 });
-			                    window.down('form[xtype=point.form]').getForm().loadRecord(model);
+			                    window.down('form[xtype=pointbonne.form]').getForm().loadRecord(model);
 			                    var title=selection[0].get("text")+" 添加终点工信息";
 			                    window.setTitle(title);
 	                            window.show();
@@ -37,27 +37,27 @@ init:function(){
 			 * 编辑
 			 */	
 				
-			"container[xtype=point.grid]  button[ref=editButton] ":{
+			"container[xtype=pointbonne.grid]  button[ref=editButton] ":{
 		   click:function(btn){
-			var modulegrid = btn.up("grid[xtype=point.grid]");	
+			var modulegrid = btn.up("grid[xtype=pointbonne.grid]");	
 			var store=modulegrid.getStore();
-			var tree=modulegrid.ownerCt.down("container[xtype=point.levelTree]");
+			var tree=modulegrid.ownerCt.down("container[xtype=pointbonne.levelTree]");
 			var selection=tree.getSelectionModel().getSelection();
 		    var vid=selection[0].get("code");
-			var  window=  Ext.createWidget("point.window",{
+			var  window=  Ext.createWidget("pointbonne.window",{
 				                grid:modulegrid,
 				                 vid:vid
 			                 });
 			var selection= modulegrid.getSelectionModel().getSelection()                 
-	         window.down('form[xtype=point.form]').getForm().loadRecord(selection[0]);
+	         window.down('form[xtype=pointbonne.form]').getForm().loadRecord(selection[0]);
 			                    var title=selection[0].get("tf_name")+" 修改终点工信息";
 			                    window.setTitle(title);
 	                            window.show();
 				}
 			},	
-			"container[xtype=point.grid]  button[ref=audit] ":{
+			"container[xtype=pointbonne.grid]  button[ref=audit] ":{
 				click:function(btn){
-					var modulegrid=btn.up("grid[xtype=point.grid]");
+					var modulegrid=btn.up("grid[xtype=pointbonne.grid]");
 			        var selection=modulegrid.getSelectionModel().getSelection();
 			        if(selection.length>0){
 			        Ext.MessageBox.confirm('确定删除', '确定要发布 '+selection[0].get("tf_name"),
@@ -71,7 +71,7 @@ init:function(){
 			},		
 			
 			
-		"form[xtype=point.form] #save":{
+		"form[xtype=pointbonne.form] #save":{
 		  click:function(btn){
 		  	
 			var formObj=btn.up('form').getForm();
@@ -114,9 +114,9 @@ init:function(){
 			/**
 			 * 删除
 			 */
-		"container[xtype=point.grid]  button[ref=removeButton] ":{
+		"container[xtype=pointbonne.grid]  button[ref=removeButton] ":{
 			click:function(btn){
-			var modulegrid=btn.up("grid[xtype=point.grid]");
+			var modulegrid=btn.up("grid[xtype=pointbonne.grid]");
 			var selection=modulegrid.getSelectionModel().getSelection();
 			var message='';
 			var infoMessage='';
@@ -195,10 +195,10 @@ init:function(){
 				/**
 				 * 点击
 				 */
-			"container[xtype=point.levelTree]":{
+			"container[xtype=pointbonne.levelTree]":{
 				itemclick:function(treeview,node,item,index,e,eOpts){
 					var tree=treeview.ownerCt;
-					var gridModue=treeview.ownerCt.ownerCt.down("grid[xtype=point.grid]");
+					var gridModue=treeview.ownerCt.ownerCt.down("grid[xtype=pointbonne.grid]");
                 	var store=gridModue.store;
                   	var proxy=store.getProxy();
                   	var selection=tree.getSelectionModel().getSelection()[0];
@@ -210,11 +210,11 @@ init:function(){
 		});
 	},
 	views:[
-  "core.prop.point.view.MainLayout",
-  "core.prop.point.view.LevelTree",
-  "core.prop.point.view.PointGrid",
-  "core.prop.point.view.PointWinodw",
-  "core.prop.point.view.PointForm"
+  "core.prop.point.view..PointbonneMainLayout",
+  "core.prop.point.view..PointbonneLevelTree",
+  "core.prop.point.view..PointbonneGrid",
+  "core.prop.point.view..PointbonneWinodw",
+  "core.prop.point.view..PointbonneForm"
 	],
 	stores:[
 	'core.prop.point.store.LevelStore',
