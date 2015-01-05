@@ -66,10 +66,19 @@ public class PointFrientInfo extends BaseEntity {
     private  Village tf_Village;
 	@Transient
 	private String tf_vname;
+	@Transient
+	private String tf_vid;
+	
 	@Column(length=10)
 	private String tf_ctype;
 	
+	
 	private String tf_topUrl;
+	
+	/**
+	 * 联系电话
+	 */
+private String tf_phone;
 	
 	
 	public String getTf_topUrl() {
@@ -157,6 +166,19 @@ public class PointFrientInfo extends BaseEntity {
 	}
 	public void setTf_state(String tf_state) {
 		this.tf_state = tf_state;
+	}
+	@Transient
+	public String getTf_vid() {
+		return tf_vid;
+	}
+	public void setTf_vid(String tf_vid) {
+		this.tf_vid = tf_vid;
+	}
+	public String getTf_phone() {
+		return tf_phone;
+	}
+	public void setTf_phone(String tf_phone) {
+		this.tf_phone = tf_phone;
 	}
 
 }

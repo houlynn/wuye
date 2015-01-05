@@ -86,41 +86,18 @@
             </list>
         </property>
     </bean>
-    
-    
-    
 	
-	<bean id="sayHelloServiceExporter" class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter" >
-		<property name="service" 			ref="testImpl" />
-		<property name="serviceInterface" 	value="com.property.base.invoker.serviceinterface.Test" />
+	<bean id="appServiceExporter" class="org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter" >
+		<property name="service" 			ref="appServiceImpl" />
+		<property name="serviceInterface" 	value="com.property.base.invoker.serviceinterface.AppService" />
 	</bean>
-		
 	<bean id="simpleUrlHandlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
 	   	<property name="urlMap">
 			<map>
-			  <entry key="/test.action" value-ref="sayHelloServiceExporter" />
+			  <entry key="/app.action" value-ref="appServiceExporter" />
 			</map>
 		</property>
 	</bean>	
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
 </beans>

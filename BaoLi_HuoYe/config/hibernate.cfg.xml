@@ -43,7 +43,9 @@
 		    <mapping class="com.model.hibernate.property.BillItem"/>
 		    <mapping class="com.model.hibernate.property.BillContext"/>
 		   <mapping class="com.model.hibernate.property.RepairInfo"/>
-		     <mapping class="com.model.hibernate.property.PointFrientInfo"/>
+		    <mapping class="com.model.hibernate.property.PointFrientInfo"/>
+		    <mapping class="com.model.hibernate.property.ExpressInfo"/>
+		     
 		    <mapping class="com.model.hibernate.system.shared.XCodeInfo"/>
 		    
 		    

@@ -1,92 +1,71 @@
-package com.model.hibernate.property;
-
+package com.property.base.invoker.model;
+import java.io.Serializable;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
-
-import com.ufo.framework.annotation.DDItemCode;
-import com.ufo.framework.annotation.DDItemName;
-import com.ufo.framework.annotation.FieldInfo;
-import com.ufo.framework.annotation.TableInfo;
-import com.ufo.framework.annotation.TreeItemName;
-import com.ufo.framework.annotation.TreeItemValue;
-import com.ufo.framework.common.model.BaseEntity;
-/**
- * 小区信息
- *
-* @author HouLynn
-* @date 2014年11月19日
-  @version 1.0
- */
-@Entity
-@DynamicUpdate(true)
-@DynamicInsert(true)
-@TableInfo(group = "基础信息模块", id = 102, title = "小区信息")
-public class Village extends BaseEntity {
-	
-	
-	@TreeItemValue
-	@DDItemCode
-	@Id
-	@GeneratedValue(generator = "increment")
-	@GenericGenerator(name = "increment", strategy = "increment")
-	@FieldInfo(title = "ID号", number = 10, hidden = true)
+public class AppVillage implements Serializable {
+	/**
+	 * ID号
+	 */
 	private int tf_viid;
-	@DDItemName
-	@Column(length=300)
-	@TreeItemName
-	@FieldInfo(title="小区名称",number=20,uniqueField=true)
+	/**
+	 * 小区名称
+	 */
 	private String  tf_name;
-	@Type(type="text")  
-	@FieldInfo(title = "简介",number=30)
+	/**
+	 * 简介
+	 */
 	private String tf_summary;
-	@Type(type="text")  
-	@FieldInfo(title = "小区介绍",number=40)
+	/**
+	 * 小区介绍
+	 */
 	private String tf_introduce;
-	
-	/////////////////////////////////////////////////////
-	@FieldInfo(title = "省份",number=50)
-	@Column(length=50)
+	/**
+	 * 省份
+	 */
 	private String tf_province;
-	@FieldInfo(title = "城市",number=60)
-	@Column(length=50)
-	private String tf_city;
-	@FieldInfo(title = "县城",number=70)
-	@Column(length=50)
-	private String tf_county;
-	@FieldInfo(title = "经度纬度",number=80)
-	@Column(length=30)
-	private String tf_locationxy;
-	@Column(length=500)
-	@FieldInfo(title = "详细地址",number=90)
-	private String tf_location;
 	
-	@Column(length=50)
-	@FieldInfo(title = "联系电话",number=90)
+	/**
+	 * 城市
+	 */
+	private String tf_city;
+	/**
+	 * 县城
+	 */
+	private String tf_county;
+	/**
+	 * 经度纬度
+	 */
+	private String tf_locationxy;
+	
+	/**
+	 * 详细地址
+	 */
+	private String tf_location;
+	/**
+	 * 楼盘编号
+	 */
+	private String tf_propertyCode;
+	/**
+	 * 预售证号
+	 */
+	private String tf_salesCode;
+	/**
+	 * 占地面积
+	 */
+	private float tf_covering ;
+	/**
+	 * 绿化面积
+	 */
+	private float tf_greenarea;
+	/**
+	 * 接盘时间
+	 */
+	private Date  tf_sales;
+	
+	/**
+	 * 联系电话
+	 */
 	private String tf_phone;
 	
-	
-	//////////////////////////////////////////////////////
-	@Column(length=50)
-	@FieldInfo(title = "楼盘编号",number=100)
-	private String tf_propertyCode;
-	@Column(length=50)
-	@FieldInfo(title = "预售证号",number=120)
-	private String tf_salesCode;
-	@FieldInfo(title = "占地面积",number=130)
-	private float tf_covering ;
-	@FieldInfo(title = "绿化面积",number=140)
-	private float tf_greenarea;
-	@FieldInfo(title = "接盘时间",number=150)
-	private Date  tf_sales;
 	
 	
 	

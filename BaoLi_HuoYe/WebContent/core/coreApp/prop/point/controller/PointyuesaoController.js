@@ -28,7 +28,7 @@ init:function(){
 				                vid:vid
 			                 });
 			                    window.down('form[xtype=point.form]').getForm().loadRecord(model);
-			                    var title=selection[0].get("text")+" 添加终点工信息";
+			                    var title=selection[0].get("text")+" 添加月嫂信息";
 			                    window.setTitle(title);
 	                            window.show();
 								}, 
@@ -50,7 +50,7 @@ init:function(){
 			                 });
 			var selection= modulegrid.getSelectionModel().getSelection()                 
 	         window.down('form[xtype=point.form]').getForm().loadRecord(selection[0]);
-			                    var title=selection[0].get("tf_name")+" 修改终点工信息";
+			                    var title=selection[0].get("tf_name")+" 修改月嫂信息";
 			                    window.setTitle(title);
 	                            window.show();
 				}
@@ -132,7 +132,7 @@ init:function(){
 				infoMessage = message;
 				message = '以下 ' + selection.length + ' 条记录吗?' + message;
 			}
-			var moduletitle = '<strong>' + "终点工"
+			var moduletitle = '<strong>' + "月嫂信息"
 					+ '</strong>';
 			Ext.MessageBox.confirm('确定删除', '确定要删除 ' + moduletitle + ' 中的' + message,
 					function(btn) {
