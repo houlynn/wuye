@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
+import javax.persistence.Transient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
@@ -148,9 +149,8 @@ public class ResidentInfo  extends BaseEntity{
 	@Column(length = 25)
 	private String tf_appPhone;
 	
-	
-	
-	
+	@Transient
+	private String tf_lefStr;
 	
 	@JsonIgnore
 	@ManyToOne(optional=true,fetch=FetchType.LAZY)
@@ -403,6 +403,14 @@ public class ResidentInfo  extends BaseEntity{
 
 	public void setTf_stateRepair(String tf_stateRepair) {
 		this.tf_stateRepair = tf_stateRepair;
+	}
+	@Transient
+	public String getTf_lefStr() {
+		return tf_lefStr;
+	}
+
+	public void setTf_lefStr(String tf_lefStr) {
+		this.tf_lefStr = tf_lefStr;
 	}
 	
 	

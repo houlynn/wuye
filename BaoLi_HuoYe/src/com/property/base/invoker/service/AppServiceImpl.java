@@ -18,8 +18,11 @@ import com.model.hibernate.property.ResidentInfo;
 import com.model.hibernate.property.Village;
 import com.model.hibernate.system.shared.Dictionary;
 import com.model.hibernate.system.shared.DictionaryItem;
+import com.property.base.ebi.UnitFeesEbi;
 import com.property.base.invoker.model.AppExpressInfo;
+import com.property.base.invoker.model.AppItemInfo;
 import com.property.base.invoker.model.AppPointInfo;
+import com.property.base.invoker.model.AppResident;
 import com.property.base.invoker.model.AppVillage;
 import com.property.base.invoker.serviceinterface.AppService;
 import com.ufo.framework.common.core.utils.AppUtils;
@@ -35,6 +38,9 @@ public class AppServiceImpl implements AppService {
 
 	@Resource(name = "ebo")
 	private Ebi ebi;
+	
+	@Resource
+	private UnitFeesEbi  unitFeesEbi;
 
 	@Override
 	public List<AppVillage> loadVis(String tf_locationxy, String city)
@@ -197,6 +203,29 @@ public class AppServiceImpl implements AppService {
 		}
 		result.put("result", "" + flag);
 		return result;
+	}
+
+	@Override
+	public AppResident getAppResident(int id) throws Exception {
+		// TODO Auto-generated method stub
+		ResidentInfo info=ebi.findById(ResidentInfo.class, id);
+		AppResident appResident=new AppResident();
+		BeanUtils.copyProperties(appResident, info);
+		return appResident;
+	}
+
+	@Override
+	public AppVillage getAppVillage(int id) throws Exception {
+		// TODO Auto-generated method stub
+		Village info=ebi.findById(Village.class, id);
+		AppVillage  appVillage=new AppVillage();
+		BeanUtils.copyProperties(appVillage, info);
+		return appVillage;
+	}
+
+	@Override
+	public List<Map<String,List<AppItemInfo>>> loadFeesItem(int rid) throws Exception {
+		return unitFeesEbi.loadFees(rid);
 	}
 
 }

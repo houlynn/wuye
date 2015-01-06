@@ -2,15 +2,20 @@ package com.property.base.ebo;
 import com.model.hibernate.property.BillItem;
 
 import java.lang.reflect.Array;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import org.hibernate.jdbc.Work;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -21,6 +26,7 @@ import com.model.hibernate.property.MeterInfo;
 import com.model.hibernate.property.ResidentInfo;
 import com.model.hibernate.system.shared.EndUser;
 import com.property.base.ebi.UnitFeesEbi;
+import com.property.base.invoker.model.AppItemInfo;
 import com.property.base.vo.UnitViewInfo;
 import com.ufo.framework.common.core.utils.AppUtils;
 import com.ufo.framework.common.core.utils.StringUtil;
@@ -294,8 +300,55 @@ public double getUniteFeesAcount(int rid){
    	return sumAcount;
 }
 
-
-
+/**
+ * App缴费信息
+ * @param rid
+ * @return
+ * @throws Exception
+ */
+public List<Map<String,List<AppItemInfo>>> loadFees(int rid) throws Exception{
+	DataFetchResponseInfo response= this.addUniteFees(rid);
+	String sql= "select distinct tf_feesDate  from BillItem where 1=1 and tf_state='0' ";
+	List<Map<String,String>> data=new ArrayList<>();
+	  Work work=conn->{
+		  PreparedStatement ps=  conn.prepareStatement(sql);
+		  ResultSet rset=  ps.executeQuery();
+		  while(rset.next()){
+			  Map<String,String> viewItem=new HashMap<String, String>();
+			  viewItem.put("tf_feesDate", rset.getString("tf_feesDate"));
+			  data.add(viewItem);
+			  viewItem=null;
+		  }
+		  rset.close();
+	  };
+	   ebi.doWork(sql, work, data);
+	List<String>  dateList= data.stream().map(item->{
+		   return item.get("tf_feesDate");
+	   }).collect(Collectors.toList());
+	List<Map<String,List<AppItemInfo>>> reuslt=new ArrayList<>();
+	List<BillItem> bills=(List<BillItem>) response.getMatchingObjects();
+	for(String date :dateList ){
+		Map<String,List<AppItemInfo>> item=new HashMap<>();
+		List<AppItemInfo> appItemInfos=new ArrayList<>();
+		for(BillItem bill :bills){
+			String billDate=bill.getTf_feesDate();
+			if(date.equals( billDate)){
+				AppItemInfo appItemInfo=new AppItemInfo();
+				appItemInfo.setBillId(bill.getTf_billitemid());
+				appItemInfo.setCount(bill.getTf_count());
+				appItemInfo.setAcount(bill.getTf_acount());
+				appItemInfo.setFeesName(bill.getTf_FeesInfo().getTf_freesName());
+				appItemInfos.add(appItemInfo);
+			}
+		}
+		appItemInfos=null;
+		item.put(date, appItemInfos);
+		reuslt.add(item);
+		item=null;
+	}
+	return reuslt;
+	
+}
 
 	
 }

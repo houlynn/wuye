@@ -6,7 +6,9 @@ import java.util.Map;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.property.base.invoker.model.AppExpressInfo;
+import com.property.base.invoker.model.AppItemInfo;
 import com.property.base.invoker.model.AppPointInfo;
+import com.property.base.invoker.model.AppResident;
 import com.property.base.invoker.model.AppVillage;
 
 public interface AppService {
@@ -42,6 +44,29 @@ public interface AppService {
 	   */
 	  
 	  public Map<String,String> addRepairInfo(String  repairTitle,String repairContent,int rid );
+	  
+	  
+	  /**
+	   * 一个业主的信息
+	   */
+	  public AppResident getAppResident(int id) throws Exception;
+	  
+	  /**
+	   * 一个小区的信息
+	   */
+	  public AppVillage getAppVillage(int id) throws Exception;
+	  
+	/**
+	 * 业主收费项目
+	 * @param rid
+	 * @return
+	 */
+	  public List<Map<String,List<AppItemInfo>>>  loadFeesItem(int rid) throws Exception;
+	  
+	  
+	  
+	  
+	  
 	
 	
 	
