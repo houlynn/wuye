@@ -61,7 +61,30 @@ public interface AppService {
 	 * @param rid
 	 * @return
 	 */
-	  public List<Map<String,List<AppItemInfo>>>  loadFeesItem(int rid) throws Exception;
+	  public List<Map<String,Object>>  loadFeesItem(int rid) throws Exception;
+	  
+	  /**
+	   * 缴费
+	   * @param vid
+	   * @param rid
+	   * @param billids
+	   * @return
+	   * @throws Exception
+	   */
+	  public Map<String, String> pay(int vid, int rid, String appUser,  int[] billids) throws Exception;
+	  
+	  
+	  /**
+	   * 根据手机号查询业主信息
+	   */
+	  public List<AppResident> loadAppResident(String loginCode) throws Exception;
+	  
+	  
+	  /**
+	   * key
+	 * @throws Exception 
+	   */
+	  public Map<String,String> getPayKey(int vid) throws Exception;
 	  
 	  
 	  

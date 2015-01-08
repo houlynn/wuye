@@ -11,13 +11,18 @@ import javax.annotation.Resource;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import com.model.hibernate.property.BillContext;
+import com.model.hibernate.property.BillItem;
 import com.model.hibernate.property.ExpressInfo;
+import com.model.hibernate.property.PayKey;
 import com.model.hibernate.property.PointFrientInfo;
 import com.model.hibernate.property.RepairInfo;
 import com.model.hibernate.property.ResidentInfo;
 import com.model.hibernate.property.Village;
 import com.model.hibernate.system.shared.Dictionary;
 import com.model.hibernate.system.shared.DictionaryItem;
+import com.model.hibernate.system.shared.EndUser;
+import com.model.hibernate.system.shared.XCodeInfo;
 import com.property.base.ebi.UnitFeesEbi;
 import com.property.base.invoker.model.AppExpressInfo;
 import com.property.base.invoker.model.AppItemInfo;
@@ -27,7 +32,10 @@ import com.property.base.invoker.model.AppVillage;
 import com.property.base.invoker.serviceinterface.AppService;
 import com.ufo.framework.common.core.utils.AppUtils;
 import com.ufo.framework.common.core.utils.StringUtil;
+import com.ufo.framework.common.model.Model;
 import com.ufo.framework.system.ebi.Ebi;
+import com.ufo.framework.system.shared.module.DataUpdateResponseInfo;
+import com.ufo.framework.system.web.SecurityUserHolder;
 
 @Service
 public class AppServiceImpl implements AppService {
@@ -50,7 +58,7 @@ public class AppServiceImpl implements AppService {
 		List<Village> vages = (List<Village>) ebi.queryByHql(hql);
 		List<AppVillage> views = new ArrayList<AppVillage>();
 		if (vages.size() == 0) {
-			hql = " from  Village where 1=1 and order by tf_locationxy desc ";
+			hql = " from  Village where 1=1  order by tf_locationxy desc ";
 			vages = (List<Village>) ebi.queryByHql(hql);
 		}
 		views = vages.stream().map(item -> {
@@ -224,8 +232,59 @@ public class AppServiceImpl implements AppService {
 	}
 
 	@Override
-	public List<Map<String,List<AppItemInfo>>> loadFeesItem(int rid) throws Exception {
+	  public List<Map<String,Object>>  loadFeesItem(int rid) throws Exception {
 		return unitFeesEbi.loadFees(rid);
+	}
+
+	@Override
+	public Map<String, String> pay(int vid, int rid, String appUser,  int[] billids)
+			throws Exception {
+		// TODO Auto-generated method stub
+		Map<String,String> map= unitFeesEbi.addpayByApp(vid, rid, appUser, billids);
+		return map;
+	}
+
+	@Override
+	public List<AppResident> loadAppResident(String loginCode) throws Exception {
+		// TODO Auto-generated method stub
+		String hql=" from ResidentInfo where 1=1 and tf_appPhone='"+loginCode+"' ";
+		List<ResidentInfo> list= (List<ResidentInfo>) ebi.queryByHql(hql);
+		List<AppResident> result=new ArrayList<AppResident>();
+		result=list.stream().map(item->{
+			AppResident appResident=new AppResident();
+			try {
+				BeanUtils.copyProperties(appResident, item);
+				appResident.setTf_vid(item.getTf_levelInfo().getTf_village().getTf_viid());
+				appResident.setTf_lefStr(item.getTf_levelInfo().getTf_parent().getTf_leveName()+" "+item.getTf_levelInfo().getTf_leveName());
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return appResident;
+			
+		}).collect(Collectors.toList());
+		return result;
+	}
+
+	@Override
+	public Map<String, String> getPayKey(int vid) throws Exception {
+		// TODO Auto-generated method stub
+		Village village=ebi.findById(Village.class, vid);
+		String xcode=village.getXcode();
+		String codeId=xcode.substring(0,xcode.length()-1);
+		XCodeInfo codeInfo=ebi.findById(XCodeInfo.class, codeId);
+		String hql=" from PayKey where 1=1 and proid="+codeInfo.getTf_propertyCompany().getTf_proid();
+		 List<PayKey> list= (List<PayKey>) ebi.queryByHql(hql);
+	    Map<String,String> result=new HashMap<>();
+		 if(list!=null&&list.size()>0){
+				      PayKey key=(PayKey)list.get(0);
+					 	String keyWorrd= key.getKeyword();
+						 String code= key.getPayCode();
+						result.put("key", code);
+						result.put("pwd", keyWorrd);
+						result.put("payType", key.getPayType());
+		 }
+		return result;
 	}
 
 }

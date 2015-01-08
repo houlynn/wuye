@@ -1,6 +1,7 @@
 package com.model.hibernate.property;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -43,11 +44,16 @@ public class BillContext extends BaseEntity {
 	private String tf_remark;
 	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-	@JoinColumn(name = "userId",nullable=false)
+	@JoinColumn(name = "userId")
 	@FieldInfo(title = "收费人员", number =70)
 	private EndUser tf_EndUser;
 	@FieldInfo(title = "收费时间", number =80)
 	private String  tf_feesTime;
+	@Column(length=5)
+	private String  tf_isAppPay;
+	@Column(length=50)
+	private String tf_appUser;
+	
 	public int getTf_billid() {
 		return tf_billid;
 	}
@@ -96,7 +102,16 @@ public class BillContext extends BaseEntity {
 	public void setTf_feesTime(String tf_feesTime) {
 		this.tf_feesTime = tf_feesTime;
 	}
-	
-	
-	
+	public String getTf_isAppPay() {
+		return tf_isAppPay;
+	}
+	public void setTf_isAppPay(String tf_isAppPay) {
+		this.tf_isAppPay = tf_isAppPay;
+	}
+	public String getTf_appUser() {
+		return tf_appUser;
+	}
+	public void setTf_appUser(String tf_appUser) {
+		this.tf_appUser = tf_appUser;
+	}
 }

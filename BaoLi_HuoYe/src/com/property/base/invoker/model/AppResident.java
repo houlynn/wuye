@@ -46,6 +46,10 @@ public class AppResident  implements Serializable{
 	 * 楼层信息
 	 */
 	private String tf_lefStr;
+	
+	
+	private int tf_vid;
+	
 	public int getTf_residentId() {
 		return tf_residentId;
 	}
@@ -105,6 +109,12 @@ public class AppResident  implements Serializable{
 	}
 	public void setTf_lefStr(String tf_lefStr) {
 		this.tf_lefStr = tf_lefStr;
+	}
+	public int getTf_vid() {
+		return tf_vid;
+	}
+	public void setTf_vid(int tf_vid) {
+		this.tf_vid = tf_vid;
 	}
 	
 	

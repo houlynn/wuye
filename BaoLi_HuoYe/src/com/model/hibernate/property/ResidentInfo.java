@@ -11,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.Transient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -21,7 +20,6 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
-import com.model.hibernate.system._ModuleGridScheme;
 import com.ufo.framework.annotation.FieldInfo;
 import com.ufo.framework.annotation.TableInfo;
 import com.ufo.framework.common.model.BaseEntity;
@@ -165,6 +163,10 @@ public class ResidentInfo  extends BaseEntity{
     @LazyCollection(LazyCollectionOption.TRUE)
 	private Set<FeesTypeItem> tf_FeesTypeItems=new HashSet<>();
 
+	
+	@Transient
+	private int tf_vid;
+	
 	public int getTf_residentId() {
 		return tf_residentId;
 	}
@@ -411,6 +413,38 @@ public class ResidentInfo  extends BaseEntity{
 
 	public void setTf_lefStr(String tf_lefStr) {
 		this.tf_lefStr = tf_lefStr;
+	}
+
+	public String getTf_rental() {
+		return tf_rental;
+	}
+
+	public void setTf_rental(String tf_rental) {
+		this.tf_rental = tf_rental;
+	}
+
+	public String getTf_sell() {
+		return tf_sell;
+	}
+
+	public void setTf_sell(String tf_sell) {
+		this.tf_sell = tf_sell;
+	}
+
+	public String getTf_appPhone() {
+		return tf_appPhone;
+	}
+
+	public void setTf_appPhone(String tf_appPhone) {
+		this.tf_appPhone = tf_appPhone;
+	}
+
+	public int getTf_vid() {
+		return tf_vid;
+	}
+
+	public void setTf_vid(int tf_vid) {
+		this.tf_vid = tf_vid;
 	}
 	
 	

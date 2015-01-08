@@ -88,7 +88,7 @@ public class UnitFeesController  implements LogerManager{
 	}
 
 	private Map<String, Object> loadFees(int rid) throws Exception {
-		DataFetchResponseInfo response= uebi.addUniteFees(rid);
+		DataFetchResponseInfo response= uebi.addUniteFees(rid,1);
 		SimpleDateFormat sdd=new SimpleDateFormat("yyyy-MM-dd");
 		List<BillItem> listData=(List<BillItem>) response.getMatchingObjects();
 		listData.stream().map(item->{

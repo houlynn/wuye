@@ -100,7 +100,7 @@ public class UniteFeesEbo implements UnitFeesEbi {
 	 * 产生用欠费信息 如果收费标准有调整可以MeterInfo来调整单价也金额
 	 * @throws Exception 
 	 */
-public 	DataFetchResponseInfo addUniteFees(int rid
+public 	DataFetchResponseInfo addUniteFees(int rid,int rtype
 		) throws Exception{
 	DataFetchResponseInfo reuslt=new DataFetchResponseInfo();
 	String hql_ft=" from FeesTypeItem where 1=1 and tf_ResidentInfo="+rid;
@@ -152,7 +152,9 @@ public 	DataFetchResponseInfo addUniteFees(int rid
 		    	bill.setTf_feesDate(m);//收费周期
 		    	bill.setTf_FeesInfo(item.getTf_FeesInfo());//收费标准
 		    	bill.setTf_state("0");//收费状态
+		    	if(rtype==1){
 		    	bill.addXcode();//物业标示
+		    	}
 		    	String feesType=item.getTf_FeesInfo().getTf_feesType();//收费项目类型
 		    	//费用为抄表类型
 		    	debug("收费标准类型:"+feesType);
@@ -194,7 +196,9 @@ public 	DataFetchResponseInfo addUniteFees(int rid
 			    			meterInfo.setTf_acount(residentInfo.getTf_builArea());//建筑面积
 			    			meterInfo.setTf_mtype(MeterInfo.FEES_TYPE_UNITE);
 			    			meterInfo.setTf_rendDate(m);//收费周期
+			    			if(rtype==1){
 			    			meterInfo.addXcode();
+			    			}
 			    			meterInfo.setTf_meterdate(AppUtils.getCurDate());
 			    			ebi.save(meterInfo);
 			    			debug("插入一条/单价*建筑面积类型收费信息");		
@@ -222,7 +226,9 @@ public 	DataFetchResponseInfo addUniteFees(int rid
 			    			ResidentInfo residentInfo= ebi.findById(ResidentInfo.class, rid);
 			    			meterInfo.setTf_ResidentInfo(residentInfo);
 			    			meterInfo.setTf_rendDate(m);//收费周期
+			    			if(rtype==1){
 			    			meterInfo.addXcode();
+			    			}
 			    			meterInfo.setTf_meterdate(AppUtils.getCurDate());
 			    			ebi.save(meterInfo);
 			    			debug("插入一条直收金额类型收费信息");	
@@ -306,9 +312,13 @@ public double getUniteFeesAcount(int rid){
  * @return
  * @throws Exception
  */
-public List<Map<String,List<AppItemInfo>>> loadFees(int rid) throws Exception{
-	DataFetchResponseInfo response= this.addUniteFees(rid);
-	String sql= "select distinct tf_feesDate  from BillItem where 1=1 and tf_state='0' ";
+public List<Map<String,Object>> loadFees(int rid) throws Exception{
+	DataFetchResponseInfo response= this.addUniteFees(rid,0);
+	String sql= "select distinct tf_feesDate  from BillItem b "
+			+ " inner  join MeterInfo m on m.tf_MeterId=b.tf_MeterId  "
+			+ " inner  join ResidentInfo r on r.tf_residentId=m.tf_residentId  "
+			+ "where 1=1 and b.tf_state='0' and r.tf_residentId="+rid; 
+	SimpleDateFormat smm=new SimpleDateFormat("yyyy-MM");
 	List<Map<String,String>> data=new ArrayList<>();
 	  Work work=conn->{
 		  PreparedStatement ps=  conn.prepareStatement(sql);
@@ -325,10 +335,10 @@ public List<Map<String,List<AppItemInfo>>> loadFees(int rid) throws Exception{
 	List<String>  dateList= data.stream().map(item->{
 		   return item.get("tf_feesDate");
 	   }).collect(Collectors.toList());
-	List<Map<String,List<AppItemInfo>>> reuslt=new ArrayList<>();
+	List<Map<String,Object>> reuslt=new ArrayList<>();
 	List<BillItem> bills=(List<BillItem>) response.getMatchingObjects();
 	for(String date :dateList ){
-		Map<String,List<AppItemInfo>> item=new HashMap<>();
+		Map<String,Object> item=new HashMap<>();
 		List<AppItemInfo> appItemInfos=new ArrayList<>();
 		for(BillItem bill :bills){
 			String billDate=bill.getTf_feesDate();
@@ -341,14 +351,39 @@ public List<Map<String,List<AppItemInfo>>> loadFees(int rid) throws Exception{
 				appItemInfos.add(appItemInfo);
 			}
 		}
-		appItemInfos=null;
-		item.put(date, appItemInfos);
+	
+		item.put("date",date);
+		item.put("feesItems",appItemInfos);
 		reuslt.add(item);
+		appItemInfos=null;
 		item=null;
 	}
 	return reuslt;
 	
 }
+
+public Map<String, String> addpayByApp(int vid, int rid, String appUser,  int[] billids) throws Exception{
+	Map<String, String> map=new HashMap<>();
+	BillContext context=new BillContext();
+	context.setTf_feesTime(AppUtils.getCurrentTime());
+	ResidentInfo residentInfo=new ResidentInfo();
+	residentInfo.setTf_residentId(rid);
+	context.setTf_ResidentInfo(residentInfo);
+	context.setTf_isAppPay("1");
+	context.setTf_appUser(appUser);
+	context.setTf_month(AppUtils.getCurDate());
+	ebi.save(context);
+	////////////////////////收费条目/////////////////////////////////////
+	for(int bid :billids){
+		BillItem bitem=ebi.findById(BillItem.class, bid);
+		bitem.setTf_state(Model.MODEL_AUDIT);
+		bitem.setTf_BillContext(context);
+		ebi.update(bitem);
+	}
+	return map;
+}
+
+
 
 	
 }
