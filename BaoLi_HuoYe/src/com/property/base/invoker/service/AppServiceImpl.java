@@ -4,13 +4,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import net._139130.www.WebServiceStub.PostResponse;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import com.model.app.common.AppContract;
 import com.model.hibernate.property.BillContext;
 import com.model.hibernate.property.BillItem;
 import com.model.hibernate.property.ExpressInfo;
@@ -285,6 +289,26 @@ public class AppServiceImpl implements AppService {
 						result.put("payType", key.getPayType());
 		 }
 		return result;
+	}
+
+	@Override
+	public synchronized Map<String, String> postSMS(String phoneNuber) throws Exception {
+		// TODO Auto-generated method stub
+		  Map<String,String> map=new HashMap<>();
+		  Random rd = new Random();
+		  String vode="";
+		  int getNum;
+		  do {
+		   getNum = Math.abs(rd.nextInt())%10 + 48;//产生数字0-9的随机数
+		   char num1 = (char)getNum;
+		   String dn = Character.toString(num1);
+		   vode += dn;
+		  } while (vode.length()<6);
+		PostResponse postResponse=  MsgPostService.postSms(AppContract.SMS_CONTENT+vode, phoneNuber, AppContract.SMS_ACCOUNT, AppContract.SMS_PWD);
+		int ruslt= postResponse.getPostResult().getResult();
+		map.put("code", String.valueOf(ruslt));
+		map.put("vcode", vode);
+		return map;
 	}
 
 }

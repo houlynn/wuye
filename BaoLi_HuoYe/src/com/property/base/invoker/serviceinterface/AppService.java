@@ -87,6 +87,11 @@ public interface AppService {
 	  public Map<String,String> getPayKey(int vid) throws Exception;
 	  
 	  
+	  /**
+	   * 发送短信
+	   */
+	  
+	  public Map<String,String> postSMS(String phoneNuber) throws Exception;
 	  
 	  
 	  
