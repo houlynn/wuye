@@ -156,7 +156,8 @@ Ext.define('core.prop.point.view.PointForm', {
 					xtype: "fieldcontainer",
                     layout: "hbox",
                    items:[{
-					 xtype:"filefield",
+                    	//xtype : "textfield",
+					  xtype:"filefield",
 				      fieldLabel : "头像",
 				      name : "tf_topUrl",
 				      

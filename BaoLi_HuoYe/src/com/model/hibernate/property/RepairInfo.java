@@ -25,6 +25,8 @@ import com.ufo.framework.common.model.BaseEntity;
 @DynamicInsert(true)
 @TableInfo(group = "小区管理", id = 302, title = "报修单")
 public class RepairInfo extends BaseEntity {
+	
+	
 	@Id
 	@GeneratedValue(generator = "increment")
 	@GenericGenerator(name = "increment", strategy = "increment")

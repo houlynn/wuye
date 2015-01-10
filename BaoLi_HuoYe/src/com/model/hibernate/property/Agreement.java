@@ -19,9 +19,9 @@ import com.ufo.framework.common.model.Model;
 /**
  * 一个用于演示单个模块所有自定义属性的类
  * 
- * @author jfok
+ *
  * 
- *         2014.10.16
+ *        
  * 
  */
 

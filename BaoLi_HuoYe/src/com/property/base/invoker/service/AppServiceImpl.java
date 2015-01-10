@@ -36,13 +36,14 @@ import com.property.base.invoker.model.AppVillage;
 import com.property.base.invoker.serviceinterface.AppService;
 import com.ufo.framework.common.core.utils.AppUtils;
 import com.ufo.framework.common.core.utils.StringUtil;
+import com.ufo.framework.common.log.LogerManager;
 import com.ufo.framework.common.model.Model;
 import com.ufo.framework.system.ebi.Ebi;
 import com.ufo.framework.system.shared.module.DataUpdateResponseInfo;
 import com.ufo.framework.system.web.SecurityUserHolder;
 
 @Service
-public class AppServiceImpl implements AppService {
+public class AppServiceImpl implements AppService ,LogerManager{
 
 	private final static String POINTTYPE = "POINTTYPE";// 终点工
 	private final static String BAOMU = "BAOMU";// 保姆
@@ -158,7 +159,9 @@ public class AppServiceImpl implements AppService {
 		map.put("items", rows);
 		return map;
 	}
-
+/**
+ * 快递收发
+ */
 	public Map<String, String> addAppExpressInfo(AppExpressInfo model) {
 		Map<String, String> resultMap = new HashMap<String, String>();
 		boolean flag = false;
@@ -187,6 +190,9 @@ public class AppServiceImpl implements AppService {
 		return resultMap;
 	}
 
+	/**
+	 * 保修报装
+	 */
 	@Override
 	public Map<String, String> addRepairInfo(String repairTitle,
 			String repairContent, int rid) {
@@ -195,7 +201,9 @@ public class AppServiceImpl implements AppService {
 		repairInfo.setTf_repairItem(repairTitle);
 		repairInfo.setTf_remark(repairContent);
 		repairInfo.setTf_repairTime(AppUtils.getCurrentTime());
-		repairInfo.setTf_state("001");
+		repairInfo.setTf_state("000");
+		
+		
 		Map<String, String> result = new HashMap<String, String>();
 		ResidentInfo resInfo;
 		try {
@@ -244,10 +252,14 @@ public class AppServiceImpl implements AppService {
 	public Map<String, String> pay(int vid, int rid, String appUser,  int[] billids)
 			throws Exception {
 		// TODO Auto-generated method stub
+		debug("appp业主缴费： 小区ID"+vid+" 业主ID "+rid+"app用户: "+appUser+" billids: "+billids);
 		Map<String,String> map= unitFeesEbi.addpayByApp(vid, rid, appUser, billids);
 		return map;
 	}
 
+	/**
+	 * 查询APP业主
+	 */
 	@Override
 	public List<AppResident> loadAppResident(String loginCode) throws Exception {
 		// TODO Auto-generated method stub
@@ -270,6 +282,9 @@ public class AppServiceImpl implements AppService {
 		return result;
 	}
 
+	/**
+	 * 获取支付密钥
+	 */
 	@Override
 	public Map<String, String> getPayKey(int vid) throws Exception {
 		// TODO Auto-generated method stub
@@ -291,6 +306,9 @@ public class AppServiceImpl implements AppService {
 		return result;
 	}
 
+	/**
+	 * 发送验证码
+	 */
 	@Override
 	public synchronized Map<String, String> postSMS(String phoneNuber) throws Exception {
 		// TODO Auto-generated method stub
