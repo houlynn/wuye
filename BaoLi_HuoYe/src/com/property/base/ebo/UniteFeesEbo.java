@@ -280,6 +280,8 @@ public  DataUpdateResponseInfo adduniteFees(
 	resinInf.setTf_residentId(rid);//业主
 	bc.setTf_ResidentInfo(resinInf);
 	bc.setTf_remark(tf_remark);//备注
+	bc.setTf_shouldCount(tf_shouldCount);
+	bc.setTf_realACount(tf_realACount);
 	bc.setTf_month(AppUtils.getCurDate());
 	ebi.save(bc);
 	////////////////////////收费条目/////////////////////////////////////
@@ -361,10 +363,21 @@ public List<Map<String,Object>> loadFees(int rid) throws Exception{
 	return reuslt;
 	
 }
-
+/**
+ * 为App生成订单
+ * @param vid
+ * @param rid
+ * @param appUser
+ * @param billids
+ * @return
+ * @throws Exception
+ */
 public Map<String, String> addpayByApp(int vid, int rid, String appUser,  int[] billids) throws Exception{
+	float acount=0;
+	boolean flag=false;
 	Map<String, String> map=new HashMap<>();
 	BillContext context=new BillContext();
+	context.setTf_billCode(AppUtils.getRandomCode());
 	context.setTf_feesTime(AppUtils.getCurrentTime());
 	ResidentInfo residentInfo=new ResidentInfo();
 	residentInfo.setTf_residentId(rid);
@@ -373,14 +386,88 @@ public Map<String, String> addpayByApp(int vid, int rid, String appUser,  int[] 
 	context.setTf_appUser(appUser);
 	context.setTf_month(AppUtils.getCurDate());
 	ebi.save(context);
+	flag=true;
 	////////////////////////收费条目/////////////////////////////////////
 	for(int bid :billids){
 		BillItem bitem=ebi.findById(BillItem.class, bid);
-		bitem.setTf_state(Model.MODEL_AUDIT);
+		if(bitem==null){
+		 map.put("msg", "无效的缴费信息!");	
+		 flag=false;
+		}
 		bitem.setTf_BillContext(context);
+		acount+=bitem.getTf_acount();
+		bitem.setTf_state("0");
 		ebi.update(bitem);
 	}
+	map.put("billCode", context.getTf_billCode());//订单号
+	map.put("billContenId", context.getTf_billid()+"");//订单ID
+	map.put("state", flag+"");//生成状态
+	map.put("acount", acount+"");//实收金额
+	map.put("createTime", context.getTf_feesTime());//时间
 	return map;
+}
+
+/**
+ * App支付
+ * @param billConteId
+ * @param billCode
+ * @param vid
+ * @param rid
+ * @param billids
+ * @param acount
+ * @return
+ * @throws Exception
+ */
+@Override
+public Map<String, String> updateBill(int billConteId, String billCode, int vid, int rid, int[] billids,float acount)
+		throws Exception {
+	// TODO Auto-generated method stub
+	 Map<String, String> reuslt=new HashMap<>();
+	 boolean flag=true;
+	 String hql=" from BillContext where 1=1 and tf_billid="+billConteId+" and tf_billCode='"+billCode+"' ";
+     List<BillContext> list= (List<BillContext>) ebi.queryByHql(hql);
+     if(list==null||list.size()==0){
+    	 flag=false;
+    	 debug("没有查找到主表记录!!!!!!!!");
+    	 reuslt.put("msg", "无效的支付账单"); 
+     }else{
+    	 BillContext billContext= list.get(0);
+    	 billContext.setTf_realACount(acount);//金额
+    	 billContext.setTf_shouldCount(acount);//金额
+    	 for(int bid :billids){
+    			BillItem bitem=ebi.findById(BillItem.class, bid);
+    			if(bitem==null){
+    		     reuslt.put("msg", "无效的支付账单"); 
+    		     debug("收费条目不存在！！");
+    			 flag=false;
+    			}
+    			
+    			if(flag){
+    				BillContext bilContext=	bitem.getTf_BillContext();
+    				 if(bilContext==null){
+      				  reuslt.put("msg", "无效的支付账单"); 
+      	    		    debug("提交了没关联的记录！！");
+      	    		   flag=false;
+      			  }
+    			}
+    			
+    			
+    			if(flag){
+    				int cid= bitem.getTf_BillContext().getTf_billid();
+    				if(cid!=billConteId){
+    					 reuslt.put("msg", "无效的支付账单"); 
+    					 debug("主从ID不相等!!!!!!!!");
+    	    			 flag=false;
+    			}
+    		 }
+    		 if(flag){
+				bitem.setTf_state(Model.MODEL_AUDIT);
+     			ebi.update(bitem);
+    		 }
+    	}
+     }
+     reuslt.put("state",flag+"");
+	return reuslt;
 }
 
 

@@ -329,4 +329,11 @@ public class AppServiceImpl implements AppService ,LogerManager{
 		return map;
 	}
 
+	@Override
+	public Map<String, String> updateBill(int billConteId, String billCode,
+			int vid, int rid, int[] billids, float acount) throws Exception {
+		// TODO Auto-generated method stub
+		return unitFeesEbi.updateBill(billConteId, billCode, vid, rid, billids, acount);
+	}
+
 }

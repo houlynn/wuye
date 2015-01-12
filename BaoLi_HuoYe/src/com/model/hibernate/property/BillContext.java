@@ -54,6 +54,9 @@ public class BillContext extends BaseEntity {
 	@Column(length=50)
 	private String tf_appUser;
 	
+	@Column(length=50,nullable=false,unique=true)
+	private String tf_billCode;
+	
 	public int getTf_billid() {
 		return tf_billid;
 	}
@@ -114,4 +117,11 @@ public class BillContext extends BaseEntity {
 	public void setTf_appUser(String tf_appUser) {
 		this.tf_appUser = tf_appUser;
 	}
+	public String getTf_billCode() {
+		return tf_billCode;
+	}
+	public void setTf_billCode(String tf_billCode) {
+		this.tf_billCode = tf_billCode;
+	}
+	
 }

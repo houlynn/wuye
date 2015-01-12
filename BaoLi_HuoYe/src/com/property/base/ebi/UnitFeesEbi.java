@@ -16,7 +16,8 @@ public interface UnitFeesEbi  extends LogerManager, CommonException {
 	public 	DataFetchResponseInfo addUniteFees(int rid,int rtype) throws Exception;
 	public  DataUpdateResponseInfo adduniteFees(double tf_shouldCount,double tf_realACount,int rid,String tf_remark,int[] bids) throws Exception;
 	public double getUniteFeesAcount(int rid);
-	  public List<Map<String,Object>>  loadFees(int rid) throws Exception;
+   public List<Map<String,Object>>  loadFees(int rid) throws Exception;
 	public Map<String, String> addpayByApp(int vid, int rid, String appUser,  int[] billids) throws Exception;
+	public Map<String,String> updateBill(int billConteId, String billCode, int vid,int rid ,int[] billids,float acount) throws Exception;
 
 }

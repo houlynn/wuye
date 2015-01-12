@@ -10,6 +10,8 @@ import com.property.base.invoker.model.AppItemInfo;
 import com.property.base.invoker.model.AppPointInfo;
 import com.property.base.invoker.model.AppResident;
 import com.property.base.invoker.model.AppVillage;
+import com.ufo.framework.system.shared.module.DataFetchResponseInfo;
+import com.ufo.framework.system.shared.module.DataUpdateResponseInfo;
 
 public interface AppService {
 	
@@ -92,6 +94,14 @@ public interface AppService {
 	   */
 	  
 	  public Map<String,String> postSMS(String phoneNuber) throws Exception;
+	  
+	  
+	  
+	  public Map<String,String> updateBill(int billConteId, String billCode, int vid,int rid ,int[] billids,float acount) throws Exception;
+	  
+	  
+	  
+	  
 	  
 	  
 	  
