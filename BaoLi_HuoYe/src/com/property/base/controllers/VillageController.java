@@ -135,6 +135,7 @@ public class VillageController extends BaseController {
 			List<PointFrientInfo> list=(List<PointFrientInfo>)dataList;
 			list=list.stream().map(item->{
 		    item.setTf_vname(item.getTf_Village().getTf_name());
+		    
 			return item;
 			}).collect(Collectors.toList());
 			return  list;
@@ -153,23 +154,21 @@ public class VillageController extends BaseController {
 		Village village=new Village();
 		village.setTf_viid(vid);
 		model.setTf_Village(village);
-		if(!topUrl.isEmpty()){
+/*		if(!topUrl.isEmpty()){
         String realPath = request.getSession().getServletContext().getRealPath(PropUtil.get("baoli.upload.path"));  
         String suffix = topUrl.getOriginalFilename().substring  
                 (topUrl.getOriginalFilename().lastIndexOf("."));     
        String logImageName = UUID.randomUUID().toString()+ suffix;//构建文件名称     
-       System.out.println(realPath+"/"+logImageName);
         File file=new File(realPath+"/"+logImageName);
         topUrl.transferTo(file); 
         model.setTf_topUrl(PropUtil.get("baoli.upload.path")+"/"+logImageName);
-		}
+		}*/
 		ebi.save(model);
 		reslut=jsonBuilder.returnSuccessJson(jsonBuilder.toJson(model));
 		return reslut;
 		
 	}
 
-	
 	
 	@RequestMapping(value = "/updatePoint", method = RequestMethod.POST,produces = "application/json;text/plain;charset=UTF-8")
 	public @ResponseBody
