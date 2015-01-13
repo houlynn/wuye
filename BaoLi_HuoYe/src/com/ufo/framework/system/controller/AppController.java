@@ -65,11 +65,11 @@ public class AppController {
 					currentUser.setXcodeInfo(codeInfo);
 				}
 				SecurityUserHolder.setSession("currentUser", currentUser);
-				Cookie userCodeCookie = new Cookie("loginUserCode",
+			/*	Cookie userCodeCookie = new Cookie("loginUserCode",
 						currentUser.getUserCode());
 				userCodeCookie.setMaxAge(Integer.MAX_VALUE);
 				userCodeCookie.setPath("/");
-				response.addCookie(userCodeCookie);
+				response.addCookie(userCodeCookie);*/
 				response.sendRedirect("/index.jsp");
 			}
 

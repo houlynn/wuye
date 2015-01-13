@@ -11,11 +11,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.model.app.common.ApplicationInfo;
+import com.model.hibernate.system.shared.EndUser;
 import com.ufo.framework.system.ebi.ApplicationEbi;
+import com.ufo.framework.system.ebi.Ebi;
+import com.ufo.framework.system.web.SecurityUserHolder;
 
 
 @Controller
 public class ApplicationController {
+	
+
 	
 	// spring注释，自动注入ApplicationService 的实例
 	@Resource

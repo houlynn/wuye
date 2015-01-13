@@ -39,15 +39,15 @@ public class AccessControllerFilter implements HandlerInterceptor {
 		
 		
 		// TODO Auto-generated method stub
-		boolean flag = false;
+/*		boolean flag = false;
 		String url = request.getRequestURI();
 		flag = url.contains("Login");
 		if (!flag) {
-			EndUser endUser = SecurityUserHolder.getCurrentUser();
-			flag=!endUser.getUserCode().equals("GUEST");
+			//EndUser endUser = SecurityUserHolder.getCurrentUser();
+		//	flag=!endUser.getUserCode().equals("GUEST");
 			
-			if(!flag)
-			{
+			//if(!flag)
+			//{
 			UsernamePasswordToken token = new UsernamePasswordToken("admin",
 					MD5Util.md5("123456"));
 			token.setRememberMe(true);
@@ -57,13 +57,13 @@ public class AccessControllerFilter implements HandlerInterceptor {
 			// 获取当前的Subject
 			Subject currentUser = SecurityUtils.getSubject();
 			currentUser.login(token);
-			}
+			//}
 		}
 		if(!flag)
 		{
 			response.sendRedirect("/login.jsp");
-		}
-		return flag;
+		}*/
+		return true;
 		
 		
 		

@@ -9,7 +9,7 @@ import org.springframework.remoting.RemoteConnectFailureException;
 
 /**
  *连接远程服务异常
- * @author gengzi
+ * 
  */
 public class RemoteConnectFailureExceptionExt extends Exception{
 

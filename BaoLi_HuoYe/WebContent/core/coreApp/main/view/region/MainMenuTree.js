@@ -6,11 +6,11 @@ Ext.define('core.main.view.region.MainMenuTree', {
 			alias : 'widget.mainmenutree',
 			style:'border-width:0 0 0 0;',
 			title : '系统菜单',
-			collapseNavigate: !1,
-			split: !0,
-            collapsible: !0,
-            collapsed: !0,
-           collapseMode: "mini",
+			//collapseNavigate: !1,
+			 split: !1,
+            //collapsible: !0,
+            //collapsed: !0,
+           // collapseMode: "mini",
 			listeners: { itemclick: function (view, node, item, index, e, eOpts) {
 				var nodeInfo=node.get("nodeInfo");
 	        	var config=nodeInfo.split(",");
@@ -18,23 +18,24 @@ Ext.define('core.main.view.region.MainMenuTree', {
 	        	var  mainPanel= view.up('app-main');
             	var maincenter=mainPanel.down("maincenter");
             	var nodeInfoType=node.get("nodeInfoType");
-            	var addPanel={};
-            	 var module={};
-                	addPanel= Ext.createWidget(config[0],{
+            	var exist_panel = maincenter.getComponent(node.data.id);
+            	if(exist_panel){
+            	  maincenter.setActiveTab(exist_panel);
+            	}else{
+            		  var addPanel={};
+            		   addPanel=Ext.getCmp(node.data.id);
+            		   if(!addPanel){
+                	      addPanel= Ext.createWidget(config[0],{
                 		  title:node.get("text"),
                 		  id:node.data.id,
                 		  code:node.get("code"),
                 		  closable : true
-                	});
-                	
-       var   oldPanel=maincenter.getComponent(node.data.id);
-				     if(oldPanel){
-				    	return;
-				     }
-				     console.log(addPanel);
-				     maincenter.add(addPanel);
-				     maincenter.setActiveTab(addPanel);
-		}
+                	     });
+            	 }
+            	   maincenter.add(addPanel);
+            	    maincenter.setActiveTab(addPanel);
+            	}
+		       }
 			},
 			rootVisible : false,
 			lines : true,

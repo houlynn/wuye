@@ -53,6 +53,7 @@ Ext.define("core.base.user.view.ProUserGrid", {
 							text : '删除',
 							disabled : true,
 							glyph : 0xf014,
+							 hidden:true,
 							ref : "removeButton",
 							itemId : 'delete'
 						}, '-', '-', '筛选', {

@@ -16,43 +16,30 @@ Ext.define('core.main.view.region.Bottom', {
 			style : 'background-color : #f6f5ec;',
 
 			items : [{
-						bind : {
-							text : '{userInfo.tf_userdwmc}'
-						},
+						text :  comm.get("pro").name,
 						glyph : 0xf0f7
-					}, {
-						bind : {
-							text : '{userInfo.tf_departmentName}'
-						}
-					}, {
-						bind : {
-							text : '用户:{userInfo.tf_userName}'
-						},
+					}, { text : comm.get("currentUser").username,
 						glyph : 0xf007
-					}, '->', {
-						bind : {
-							text : '{serviceInfo.tf_serviceDepartment}'
-						},
+					},
+					 {
+						text : comm.get("currentUser").deptName,
 						glyph : 0xf059
 
-					}, {
-						bind : {
-							text : '{serviceInfo.tf_serviceMen}'
-						}
-					}, {
-						bind : {
-							text : '{serviceInfo.tf_serviceTelnumber}'
-						},
+					},
+					'->', {
+							text : "研发部",
+					}, 
+					 {
+							text : "八二哥",
+					},	
+					{
+					 text : '13698980',
 						glyph : 0xf095
 					}, {
-						bind : {
-							hidden : '{!serviceInfo.tf_serviceEmail}', // 绑定值前面加！表示取反，如果有email则不隐藏，如果email未设置，则隐藏
-							text : '{serviceInfo.tf_serviceEmail}'
-						},
+					text : 'chuang@gzinterest.com',
 						glyph : 0xf003,
 						handler : function(button) {
 							// 发送邮件
-							var vm = button.up('app-main').getViewModel();
 							var link = "mailto:" + vm.get('serviceInfo.tf_serviceEmail')
 									+ "?subject=" + vm.get('userInfo.tf_userdwmc')
 									+ vm.get('userInfo.tf_userName') + " 关于 "

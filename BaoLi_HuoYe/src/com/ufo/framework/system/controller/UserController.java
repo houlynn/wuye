@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
+import com.model.hibernate.property.PropertyCompany;
 import com.model.hibernate.system.shared.Department;
 import com.model.hibernate.system.shared.EndUser;
 import com.model.hibernate.system.shared.XCodeInfo;
@@ -41,6 +43,7 @@ import com.ufo.framework.common.core.utils.AppUtils;
 import com.ufo.framework.common.core.utils.MD5Util;
 import com.ufo.framework.common.core.utils.StringUtil;
 import com.ufo.framework.common.core.web.VerifyCodeUtil;
+import com.ufo.framework.system.ebi.Ebi;
 import com.ufo.framework.system.ebi.EndUserEbi;
 import com.ufo.framework.system.repertory.SqlModuleFilter;
 import com.ufo.framework.system.shared.module.DataDeleteResponseInfo;
@@ -57,6 +60,10 @@ import com.ufo.framework.system.web.SecurityUserHolder;
 @Scope("prototype")
 @RequestMapping("/rbacUser")
 public class UserController extends SimpleBaseController<EndUser> {
+	
+	@Resource(name="ebo")
+	private Ebi ebo;
+	
 	protected UserController() {
 		super(EndUser.class);
 	}
@@ -95,6 +102,30 @@ public class UserController extends SimpleBaseController<EndUser> {
 		}
 	}
 	
+	
+	
+	@RequestMapping("/pro")
+	private  @ResponseBody Map<String,String> loadPro() throws Exception{
+		EndUser user = SecurityUserHolder.getCurrentUser();
+		Map<String,String> result=new HashMap<>();
+		XCodeInfo codeInfo=user.getXcodeInfo();
+		boolean flag=true;
+		if(codeInfo==null){
+			flag=false;
+		}
+		if(flag){
+			PropertyCompany company=codeInfo.getTf_propertyCompany();
+			if(company!=null){
+				result.put("name", company.getTf_name());
+				result.put("phone", company.getTf_phone());
+				result.put("contact", company.getTf_contact());
+			}
+		}
+		return result;
+		
+	}
+	
+	
 	@Override
 	public EndUser getModel(HttpServletRequest request, EndUser model) {
 		String deptId = request.getParameter("foreignKey");
@@ -131,6 +162,7 @@ public class UserController extends SimpleBaseController<EndUser> {
 	@RequestMapping(value = "/Login", method = RequestMethod.POST)
 	private void loginAction(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
+	//	SecurityUtils.getSubject().logout();
 		String resultPageURL = InternalResourceViewResolver.FORWARD_URL_PREFIX
 				+ "/";
 		String username = request.getParameter("userCode");
@@ -164,6 +196,8 @@ public class UserController extends SimpleBaseController<EndUser> {
 			System.out.println("对用户[" + username + "]进行登录验证..验证通过");
 			resultPageURL = "main";
 		} catch (UnknownAccountException uae) {
+			token.clear();
+			SecurityUtils.getSubject().logout();
 			System.out.println("对用户[" + username + "]进行登录验证..验证未通过,未知账户");
 			mesg="用户名或密码不正确!";
 		} catch (IncorrectCredentialsException ice) {
@@ -265,10 +299,6 @@ public class UserController extends SimpleBaseController<EndUser> {
 			@RequestParam(value="ids",required=false) int[] ids,
 			HttpServletRequest request) {
 		DataDeleteResponseInfo 	result = new DataDeleteResponseInfo();
-		
-		
-		
-		
 		return result;
 	}
 	

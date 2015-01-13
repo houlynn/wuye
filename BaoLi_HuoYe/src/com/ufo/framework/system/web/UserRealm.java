@@ -30,7 +30,7 @@ import com.ufo.framework.system.ebi.SimpleEbi;
 
 /**
  * 自定义的指定Shiro验证用户登录的类
-* @author 作者 yingqu: 
+* @author 作者 Houlynn: 
 * @version 创建时间：2014年7月4日 上午8:32:30 
 * version 1.0
  */

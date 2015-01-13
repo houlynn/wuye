@@ -23,7 +23,17 @@ Ext.define("core.base.user.controller.ProUserController",{
 	  	},
 	    "grid[xtype=user.prouser] #edit":{
 	  	 click:function(btn){
-	  	 
+	  	 var modulegrid=	btn.up("grid[xtype=user.prouser]");
+	  	 var store=modulegrid.getStore();
+	  	 var selection=modulegrid.getSelectionModel().getSelection();
+	  	 var model = selection[0];
+		 var window = Ext.create('core.base.user.view.ProUserWindow', {
+				       grid:modulegrid});
+			          var prouserform=  window.down('form[xtype=user.prouserform]');
+			          prouserform .getForm().loadRecord(model);
+			          window.setTitle('修改用户');
+	                   window.show();
+	  	 	
 	  	 }
 	  	},
 	  	  "grid[xtype=user.prouser] #delete":{

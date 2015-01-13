@@ -6,7 +6,7 @@ Ext.define('core.main.view.region.Center', {
 	alias : 'widget.maincenter',
 	 uses : ['core.main.view.region.HomePage','Ext.ux.TabCloseMenu'],
 	closeAction : 'hide',
-	autoDestroy : false,
+	autoDestroy:false,
 	tabPosition : 'top',
 	style:'border-width:0 0 0 0;',
 	plugins : [{
@@ -54,6 +54,9 @@ Ext.define('core.main.view.region.Center', {
 					}
 				}],
 		listeners : {
+			remove:function(tp,c){
+				c.hide();
+			},
 			beforemenu : function(menu, tabPanel) {
 				// 此插件有bug,需要加入这个参数
 				menu.tabPanel = tabPanel;

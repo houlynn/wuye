@@ -42,10 +42,19 @@ var errors = Ext.create("Ext.util.MixedCollection");
 	async:false,
 	timeout:4000,
 	success:function(response){
-		return ;
-		data = Ext.decode(Ext.value(response.responseText,'{}'));
+		var data = Ext.decode(Ext.value(response.responseText,'{}'));
 		if(data.success){
 			comm.add("currentUser",data.obj);
+			 Ext.Ajax.request({
+ 	         url:"/rbacUser/pro.action",
+         	method:"POST",
+	        async:false,
+	        timeout:4000,
+	        success:function(responsep){
+	        		var obj = Ext.decode(Ext.value(responsep.responseText,'{}'));
+	        	     comm.add("pro",obj);
+	        }
+	        });
 		}
 	}
  });

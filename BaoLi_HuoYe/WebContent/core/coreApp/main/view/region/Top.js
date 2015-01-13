@@ -25,19 +25,15 @@ Ext.define('app.view.main.region.Top', {
 							hidden : '{!systemInfo.tf_iconUrl}', // 如果system.iconUrl未设置，则此image不显示
 							src : '{systemInfo.tf_iconUrl}' // 根据system.iconUrl的设置来加载图片
 						}
-					}, {
+					} ,{
 						xtype : 'label',
-						bind : {
-							text : '{systemInfo.tf_systemName}'
-						},
+						text : '保利物业信息管理系统',
 						style : 'font-size:20px;color:blue;'
 					}, {
 						xtype : 'label',
 						style : 'color:grey;',
-						bind : {
-							text : '({systemInfo.tf_systemVersion})'
-						}
-					}, '->', ' ', ' ', {
+						text : '2015,01,30'
+					},'->', ' ', ' ', {
 						text : '首页',
 						glyph : 0xf015,
 						//handler : 'onHomePageButtonClick'
