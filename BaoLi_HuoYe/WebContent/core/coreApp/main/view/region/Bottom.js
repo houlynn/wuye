@@ -40,10 +40,10 @@ Ext.define('core.main.view.region.Bottom', {
 						glyph : 0xf003,
 						handler : function(button) {
 							// 发送邮件
-							var link = "mailto:" + vm.get('serviceInfo.tf_serviceEmail')
-									+ "?subject=" + vm.get('userInfo.tf_userdwmc')
-									+ vm.get('userInfo.tf_userName') + " 关于 "
-									+ vm.get('systemInfo.tf_systemName') + " 的咨询";
+							var link = "mailto:" +'chuang@gzinterest.com' 
+									+ "?subject=" +''// vm.get('userInfo.tf_userdwmc')
+									+ comm.get("currentUser").username + " 关于 "
+									+ '保利物业管理系统'+ " 的咨询";
 							window.location.href = link;
 						}
 					}, {

@@ -150,7 +150,7 @@ Ext.define('core.prop.point.view.PointbonneForm', {
 				      fieldLabel : "头像",
 				      name : "tf_topUrl",
 				      renderer:function(){
-				       alert(0);
+				      
 				      }*/
 				      
 					xtype: "fieldcontainer",

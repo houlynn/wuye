@@ -120,7 +120,7 @@ var ajax = function(config) {
 				ddRenderer : function(val) {
 					console.log(this);
 					/* val=this.getText(val);
-					 alert(val);*/
+					*/
 				     return val;
 				},
 				// 百分比

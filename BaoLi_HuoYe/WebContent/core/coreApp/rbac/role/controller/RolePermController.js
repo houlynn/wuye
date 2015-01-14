@@ -101,7 +101,6 @@ Ext.define("core.rbac.role.controller.RolePermController",{
 			},
 			"container[xtype=role.roleform] button[ref=submit]":{
 				click:function(btn){
-					alert("add!!")
 					var deptForm=btn.up("container[xtype=role.roleform]");
 					var formObj=deptForm.getForm();
 					var params=self.getFormValue(formObj);
@@ -275,7 +274,6 @@ Ext.define("core.rbac.role.controller.RolePermController",{
 			 */
 			"container[xtype=role.moduletree] button[ref=setPerm]":{
 				click:function(btn){
-					alert("query aiaiiai");
 					var mainLayout=btn.up("container[xtype=role.mainlayout]");
 					var roleTree=mainLayout.down("container[xtype=role.roletree]");
 					var selRoles=roleTree.getSelectionModel().getSelection();

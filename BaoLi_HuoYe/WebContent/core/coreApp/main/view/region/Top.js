@@ -84,12 +84,20 @@ Ext.define('app.view.main.region.Top', {
 					}, {
 
 						text : '注销',
-						glyph : 0xf011
+						glyph : 0xf011,
+					    handler:function(btn){
+							    Ext.MessageBox.confirm('提示', '您确定要退出系统',	function(b, text) {
+								if (b== 'yes') {
+								   window.location.href ="rbacUser/logout.action" ;  
+								}
+								});
+						
+					 }
 					}, {
 						glyph : 0xf102,
 						//handler : 'hiddenTopBottom', 返回首页事件
 						tooltip : '隐藏顶部和底部区域',
-						disableMouseOver : true
+						disableMouseOver : true,
 					}]
 
 		});

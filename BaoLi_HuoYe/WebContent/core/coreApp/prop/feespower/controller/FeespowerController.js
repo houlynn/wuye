@@ -279,7 +279,6 @@ init:function(){
 			beforeclick:function(btn){
 				btn.callback=function(info){
 					var resutlCode= info.errorInfo.resultCode;
-					alert(resutlCode);
 					var vid=btn.up("window[xtype=feespower.window]").vid;
 					 if(300==resutlCode){
 						 btn.ownerCt.ownerCt.ownerCt.close();

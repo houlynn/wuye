@@ -66,7 +66,7 @@ Ext.define('core.app.module.Module', {
 						collapseMode : 'mini', // 折叠陷藏模式
 						module : viewModel.data,
 					};
-				//alert(0);
+				
 				this.items.push(navigate);
 			}
 			

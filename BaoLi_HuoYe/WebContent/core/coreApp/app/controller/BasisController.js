@@ -118,7 +118,6 @@ Ext.define("core.app.controller.BasisController",{
 						    			if(errorInfo){
 						    				modulegrid.getStore().reload();
 						    				delete odulegrid.getStore().getProxy().errorInfo;
-						    				alert(odulegrid.getStore().getProxy().errorInfo);
 							    			return;
 							    		}
 							    
@@ -314,7 +313,6 @@ Ext.define("core.app.controller.BasisController",{
 						    			if(errorInfo){
 						    				modulegrid.getStore().reload();
 						    				delete odulegrid.getStore().getProxy().errorInfo;
-						    				alert(odulegrid.getStore().getProxy().errorInfo);
 							    			return;
 							    		}
 							    

@@ -148,7 +148,7 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 											}
 											uniteFees(records[0],dataView);
 										}
-									}, {
+									}/*, {
 										iconCls : 'table_edit',
 										text : '查看收费历史',
 										itemId : 'history',
@@ -175,7 +175,7 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 											
 											
 										}
-									}]
+									}*/]
 						});
 			         }
 			           dataView.menu.showAt(e.getXY());
@@ -227,7 +227,6 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
        click:function(btn){
        	                   var modulegrid = btn.up("grid[xtype=unite.repairgrid]");	
 							 var store=modulegrid.getStore();
-							 alert(store);
 							 var panel=modulegrid.ownerCt.ownerCt.ownerCt.ownerCt;
 							 var tree= panel.down("container[xtype=resident.unitlevelTree]");
 			                 var selection=tree.getSelectionModel().getSelection();

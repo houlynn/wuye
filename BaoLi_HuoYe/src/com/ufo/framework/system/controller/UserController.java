@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -229,11 +230,14 @@ public class UserController extends SimpleBaseController<EndUser> {
 
 	/**
 	 * 用户登出
+	 * @throws IOException 
+	 * @throws ServletException 
 	 */
 	@RequestMapping("/logout")
-	public String logout(HttpServletRequest request) {
+	public void logout(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
 		SecurityUtils.getSubject().logout();
-		return InternalResourceViewResolver.REDIRECT_URL_PREFIX + "/";
+		request.getRequestDispatcher("/login.jsp").forward(request, response);
+		//return  "login.jsp";//InternalResourceViewResolver.REDIRECT_URL_PREFIX + "/";
 	}
 	@RequestMapping(value = "/fetchdata", method = RequestMethod.GET)
 	public @ResponseBody

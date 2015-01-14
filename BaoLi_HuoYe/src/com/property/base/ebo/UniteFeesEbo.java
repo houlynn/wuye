@@ -283,6 +283,7 @@ public  DataUpdateResponseInfo adduniteFees(
 	bc.setTf_shouldCount(tf_shouldCount);
 	bc.setTf_realACount(tf_realACount);
 	bc.setTf_month(AppUtils.getCurDate());
+	bc.setTf_billCode(AppUtils.getRandomCode());
 	ebi.save(bc);
 	////////////////////////收费条目/////////////////////////////////////
 	for(int bid :bids){

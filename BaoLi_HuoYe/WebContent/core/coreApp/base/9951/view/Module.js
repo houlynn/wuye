@@ -48,7 +48,7 @@ Ext.define('core.base.9951.view.Module', {
 						split : true,
 						module : this.viewModel.data,
 					};
-				alert(0);
+			
 				items.push(navigate);
 				}
 			

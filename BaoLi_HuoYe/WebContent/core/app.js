@@ -5,7 +5,6 @@ Ext.onReady(function(){
         appFolder : "core/coreApp",//应用的目录
         launch:function(){//当前页面加载完成执行的函数
         	   coreApp.initMenu();
-        	 //  alert("appp init");
         	   Ext.create("core.main.view.Main");
         	   Ext.create("core.app.main.MainModel");
         	   console.log(comm.get("viewModel"));
