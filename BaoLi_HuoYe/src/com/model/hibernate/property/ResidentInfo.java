@@ -162,7 +162,58 @@ public class ResidentInfo  extends BaseEntity{
 	@OneToMany(mappedBy="tf_ResidentInfo",cascade={CascadeType.REMOVE},fetch=FetchType.LAZY)
     @LazyCollection(LazyCollectionOption.TRUE)
 	private Set<FeesTypeItem> tf_FeesTypeItems=new HashSet<>();
-
+	
+	//////////////////////////房产其他信息///////////////////////////////////////
+	
+	@FieldInfo(title = "是否已经收楼", number = 10)
+	private String tf_repossession; 
+	@FieldInfo(title = "交楼类型", number = 20)
+	  private String tf_jfloorType;
+	@FieldInfo(title = "收楼类型", number = 20)
+	private String tf_sffloorType;
+	@FieldInfo(title = "收楼日期", number = 25)
+	private String tf_sdate;
+	@FieldInfo(title = "收楼通知书日期", number = 25)
+	private String tf_adate;
+	@FieldInfo(title = "是否已经交房产复印件", number = 10)
+	private String tf_isposttip;
+	@FieldInfo(title = "经办人", number = 10)
+	private String tf_doman;
+	@FieldInfo(title = "车牌", number = 10)
+	private String tf_license;
+	@FieldInfo(title = "是否装防盗门", number = 5)
+	private String tf_isburglar;
+	
+	
+	//////////////////////备注一//////////////////////////////////
+	@FieldInfo(title = "备注性质", number = 50)
+	private String tf_remark1;
+	
+	@FieldInfo(title = "备注业主住户联系电话", number = 50)
+	private String tf_remark2;
+	
+	@FieldInfo(title = "备注3业主身份证号码", number = 250)
+	private String tf_remark3;
+	
+	@FieldInfo(title = "备注4家庭成员名单", number = 250)
+	private String tf_remark4;
+	
+	
+	//////////////////////备注二///////////////////////////////
+	@FieldInfo(title = "备注1", number = 50)
+	private String tf_remark5;
+	
+	@FieldInfo(title = "备注2", number = 50)
+	private String tf_remark6;
+	
+	@FieldInfo(title = "备注3", number = 250)
+	private String tf_remark7;
+	
+	@FieldInfo(title = "备注4", number = 250)
+	private String tf_remark8;
+	
+	@FieldInfo(title = "备注5", number = 250)
+	private String tf_remark9;
 	
 	@Transient
 	private int tf_vid;
@@ -446,6 +497,151 @@ public class ResidentInfo  extends BaseEntity{
 	public void setTf_vid(int tf_vid) {
 		this.tf_vid = tf_vid;
 	}
+
+	public String getTf_repossession() {
+		return tf_repossession;
+	}
+
+	public void setTf_repossession(String tf_repossession) {
+		this.tf_repossession = tf_repossession;
+	}
+
+	public String getTf_jfloorType() {
+		return tf_jfloorType;
+	}
+
+	public void setTf_jfloorType(String tf_jfloorType) {
+		this.tf_jfloorType = tf_jfloorType;
+	}
+
+	public String getTf_sffloorType() {
+		return tf_sffloorType;
+	}
+
+	public void setTf_sffloorType(String tf_sffloorType) {
+		this.tf_sffloorType = tf_sffloorType;
+	}
+
+	public String getTf_sdate() {
+		return tf_sdate;
+	}
+
+	public void setTf_sdate(String tf_sdate) {
+		this.tf_sdate = tf_sdate;
+	}
+
+	public String getTf_adate() {
+		return tf_adate;
+	}
+
+	public void setTf_adate(String tf_adate) {
+		this.tf_adate = tf_adate;
+	}
+
+	public String getTf_isposttip() {
+		return tf_isposttip;
+	}
+
+	public void setTf_isposttip(String tf_isposttip) {
+		this.tf_isposttip = tf_isposttip;
+	}
+
+	public String getTf_doman() {
+		return tf_doman;
+	}
+
+	public void setTf_doman(String tf_doman) {
+		this.tf_doman = tf_doman;
+	}
+
+	public String getTf_license() {
+		return tf_license;
+	}
+
+	public void setTf_license(String tf_license) {
+		this.tf_license = tf_license;
+	}
+
+	public String getTf_isburglar() {
+		return tf_isburglar;
+	}
+
+	public void setTf_isburglar(String tf_isburglar) {
+		this.tf_isburglar = tf_isburglar;
+	}
+
+	public String getTf_remark1() {
+		return tf_remark1;
+	}
+
+	public void setTf_remark1(String tf_remark1) {
+		this.tf_remark1 = tf_remark1;
+	}
+
+	public String getTf_remark2() {
+		return tf_remark2;
+	}
+
+	public void setTf_remark2(String tf_remark2) {
+		this.tf_remark2 = tf_remark2;
+	}
+
+	public String getTf_remark3() {
+		return tf_remark3;
+	}
+
+	public void setTf_remark3(String tf_remark3) {
+		this.tf_remark3 = tf_remark3;
+	}
+
+	public String getTf_remark4() {
+		return tf_remark4;
+	}
+
+	public void setTf_remark4(String tf_remark4) {
+		this.tf_remark4 = tf_remark4;
+	}
+
+	public String getTf_remark5() {
+		return tf_remark5;
+	}
+
+	public void setTf_remark5(String tf_remark5) {
+		this.tf_remark5 = tf_remark5;
+	}
+
+	public String getTf_remark6() {
+		return tf_remark6;
+	}
+
+	public void setTf_remark6(String tf_remark6) {
+		this.tf_remark6 = tf_remark6;
+	}
+
+	public String getTf_remark7() {
+		return tf_remark7;
+	}
+
+	public void setTf_remark7(String tf_remark7) {
+		this.tf_remark7 = tf_remark7;
+	}
+
+	public String getTf_remark8() {
+		return tf_remark8;
+	}
+
+	public void setTf_remark8(String tf_remark8) {
+		this.tf_remark8 = tf_remark8;
+	}
+
+	public String getTf_remark9() {
+		return tf_remark9;
+	}
+
+	public void setTf_remark9(String tf_remark9) {
+		this.tf_remark9 = tf_remark9;
+	}
+	
 	
 	
 }

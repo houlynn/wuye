@@ -10,7 +10,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>保利小区管家管理后台</title>
+<title>保利物业信息管理系统</title>
 <link rel="stylesheet" type="text/css"
 	href="/extjs/resources/css/ext-all.css" />
 <link rel="stylesheet" type="text/css"
@@ -65,20 +65,25 @@ LoginWindow = Ext.extend(
 			function subjectForm() {
 				if (myform.getForm().isValid()) {
 					myform.form.submit({
-						waitMsg : '正在登录......',
 						url : '/rbacUser/Login.action',
 						timeout : 3000,
 						success : function(form, action) {
 							 	var obj=action.result.obj;
 							 	console.log(obj);
 							    if (action.result.success){
-							    	   window.location.href =obj ;  
+							    	   window.location.href =obj ; 
+							    	   this.hidden=true;
 							    }else{
+							    	var img=document.getElementById('code');
+									changeCode(img);
 							    	Ext.Msg.alert('错误提示', obj);
+							    	
 							    }
 						},
 						failure : function(form, action) {
 							form.reset();
+							var img=document.getElementById('code');
+							changeCode(img);
 							var obj=action.result.obj;
 							switch (action.failureType) {
 							case Ext.form.Action.CLIENT_INVALID:

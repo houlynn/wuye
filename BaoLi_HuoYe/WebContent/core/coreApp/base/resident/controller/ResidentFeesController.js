@@ -34,6 +34,20 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 					proxy.extraParams.moduleType=node.raw.nodeInfoType
 					store.load();
 					var unitePanel=tree.ownerCt;
+				 //////////////////////////////////清空数据////////////////////////////////////////////
+					var mainPanel=treeview.ownerCt.ownerCt;
+				var panel=mainPanel.down("#centerPanel");
+				var unitefeesgrid=mainPanel.down("#unitefeesgrid");
+				unitefeesgrid.getStore().removeAll();
+				var repairgrid=mainPanel.down("#repairgrid");
+			    panel.setTitle('');
+					
+					
+					
+					
+					
+					
+					
 					
 				}
 			},
@@ -395,9 +409,10 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 			"core.base.resident.view.UnitDataView",
 			 "core.base.resident.view.UniteFeesForm",
 			 "core.base.resident.view.UniteFeesGrid",
-			 "core.base.resident.view.RepairGrid"
+			 "core.base.resident.view.RepairGrid",
+		
 			],
-	stores : ["core.base.resident.store.UnitStore",'core.base.resident.store.LevelStore',]
+	stores : ["core.base.resident.store.UnitStore",'core.base.resident.store.LevelStore',"core.base.resident.store.UniteLevelStore"]
 });
 /**
  * 打开收费窗口

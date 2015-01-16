@@ -24,7 +24,7 @@ Ext.define("core.app.controller.BasisController",{
 							  var model = Ext.create(modulegrid.getStore().model);
 							 if(funData.navigatesStore&&funData.navigatesStore==true){
 							 	  if(!store.navigates||store.navigates.length==0){
-                	         	  system.errorInfo("请选择导航条目再进行添加操作!","错误提示");
+                	         	   system.errorInfo("请选择导航条目再进行添加操作!","错误提示");
                 	         	 return;
                 	          }else{
                 	         var node=navigatetree.getSelectionModel().getSelection()[0];

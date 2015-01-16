@@ -90,7 +90,7 @@
 	comm.add("screenHeight", screenHeight);
 	comm.add("resolutionWidth", resolutionWidth);
 	comm.add("resolutionHeight", resolutionHeight);
-
+	Ext.getBody().mask('欢迎使用保利物业信管理系统');		
 	</script>
 </body>
 </html>

@@ -146,7 +146,7 @@ Ext.define('core.app.module.factory.ColumnsFactory', {
 							             editor:{
 									           xtype : "basecombobox",
 									       	   ddCode : fd.tf_otherSetting,
-					                           allowBlank : false,
+					                         //  allowBlank : false,
 					                           hideTrigger : false
 							             }
 									});

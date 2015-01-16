@@ -50,8 +50,6 @@ Ext.define('core.app.module.factory.FormFieldFactory', {
 							allowBlank : false,
 							beforeLabelTextTpl : comm.get('required')
 						});
-
-         console.log(field);
 			return field;
 		},
 
@@ -59,9 +57,6 @@ Ext.define('core.app.module.factory.FormFieldFactory', {
 		 * 判断字段类型
 		 */
 		getFieldXType : function(fieldDefine, field) {
-		        console.log(fieldDefine.tf_fieldType);
-			
-			
 				switch (fieldDefine.tf_fieldType) {
 					case 'Date' :
 						return {
@@ -91,9 +86,8 @@ Ext.define('core.app.module.factory.FormFieldFactory', {
 					case 'basecombobox' :
 						return {
 							xtype : 'basecombobox',
-							beforeLabelTextTpl : comm.get('required'),
-							emptyText :fieldDefine.tf_title,
-							allowBlank : false,
+						//	beforeLabelTextTpl : comm.get('required'),
+						//	emptyText :fieldDefine.tf_title,
 							ddCode : fieldDefine.tf_otherSetting,
 						};	
 					case 'Integer' :

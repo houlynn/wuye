@@ -3,7 +3,7 @@ Ext.define("core.base.resident.view.UnitLevelTree",{
 	alias : "widget.resident.unitlevelTree",
 	displayField : "text",
 	rootVisible : false,
-	store : "core.base.resident.store.LevelStore",
+	store : "core.base.resident.store.UniteLevelStore",
 	title:"楼宇列表",
     dockedItems: [{
        	 xtype: 'toolbar',dock: 'top',layout : 'hbox',items: [

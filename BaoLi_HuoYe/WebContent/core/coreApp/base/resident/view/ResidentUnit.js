@@ -11,6 +11,7 @@ Ext.define("core.base.resident.view.ResidentUnit", {
 						xtype : "panel",
 						region : "center",
 						title : '单元信息',
+						itemId:"centerPanel",
 						layout : 'border',
 
 						items : [{
@@ -28,6 +29,7 @@ Ext.define("core.base.resident.view.ResidentUnit", {
 											     items:[
 											     {
 											       xtype:"unite.unitefeesgrid",
+											       	itemId:"unitefeesgrid",
 											       viewBar:true,
 											     }
 											     ],
@@ -38,6 +40,7 @@ Ext.define("core.base.resident.view.ResidentUnit", {
 											   items:[
 										       {
 										        xtype:"unite.repairgrid",
+										         itemId:"repairgrid",
 											    }
 											     ]
 											},
