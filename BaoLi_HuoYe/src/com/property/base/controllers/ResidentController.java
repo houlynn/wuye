@@ -267,7 +267,7 @@ public class ResidentController    implements LogerManager,CommonException {
 	            FileCopyUtils.copy(file.getBytes(), new File(tomcatPath +"/" +  fileName));//FileCopyUtils来自org.springframework.util.FileCopyUtils  
 	            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
 	            List<List<Object>> list=AppUtils.readExcel(new File(tomcatPath +"/" +  fileName));
-	            int count =1;
+	            int count =0;
 	            for(Object row :list){
 	            	List<Object> rowData=(List<Object>)row;
 	            	System.out.println("列数： "+rowData.size());
