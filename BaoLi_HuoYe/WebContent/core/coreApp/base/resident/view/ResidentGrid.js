@@ -89,6 +89,12 @@ Ext.define("core.base.resident.view.ResidentGrid",{
 							glyph : 0xf014,
 							ref:"seting",
 							itemId : 'setting'
+						},
+						 {
+							text : '导入',
+							glyph : 0xf014,
+							ref:"inputItem",
+							itemId : 'inputItem'
 						}
 						
 						

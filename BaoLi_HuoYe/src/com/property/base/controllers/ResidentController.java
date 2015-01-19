@@ -1,31 +1,63 @@
 package com.property.base.controllers;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Writer;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.model.hibernate.property.FeesTypeItem;
 import com.model.hibernate.property.LevelInfo;
 import com.model.hibernate.property.ResidentInfo;
 import com.model.hibernate.property.Village;
 import com.property.base.ebi.ResidentEbi;
+import com.ufo.framework.annotation.FieldInfo;
 import com.ufo.framework.common.constant.RequestPathConstants;
 import com.ufo.framework.common.core.exception.DeleteException;
 import com.ufo.framework.common.core.exception.InsertException;
 import com.ufo.framework.common.core.exception.ResponseErrorInfo;
 import com.ufo.framework.common.core.ext.model.JSONTreeNode;
 import com.ufo.framework.common.core.properties.PropUtil;
+import com.ufo.framework.common.core.utils.AppUtils;
+import com.ufo.framework.common.core.utils.JsonBuilder;
+import com.ufo.framework.common.core.utils.ModelUtil;
+import com.ufo.framework.common.core.utils.StringUtil;
 import com.ufo.framework.common.core.web.ModuleServiceFunction;
 import com.ufo.framework.common.log.LogerManager;
 import com.ufo.framework.system.ebi.CommonException;
@@ -37,6 +69,8 @@ import com.ufo.framework.system.shared.module.DataInsertResponseInfo;
 @Controller
 @RequestMapping("/102")
 public class ResidentController    implements LogerManager,CommonException {
+	
+	protected static JsonBuilder jsonBuilder;
 	@Resource(name="ebo")
 	private Ebi ebi;
 
@@ -70,6 +104,9 @@ public class ResidentController    implements LogerManager,CommonException {
 		this.moduleService = moduleService;
 	}
 
+	static {
+		jsonBuilder = JsonBuilder.getInstance();
+	}
 	@RequestMapping(RequestPathConstants.REQUEST_LOADPATH)
 	public @ResponseBody List<JSONTreeNode>  getTree(HttpServletRequest request,HttpServletResponse response,
 			@RequestParam(value="vid",required=true) int vid,
@@ -218,10 +255,164 @@ public class ResidentController    implements LogerManager,CommonException {
 	
 	
 	
+	@RequestMapping(value="/import",method=RequestMethod.POST)
+	public void doSave( HttpServletRequest request,
+			HttpServletResponse response,
+			  @RequestParam("file")  MultipartFile file,
+			  @RequestParam("vid") int vid
+			) throws Exception {
+	         String fileName = file.getOriginalFilename();  
+	        try {  
+	            String tomcatPath = request.getServletContext().getRealPath("/excel/"); //得到保存的路径  
+	            FileCopyUtils.copy(file.getBytes(), new File(tomcatPath +"/" +  fileName));//FileCopyUtils来自org.springframework.util.FileCopyUtils  
+	            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");  
+	            List<List<Object>> list=AppUtils.readExcel(new File(tomcatPath +"/" +  fileName));
+	            int count =1;
+	            for(Object row :list){
+	            	List<Object> rowData=(List<Object>)row;
+	            	System.out.println("列数： "+rowData.size());
+	            	if(rowData.size()<20){
+	            		continue;
+	            	}
+	            	String index=String.valueOf(rowData.get(0));//序号
+	            	String lev0=String.valueOf(rowData.get(1));//栋
+	            	String lev1=String.valueOf(rowData.get(2));//楼层
+	            	String reNuber=String.valueOf(rowData.get(3));//房号
+	            	if(StringUtil.isEmpty(lev0)||StringUtil.isEmpty(lev1)){
+	            		continue;
+	            	}
+	            	  if(reNuber.contains(".")){
+	            		  reNuber=reNuber.substring(0,reNuber.lastIndexOf("."));
+	          	    }
+	            	ResidentInfo info=this.getByResident(vid, lev0, lev1, reNuber);
+	            	boolean  add=false;
+	            	if(info==null){
+	            		info=new ResidentInfo();
+	            		add=true;
+	            	}else{
+	            		continue;
+	            	}
+	            	info.setTf_number(reNuber);
+	            	
+	            	info.setTf_stateOccupancy("true");
+	            	
+	            	/**
+	            	 * 欠费状态
+	            	 */
+	            	info.setTf_stateFees("false");
+	            	
+	            	
+	            	/**
+	            	 * 报修状态
+	            	 */
+	            	info.setTf_stateRepair("false");
+	            	
+
+	            	info.setTf_rental("false");
+	            	
+	            	
+	            	info.setTf_sell("false");
+	            	
+	            	LevelInfo levelInfo=getByLevf(vid, lev0,lev1);
+	            	if(levelInfo==null){
+	            		continue;
+	            	}
+	            	debug(levelInfo.getTf_parent().getTf_leveName()+"-----"+levelInfo.getTf_leveName());
+	            	info.setTf_levelInfo(levelInfo);
+	            	String loutype=String.valueOf(rowData.get(4));//交楼类型
+	            	info.setTf_jfloorType(loutype);
+	            	String souQcare=String.valueOf(rowData.get(5));//收楼情况
+	            	info.setTf_sffloorType(souQcare);
+	            	if(StringUtil.isEmpty(souQcare)){
+	            		info.setTf_repossession("false");
+	            	}else{
+	            		info.setTf_repossession("true");
+	            	}
+	            	String reName=String.valueOf(rowData.get(6));//业主姓名
+	            	info.setTf_residentName(reName);
+	            	String remark=String.valueOf(rowData.get(7));//备注性质
+	            	info.setTf_remark1(remark);
+	            	String shouDate=String.valueOf(rowData.get(8));//收楼日期
+	            	if(StringUtil.isEmpty(shouDate)){
+	            		shouDate=format.format(shouDate);
+	            	}
+	            	info.setTf_sdate(shouDate);
+	            	String souAdvDate=String.valueOf(rowData.get(9));//收楼通知书日期
+	            	if(StringUtil.isEmpty(shouDate)){
+	            		shouDate=format.format(shouDate);
+	            	}
+	                 info.setTf_adate(souAdvDate);
+	            	String soutFuce=String.valueOf(rowData.get(10));//是否已经收房产信息通知书
+	            	info.setTf_isposttip(soutFuce);
+	            	String doWithMane=String.valueOf(rowData.get(11));//经办人
+	            	info.setTf_doman(doWithMane);
+	            	String remrak1=String.valueOf(rowData.get(12));//备注住户联系信息
+	            	info.setTf_remark2(remrak1);
+	            	String appPhone=String.valueOf(rowData.get(13));//APP
+	            	  if(appPhone.contains(".")){
+	            		  appPhone=appPhone.substring(0,appPhone.lastIndexOf("."));
+	          	    }
+	            	
+	            	info.setTf_appPhone(appPhone);
+	            	String cardRemark=String.valueOf(rowData.get(14));//备注身份证号
+	            	info.setTf_remark3(cardRemark);
+	            	String  manreark=String.valueOf(rowData.get(15));//备注家庭成员
+	            	info.setTf_remark4(manreark);
+	            	String careNub=String.valueOf(rowData.get(16));//车牌号
+	            	info.setTf_license(careNub);
+	            	float arear=Float.valueOf(rowData.get(17)+"");//建筑面积
+	            	  BigDecimal bg = new BigDecimal(arear);
+	            	   arear = bg.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+	            	   info.setTf_builArea(arear);
+	            	
+	             	float resarea=Float.valueOf(rowData.get(18)+"");//实测面积
+	            	info.setTf_userArea(resarea);
+	            	String fddoc=String.valueOf(rowData.get(19));//是否装了防盗门
+	            	if(StringUtil.isEmpty(fddoc)){
+	            		info.setTf_isburglar("false");
+	            	}else{
+	            		info.setTf_isburglar("true");
+	            	}
+	             if(add){
+	            	 ebi.save(info);
+	            	 
+	             }else{
+	            	 ebi.update(info);
+	             }
+	             count++;
+	            }
+	            toWrite(response, jsonBuilder.returnSuccessJson("'成功导入"+count+"记录'"));
+	            
+	        } catch (IOException e) {  
+	            // TODO Auto-generated catch block  
+	            e.printStackTrace();  
+	        }  
+		
+		
+		
+	}
 	
 	
+	public ResidentInfo getByResident(int vid, String levf,String levf1,String reNuber) throws Exception{
+		String hql=" from ResidentInfo where 1=1 and tf_levelInfo.tf_leveName='"+levf1+"' and  tf_levelInfo.tf_parent.tf_village="+vid+"  and tf_levelInfo.tf_parent.tf_leveName='"+levf+"' and tf_number='"+reNuber+"'";
+		List<ResidentInfo> row= (List<ResidentInfo>) ebi.queryByHql(hql);
+		if(row!=null&&row.size()>0){
+			return row.get(0);
+		}
+		return null;
+	}
 	
-	
+	public LevelInfo getByLevf(int vid,String levf0Name,String levf1Name) throws Exception{
+		String hql=" from LevelInfo where 1=1 and tf_leveName='"+levf1Name+"' and tf_parent.tf_leveName='"+levf0Name+"'  and tf_parent.tf_village="+vid;
+		List<LevelInfo> row= (List<LevelInfo>) ebi.queryByHql(hql);
+		if(row!=null&&row.size()>0){
+			return row.get(0);
+		}
+		return null;
+		
+		
+		
+	}
 	
 	
 /*	
@@ -293,7 +484,28 @@ public class ResidentController    implements LogerManager,CommonException {
 	
 	
 	
-	
+	protected void toWrite(HttpServletResponse response, String contents) {
+		if (ModelUtil.isNotNull(response)) {
+			response.setContentType("text/html;charset=UTF-8;");
+			Writer writer = null;
+			try {
+				response.setCharacterEncoding("UTF-8");
+				writer = response.getWriter();
+				writer.write(contents);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					writer.flush();
+					writer.close();
+					response.flushBuffer();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 	
 	
 	

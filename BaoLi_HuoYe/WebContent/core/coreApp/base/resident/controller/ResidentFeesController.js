@@ -7,6 +7,11 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 		var self = this
 		// 事件注册
 		this.control({
+			
+			
+			
+			
+			
 			/**
 			 * 加载业主
 			 */

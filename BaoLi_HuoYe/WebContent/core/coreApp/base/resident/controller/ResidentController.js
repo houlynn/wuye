@@ -11,6 +11,38 @@ init:function(){
 		var self=this
 		//事件注册
 	this.control({
+		 	"container[xtype=resident.gridModue] button[ref=inputItem]":{
+	         	     click:function(btn){
+	         	     	var tree= btn.ownerCt.ownerCt.ownerCt.down("container[xtype=resident.levelTree]");
+   		     	      	var commbox=tree.down("combobox[ref=vicombobox]");
+   		     	      	var vid=commbox.getValue();
+	         	     	    var window= Ext.create("Ext.window.Window",{
+               		    	items:[{xtype:"base.fileUpload",vid:vid}]
+               		    });   
+               		    window.show();
+	         	  
+	         	    }
+	         	 },
+	        "form[xtype=base.fileUpload] button[ref=formUpload]" :{
+	           click:function(btn){
+	              var form=  btn.up("form[xtype=base.fileUpload]");  
+	              
+	               var formObj=form.getForm();
+	              	formObj.submit({
+	              		url:'/102/import.action',
+	              		params:{vid:form.vid},
+						//成功回调函数
+						success:function(form,action){
+							if(action.result.success){
+							 Ext.Msg.alert('提示', action.result.obj); 
+							}
+							
+					  }
+	              	});
+	           	
+	         
+	          }
+	        },	 
 			"container[xtype=resident.gridModue] button[ref=addButton]":{
 							click : function (btn){
 							 var modulegrid = btn.up("grid[xtype=resident.gridModue]");	
@@ -415,13 +447,8 @@ init:function(){
 	                         	endDate.setDisabled(true);
                               }
                            }
-                          }
-	         	
+                          },
 	         
-	         
-
-
-			
 		});
 	},
 	views:[
@@ -431,6 +458,7 @@ init:function(){
 	"core.base.resident.view.FeeSettingGrid",
 	"core.base.resident.view.FeeSettingFrom",
 	"core.base.resident.view.FeesSettingPanel",
+	"core.base.resident.view.UploadForm"
 	],
 	stores:[
 	'core.base.resident.store.LevelStore',
