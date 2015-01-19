@@ -32,6 +32,9 @@ public class FeesInfo extends BaseEntity {
 	public static final String FB="001";//抄表类型
 	public static final String FC="000";//单位*建筑面积 如物业费
 	public static final String FM="002";//金额收取
+	public static final String GT="003";//公共分摊
+	
+	
 	
 	@DDItemCode
 	@Id

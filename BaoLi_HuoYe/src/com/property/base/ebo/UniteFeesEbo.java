@@ -103,24 +103,28 @@ public class UniteFeesEbo implements UnitFeesEbi {
 public 	DataFetchResponseInfo addUniteFees(int rid,int rtype
 		) throws Exception{
 	DataFetchResponseInfo reuslt=new DataFetchResponseInfo();
+	//查询业主的收费项目
 	String hql_ft=" from FeesTypeItem where 1=1 and tf_ResidentInfo="+rid;
 	SimpleDateFormat sdd=new SimpleDateFormat("yyyy-MM-dd");
 	SimpleDateFormat sdm=new SimpleDateFormat("yyyy-MM");
 	//取当前时间为结束天
 	String endTime=sdd.format(new Date());
+	debug("当天时间为："+endTime);
 	//取当前时间为结束月
 	String endMonth=sdm.format(new Date());
+	debug("当前月为："+endMonth);
 	//获取业主收费项目
 	List<FeesTypeItem> fessItems=(List<FeesTypeItem>) ebi.queryByHql(hql_ft);
 	//遍历业主收费项目
 	List<BillItem> bills=new ArrayList<>();
-	fessItems.forEach(item->{
+	for(FeesTypeItem item : fessItems ){
 	debug("遍历:"+item.getTf_ResidentInfo().getTf_residentName()+item.getTf_FeesInfo().getTf_freesName());	
 	int feesid=item.getTf_FeesInfo().getTf_feesid();
 	//开始时间	
 	String start=item.getTf_beginDate();
 	//结束时间
 	String end=StringUtil.isEmpty(item.getTf_endDate())?endTime:item.getTf_endDate();
+	debug("业主收费结束时间： "+end);
 	int reslut= endMonth.compareTo(end);
 	String startDate=start+"-01";
 	String endDate=end+"-01";
@@ -138,16 +142,20 @@ public 	DataFetchResponseInfo addUniteFees(int rid,int rtype
 		Integer count=0;
 		try {
 		 count=ebi.getCount(nchql);
-		 if(count==1){
+		 debug("查询是否已经交费的BillItem： "+nchql);
+		 if(count>0){
+			 debug("已经BillItem 收费 跳出！！");
 			 continue;//如果已经收过了不添加
 		 }else{
 		  count=ebi.getCount(ochql);
-		     if(count==1){
+		     if(count>0){
 			    List<BillItem> listItem= (List<BillItem>) ebi.queryByHql(ohql);
 			    bills.add(listItem.get(0));//如何没收但是记录已经经存在则添加
+			    debug("已经存在BillItem的欠费记录跳出循环！！");
 			    continue;
 		    }else{
 		    	//如何未收但是记录不存在产生一条收费记录
+		    	  debug("不存在欠费记录需要产生一条");
 		    	BillItem bill=new BillItem();
 		    	bill.setTf_feesDate(m);//收费周期
 		    	bill.setTf_FeesInfo(item.getTf_FeesInfo());//收费标准
@@ -186,27 +194,33 @@ public 	DataFetchResponseInfo addUniteFees(int rid,int rtype
 		    		if(mlist!=null&&mlist.size()>0){
 			    		MeterInfo meterInfo=mlist.get(0);
 			    		bill.setTf_MeterInfo(meterInfo);
-			    		debug(m+"查询到一条单价*建筑面积类型费用");	
+		    			bill.setTf_count(meterInfo.getTf_acount());
+		    			bill.setTf_price(item.getTf_FeesInfo().getTf_price());//设置单价
+		    			bill.setTf_acount(item.getTf_FeesInfo().getTf_price()*meterInfo.getTf_acount());//计算金额
+			    		debug(m+"查询到 MeterInfo一条单价*建筑面积类型费用");	
 			    		}else{
-			    			MeterInfo meterInfo=new MeterInfo();
-			    			meterInfo.setTf_mtermane(item.getTf_FeesInfo().getTf_freesName());//项目名称
-			    			meterInfo.setTf_FeesInfo(item.getTf_FeesInfo());//收费标准
+			    			MeterInfo	newmeterInfo=new MeterInfo();
+			    			newmeterInfo.setTf_mtermane(item.getTf_FeesInfo().getTf_freesName());//项目名称
+			    			newmeterInfo.setTf_FeesInfo(item.getTf_FeesInfo());//收费标准
 			    			ResidentInfo residentInfo= ebi.findById(ResidentInfo.class, rid);
-			    			meterInfo.setTf_ResidentInfo(residentInfo);
-			    			meterInfo.setTf_acount(residentInfo.getTf_builArea());//建筑面积
-			    			meterInfo.setTf_mtype(MeterInfo.FEES_TYPE_UNITE);
-			    			meterInfo.setTf_rendDate(m);//收费周期
+			    			newmeterInfo.setTf_ResidentInfo(residentInfo);
+			    			newmeterInfo.setTf_acount(residentInfo.getTf_builArea());//建筑面积
+			    			newmeterInfo.setTf_mtype(MeterInfo.FEES_TYPE_UNITE);
+			    			newmeterInfo.setTf_rendDate(m);//收费周期
 			    			if(rtype==1){
-			    			meterInfo.addXcode();
+			    				newmeterInfo.addXcode();
 			    			}
-			    			meterInfo.setTf_meterdate(AppUtils.getCurDate());
-			    			ebi.save(meterInfo);
-			    			debug("插入一条/单价*建筑面积类型收费信息");		
-			    			bill.setTf_MeterInfo(meterInfo);
-			    			bill.setTf_count(meterInfo.getTf_acount());
+			    			newmeterInfo.setTf_meterdate(AppUtils.getCurDate());
+			    			ebi.save(newmeterInfo);
+			    			debug("向 MeterInfo 添加了一条新记录");
+			    			debug("插入MeterInfo 一条/单价*建筑面积类型收费信息");
+				    		bill.setTf_MeterInfo(newmeterInfo);
+			    			bill.setTf_count(newmeterInfo.getTf_acount());
 			    			bill.setTf_price(item.getTf_FeesInfo().getTf_price());//设置单价
-			    			bill.setTf_acount(item.getTf_FeesInfo().getTf_price()*meterInfo.getTf_acount());//计算金额
+			    			bill.setTf_acount(item.getTf_FeesInfo().getTf_price()*newmeterInfo.getTf_acount());//计算金额
+			    			
 			    		}
+		    	
 				}
 				break;
 				/////////////////////////////////////////////////////////////
@@ -248,7 +262,7 @@ public 	DataFetchResponseInfo addUniteFees(int rid,int rtype
 			e.printStackTrace();
 		}
 	}
-	});
+	}
 	reuslt.setTotalRows(bills.size());
 	reuslt.setMatchingObjects(bills);
 	return reuslt;

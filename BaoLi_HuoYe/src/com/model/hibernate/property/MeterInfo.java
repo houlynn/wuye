@@ -39,6 +39,7 @@ public class MeterInfo extends BaseEntity {
 	public static final String  FEES_TYPE_COAL="B003";//煤气费
 	
     public static final String FEES_TYPE_LL="005";//临时性收费
+    public static final String FEES_TYPE_GT="003";// 公摊费
 	
 	
 	@Id
@@ -83,6 +84,12 @@ public class MeterInfo extends BaseEntity {
 	@JoinColumn(name = "tf_feesid",nullable=false)
 	@FieldInfo(title = "收费标准", number =60)
 	private  FeesInfo tf_FeesInfo; 
+	
+	///所属小区
+	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
+	@JoinColumn(name = "tf_viid",nullable=false)
+	@FieldInfo(title = "所属小区", number =60)
+	private Village tf_Village;
 	
 	public int getTf_MeterId() {
 		return tf_MeterId;
@@ -186,6 +193,14 @@ public class MeterInfo extends BaseEntity {
 
 	public void setTf_FeesInfo(FeesInfo tf_FeesInfo) {
 		this.tf_FeesInfo = tf_FeesInfo;
+	}
+
+	public Village getTf_Village() {
+		return tf_Village;
+	}
+
+	public void setTf_Village(Village tf_Village) {
+		this.tf_Village = tf_Village;
 	}
 	
 }
