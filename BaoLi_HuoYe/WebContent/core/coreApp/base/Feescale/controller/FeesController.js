@@ -13,7 +13,6 @@ init:function(){
 		 */
 			"container[xtype=feesv.grid] button[ref=addButton]":{
 							click : function (btn){
-							alert(btn);
 							 var modulegrid = btn.up("grid[xtype=feesv.grid]");	
 							 var store=modulegrid.getStore();
 			                 var tree=modulegrid.ownerCt.down("container[xtype=feesv.levelTree]");

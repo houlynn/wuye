@@ -1,24 +1,10 @@
 Ext.define("core.prop.feesgtset.view.LevelTree",{
 	extend:"Ext.tree.Panel",
 	alias : "widget.feesgtset.levelTree",
-	displayField : "text",
+displayField : "text",
 	rootVisible : false,
 	store : "core.prop.feesgtset.store.LevelStore",
-	title:"楼宇列表",
-    dockedItems: [{
-       	 xtype: 'toolbar',dock: 'top',layout : 'hbox',items: [
-        	 {
-       	  	xtype : "moduecombobox",
-		      width:"100%",
-		      ref:"vicombobox",
-		      ddCode :{
-                           modeuName:"Village",
-                           marking:'1',
-                           identification:'1'
-                        }
-       	 }
-       	 ]
-     	}],
+	title:"小区列表",
 	tools : [{
 		type:'refresh',
 	   	qtip: '刷新',

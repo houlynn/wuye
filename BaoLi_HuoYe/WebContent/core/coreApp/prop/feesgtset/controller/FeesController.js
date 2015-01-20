@@ -395,10 +395,13 @@ init:function(){
 	'core.prop.feesgtset.view.LevelTree',
 	"core.prop.feesgtset.view.FeesGrid",
 	"core.prop.feesgtset.view.FeeWinodw",
-	"core.prop.feesgtset.view.FeesgtForm"
+	"core.prop.feesgtset.view.FeesgtForm",
+	"core.prop.feesgtset.view.LevelTree"
 	],
 	stores:[
-	'core.prop.feesgtset.store.LevelStore'
+	'core.prop.feesgtset.store.LevelStore',
+	"core.prop.feesgtset.store.LevelStore"
+	
 	],
     models : []
 });

@@ -6,7 +6,7 @@ Ext.define("core.prop.feesgtset.store.LevelStore",{
         constructor: function() {
           this.proxy = {
                    	type:"ajax",
-		             url:"/201/loadL.action",
+		             url:"/vi/loadVi.action",
                         extraParams: arguments[0]
                 },
                 this.callParent(arguments)
