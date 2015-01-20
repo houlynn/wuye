@@ -71,6 +71,12 @@ public class LevelInfo extends BaseEntity {
 	@JsonIgnore
 	@Transient
 	private String icon=PropUtil.get("sys.leve.LevelInfo");
+	
+	@JsonIgnore
+	@ManyToOne(optional=true,fetch=FetchType.LAZY)
+	@JoinColumn(name="tf_insid")
+	@FieldInfo(title = "公表", number = 30)
+	private InnstallBill tf_InnstallBill;
 
 	public int getTf_leveId() {
 		return tf_leveId;
@@ -126,6 +132,14 @@ public class LevelInfo extends BaseEntity {
 
 	public void setTf_level(String tf_level) {
 		this.tf_level = tf_level;
+	}
+
+	public InnstallBill getTf_InnstallBill() {
+		return tf_InnstallBill;
+	}
+
+	public void setTf_InnstallBill(InnstallBill tf_InnstallBill) {
+		this.tf_InnstallBill = tf_InnstallBill;
 	}
 	
 	

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.model.hibernate.property.LevelInfo;
 import com.model.hibernate.property.PointFrientInfo;
 import com.model.hibernate.property.Village;
 import com.ufo.framework.common.core.ext.model.JSONTreeNode;
@@ -198,6 +199,34 @@ public class VillageController extends BaseController {
 		
 	}
 	
+	
+	
+	@RequestMapping("/loadVLevf")
+	public  @ResponseBody List<JSONTreeNode> getVill(
+			@RequestParam(value="vid",required=true) int vid,
+			@RequestParam(value="orderSql",required=false,defaultValue=" order by tf_leveName ASC") String orderSql
+			) throws Exception{
+		List<JSONTreeNode> lists=new ArrayList<JSONTreeNode>();
+		List<LevelInfo> leves=(List<LevelInfo>) ebi.queryByHql(" from LevelInfo where 1=1   and  tf_parent=null  and tf_village="+vid+ orderSql);
+		for(LevelInfo l:leves){
+			JSONTreeNode node=new JSONTreeNode();
+			node.setId(l.getTf_leveId()+"");
+			node.setText(l.getTf_leveName());
+			node.setCode(l.getTf_leveId()+"");
+			node.setNodeInfo("LevelInfo");
+			node.setCls("tree_set_perm");
+			node.setIcon(l.getIcon());
+			node.setDescription("tf_leveName");
+			node.setExpanded(true);
+			node.setLeaf(false);
+			node.setNodeInfoType("0");
+			node.setChecked(false);
+			lists.add(node);
+		}
+		return lists;
+		
+		
+	}
 	
 	
 	
