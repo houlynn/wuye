@@ -267,14 +267,13 @@ public class ModuleController implements LogerManager,CommonException {
 	@RequestMapping(value = "/removerecords.do")
 	public @ResponseBody
 	DataDeleteResponseInfo removeRecords(String moduleName, String[] titles,
-			@RequestParam(value="ids",required=false) int[] ids,
+			@RequestParam(value="ids",required=true) int[] ids,
 			HttpServletRequest request) {
 		DataDeleteResponseInfo 	result = new DataDeleteResponseInfo();
 		for(int id : ids){
-			DataDeleteResponseInfo recordDeleteResult = moduleService.remove(moduleName, id+"",
+			DataDeleteResponseInfo recordDeleteResult = moduleService.remove(moduleName, id,
 					request);
 		}
-		
 		return result;
 	}
 /*	public @ResponseBody

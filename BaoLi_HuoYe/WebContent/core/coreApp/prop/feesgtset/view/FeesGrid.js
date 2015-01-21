@@ -130,7 +130,7 @@ Ext.define("core.prop.feesgtset.view.FeesGrid", {
 						this.model = core.app.module.factory.ModelFactory
 						.getModelByModule(viewModel.data,{
 						//read : 'rest/201/fetchdata.do',
-					    read : 'rest/module/fetchdata.do',
+					    read : '/201/loadins.do',
 					    update : 'rest/module/update.do',
 						create : 'rest/module/create.do',
 						destroy : 'rest/module/remove.do'
@@ -216,26 +216,11 @@ Ext.define("core.prop.feesgtset.view.FeesGrid", {
 				},
 				{
 					text : '安装公摊表',
-					xtype:"buttontransparent"
+					itemId : 'setting',
+						ref : "setting"
 				},
-					{
-					text : '安装公表',
-					glyph : 0xf014,
-       	  	xtype : "moduecombobox",
-		      width:"100%",
-		      ref:"vicombobox",
-		      emptyText :"请选择小区选择对应的楼宇",
-		      width:250,
-		      ddCode :{
-                           modeuName:"Village",
-                           marking:'1',
-                           identification:'1'
-                        },
-					ref : "seting",
-					itemId : 'setting'
-				}
 
-				, '-', '-', '筛选', {
+				 '-', '-', '筛选', {
 					width : 60,
 					xtype : 'gridsearchfield',
 					// store : this.grid.getStore() // 现在用的local数据，不可以进行筛选
@@ -289,7 +274,7 @@ Ext.define("core.prop.feesgtset.view.FeesGrid", {
 							e.grid.getStore().sync({
 										callback : function(data, store) {
 											e.record.commit();
-											system.smileInfo("保存成功!")
+											//system.smileInfo("保存成功!")
 										}
 									});
 							var proxy = e.grid.getStore().getProxy();
@@ -314,6 +299,47 @@ Ext.define("core.prop.feesgtset.view.FeesGrid", {
 
 				};
 
+				
+	  var columns=new Array();
+		Ext.each(this.columns,function(col){
+			if(col.columnType=="basecombobox" || (col.field && col.field.xtype && col.field.xtype=="basecombobox")){
+				col.renderer=function(value,data,record){
+								var val=value;
+								//如果该字段是可编辑的
+								var ddCode=null;
+								if(col.field){
+									ddCode=col.field.ddCode;
+								}else{
+									ddCode=col.ddCode;
+								}
+								var ddItem=factory.DDCache.getItemByDDCode(ddCode);
+								for(var i=0;i<ddItem.length;i++){
+									var ddObj=ddItem[i];
+									var displayField='itemName';
+									var valueField='itemCode';
+									if(col.field && col.field.displayField){
+										displayField=column.field.displayField;
+									}else if(col.displayField){
+										displayField=col.displayField;
+									}
+									if(col.field && col.field.valueField){
+										displayField=col.field.valueField;
+									}else if(col.displayField){
+										displayField=col.displayField;
+									}
+									if(value==ddObj[valueField]){
+										val=ddObj[displayField];
+										break;
+									}
+								}
+								return val;
+						}
+			}
+			columns.push(col);
+		});
+		this.columns=columns;
+				
+				
 				this.callParent();
 
 			}

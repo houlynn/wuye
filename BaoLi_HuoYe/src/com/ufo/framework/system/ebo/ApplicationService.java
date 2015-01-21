@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Service;
+
 import com.model.app.common.ApplicationInfo;
 import com.model.app.common.UserInfo;
 import com.model.hibernate.system._MenuGroup;
@@ -16,10 +19,13 @@ import com.model.hibernate.system._ModuleGridScheme;
 import com.model.hibernate.system._ModuleGridSchemeGroup;
 import com.model.hibernate.system.ServiceInfo;
 import com.model.hibernate.system.SystemInfo;
+import com.ufo.framework.common.core.exception.ResponseErrorInfo;
+import com.ufo.framework.common.core.exception.TimeoutException;
 import com.ufo.framework.common.core.utils.AppUtils;
 import com.ufo.framework.system.ebi.ApplicationEbi;
+import com.ufo.framework.system.ebi.CommonException;
 @Service
-public class ApplicationService extends Ebo  implements  ApplicationEbi {
+public class ApplicationService extends Ebo  implements  ApplicationEbi,CommonException {
 
 
 	private static List<_Module> modules = null;
@@ -99,9 +105,18 @@ public class ApplicationService extends Ebo  implements  ApplicationEbi {
 
 	// 根据模块 name 号取得模块定义
 	public static _Module getModuleWithName(String name) {
+		try{
 		for (_Module module : getModules())
 			if (module.getTf_moduleName().equals(name))
 				return module;
+		}catch(NullPointerException e){
+			
+			TimeoutException exception=	 new TimeoutException(); 
+			 ResponseErrorInfo errorInfo= new ResponseErrorInfo();
+			 errorInfo.getErrorMessage().put("error", "用户未登陆，或回话过期!");
+			 errorInfo.setResultCode(ResponseErrorInfo.STATUS_TIME_OUT);
+			 exception.setErrorInfo(errorInfo);
+		}
 		return null;
 	}
 

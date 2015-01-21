@@ -1,6 +1,7 @@
 package com.ufo.framework.system.ebo;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -286,7 +287,7 @@ public class ModuleService extends Ebo implements ModelEbi {
 	 * @see com.ufo.framework.system.ebo.ModelEbi#remove(java.lang.String, java.lang.String, javax.servlet.http.HttpServletRequest)
 	 */
 	@Override
-	public DataDeleteResponseInfo remove(String moduleName, String id, HttpServletRequest request) {
+	public DataDeleteResponseInfo remove(String moduleName, Serializable id, HttpServletRequest request) {
 		debug("数据delete:模块" + moduleName + ",主键" + id);
 		DataDeleteResponseInfo result = new DataDeleteResponseInfo();
 		Class<?> beanClass = ModuleServiceFunction.getModuleBeanClass(moduleName);

@@ -4,6 +4,7 @@ import com.ufo.framework.common.core.exception.CustomException;
 import com.ufo.framework.common.core.exception.DeleteException;
 import com.ufo.framework.common.core.exception.InsertException;
 import com.ufo.framework.common.core.exception.ResponseErrorInfo;
+import com.ufo.framework.common.core.exception.TimeoutException;
 import com.ufo.framework.common.core.exception.UpdateException;
 import com.ufo.framework.common.core.exception.WebAppException;
 
@@ -102,6 +103,17 @@ public interface CommonException {
 		 errorInfo.setResultCode(code);
 		 exception.setErrorInfo(errorInfo);
 		 throw exception;
+	}
+	
+	default void getTimeoutException()throws TimeoutException {
+		
+		TimeoutException exception=	 new TimeoutException(); 
+		 ResponseErrorInfo errorInfo= new ResponseErrorInfo();
+		 errorInfo.getErrorMessage().put("error", "用户未登陆，或回话过期!");
+		 errorInfo.setResultCode(ResponseErrorInfo.STATUS_TIME_OUT);
+		 exception.setErrorInfo(errorInfo);
+		 throw exception;
+		
 	}
 	
 }

@@ -1,5 +1,6 @@
 package com.ufo.framework.system.ebi;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -73,7 +74,7 @@ public interface ModelEbi extends Ebi{
 			String operType, String updated,HttpServletRequest request);
 
 	// @Override
-	public abstract DataDeleteResponseInfo remove(String moduleName, String id,
+	public abstract DataDeleteResponseInfo remove(String moduleName, Serializable id,
 			HttpServletRequest request);
 
 }

@@ -16,14 +16,15 @@ Ext.define("core.prop.feesgtset.view.FeesgtForm", {
 						text : '保存',
 						itemId : 'save',
 						glyph : 0xf0c7,
-						style : 'border-width:0 0 0 0;',
-						text : '关闭',
+						style : 'border-width:0 0 0 0;'},
+						
+						{text : '关闭',
 						itemId : 'close',
 						glyph : 0xf148,
 						handler : function(button) {
 							button.up('window').hide();
-						}
-					}],
+						}}
+					],
 			initComponent : function() {
 				var me = this;
 				var self = this;
@@ -94,7 +95,7 @@ Ext.define("core.prop.feesgtset.view.FeesgtForm", {
 										ddCode : {
 											modeuName : "FeesInfo",
 											marking : '1',
-											identification : '1',
+											identification : '0',
 											allowBlank : false
 
 										}
@@ -110,7 +111,7 @@ Ext.define("core.prop.feesgtset.view.FeesgtForm", {
 							items : [{
 										xtype : "textareafield",
 										fieldLabel : "备注",
-										name : "tf_remark;",
+										name : "tf_remark",
 										flex : 5,
 										preventScrollbars : true, // 设置多行文本框没有滚动条显示
 										columnWidth : 1

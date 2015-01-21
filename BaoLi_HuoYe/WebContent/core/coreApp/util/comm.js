@@ -1,5 +1,11 @@
-/*		Ext.Ajax.on('requestcomplete',
+		Ext.Ajax.on('requestcomplete',
 				function(conn, response, options) {
+						var  errorInfo = Ext.decode(response.responseText, true);
+						if(errorInfo.errorInfo){
+						  var resutlCode=errorInfo.errorInfo.resultCode;
+						  alert(rrorInfo.errorInfo);
+						  return;
+						}
 					if (response.getResponseHeader) {
 						var sessionStatus = response
 								.getResponseHeader("sessionstatus");
@@ -17,7 +23,7 @@
 							})
 						}
 					}
-				});*/
+				});
 		
 Ext.setGlyphFontFamily('FontAwesome'); // 设置图标字体文件，只有设置了以后才能用glyph属性		
 //开启动态加载

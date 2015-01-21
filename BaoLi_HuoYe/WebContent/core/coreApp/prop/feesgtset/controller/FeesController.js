@@ -1,217 +1,95 @@
-Ext.define("core.prop.feesgtset.controller.FeesController",{
-	extend:"Ext.app.Controller",
-		mixins: {
-		treeUtil:"core.util.TreeUtil",
-		queryUtil:"core.util.QueryUtil",
-		suppleUtil:"core.util.SuppleUtil",
+Ext.define("core.prop.feesgtset.controller.FeesController", {
+	extend : "Ext.app.Controller",
+	mixins : {
+		treeUtil : "core.util.TreeUtil",
+		queryUtil : "core.util.QueryUtil",
+		suppleUtil : "core.util.SuppleUtil",
+		formUtil : "core.util.FormUtil"
 	},
-init:function(){
-	var self=this
-	this.control({
-		"grid[xtype=feesgtset.gridModue] #setting":{
-			 select:function(combo,record,opts) {  
-				 	    var vid=record[0].get("itemCode");
-				 	    var itemName=record[0].get("itemName");
-						self.selTreeWin({
-						title:itemName+"--楼宇列表",
-						multiSelect:true,
-						haveButton:true,
-						isEmpty:false,
-						config:{
-							url:"/vi/loadVLevf.action",
-							params:{
-								vid:1,
-								expanded:true
-							}
-						},
-						callback:function(win,records){
-							//点击确定之后会得到选中的数据做处理
-							
-						   console.log(records);
-							
-						}
-					});							
-											
-											
-											
-				}
-			
-				
-		},
-		"grid[xtype=feesgtset.gridModue] button[ref=addButton]":{
-		 click:function(btn){
-		    var modulegrid = btn.up("grid[xtype=feesgtset.gridModue]");	
-		    var store=modulegrid.getStore();
-		    var  window=  Ext.createWidget("feesgtset.window",{
-			                    viewModel:viewModel,
-				                grid:modulegrid,
-			                 });
-			       var model = Ext.create(modulegrid.getStore().model);
-			                    window.down('form[xtype=feesgtset.form]').getForm().loadRecord(model);
-			                    window.setTitle("公表信息录入");
-	                            window.show();
-		 
-		 }
-		},
-		
-			         "form[xtype=feesgtset.form] #feeeItemCombobox":{
-	         	  render:function(combo) {
-	         	  	var from= combo.ownerCt.ownerCt.ownerCt;
-	         	  	var tag=from.tag;
-	         	    var ddCode ={
-                           whereSql:' and tf_Village='+tag.vid
-                        }
-                  Ext.apply(combo.ddCode,ddCode);
-                  var store=combo.store;
-                  var proxy=store.getProxy();
-				  proxy.extraParams=combo.ddCode;
-			      store.load();	
-				   
-	         	  	
-	         	  }
-	         	
-	         },
-	         
-		
-		
-	/*	*//**
-		 * 添加 抄水表信息
-		 *//*
-			"container[xtype=fees.gridModue] button[ref=addButton]":{
-							click : function (btn){
-							 var modulegrid = btn.up("grid[xtype=fees.gridModue]");	
-							 var store=modulegrid.getStore();
-			                 var tree=modulegrid.ownerCt.down("container[xtype=fees.levelTree]");
-			                 var selection=tree.getSelectionModel().getSelection();
-			                 if(!selection&&selection.length==0){
-			                  return ;
-			                 }else{
-			                    if(selection[0].get("nodeInfoType")=="0"||selection[0].get("nodeInfoType")=="1"){
-			                    system.errorInfo("请选择对应的房号在进行添加","错误提示");
-			                    return ;
-			                   }
-			                 }
-							 var viewModel=system.getViewModel(201);
-                	         if(!store.navigates||store.navigates.length==0){
-                	            system.errorInfo("请选择对应的房号在进行添加","错误提示");
-                	         	return;
-                	          }
-							 
-						     var model = Ext.create(modulegrid.getStore().model);
-			                 model.set(model.idProperty, null); 
-			                 model.set("tf_mtype","B001");
-			                 
-			          var tree= btn.ownerCt.ownerCt.ownerCt.down("container[xtype=fees.levelTree]");
-   		     	      	 var commbox=tree.down("combobox[ref=vicombobox]");
-   		     	      	 var vid=commbox.getValue();
-			             var  window=  Ext.createWidget("fees.window",{
-			                    viewModel:viewModel,
-				                grid:modulegrid,
-				                vid:vid
-			                 });
-			                    window.down('form[xtype=baseform]').setData(model);
-			                    var title=selection[0].get("text")+" 水表信息录入";
-			                    window.setTitle(title);
-	                            window.show();
-								}, 
-								render : function(btn) {
-									var modulegrid= btn.up("resident.gridModue");
-									btn.dropZone = new Ext.dd.DropZone(btn.getEl(), {
-												ddGroup : 'DD_grid_' + viewModel.get('tf_moduleName'),
-												getTargetFromEvent : function(e) {
-													return e.getTarget('');
-												},
-												onNodeOver : function(target, dd, e, data) {
-													return Ext.dd.DropZone.prototype.dropAllowed;
-												},
-												onNodeDrop : function(target, dd, e, data) {
-													var b = btn.menu.down('#newwithcopy');
-													b.fireEvent('click', b);
-												}
-											})
+	init : function() {
+		var self = this
+		this.control({
+			"grid[xtype=feesgtset.gridModue] #setting" : {
+				click : function(btn) {
+					var modulegrid = btn.up("grid[xtype=feesgtset.gridModue]");
+					var store = modulegrid.getStore();
+					var tree = modulegrid.ownerCt
+							.down("container[xtype=feesgtset.levelTree]");
+					var selection = tree.getSelectionModel().getSelection();
+					if (!selection || selection.length == 0) {
+						system.errorInfo("请选择一个小区再进行添加", "错误提示");
+						return;
+					}
+					var vid = selection[0].get("code");
+					var itemName = selection[0].get("text");
+					self.selTreeWin({
+								title : itemName + "--楼宇列表",
+								multiSelect : true,
+								haveButton : true,
+								isEmpty : false,
+								config : {
+									url : "/vi/loadVLevf.action",
+									params : {
+										vid : 1,
+										expanded : true
+									}
+								},
+								callback : function(win, records) {
+									// 点击确定之后会得到选中的数据做处理
+
 								}
-				},
-			*//**
-			 * 编辑
-			 *//*	
-				
-			"container[xtype=fees.gridModue]  button[ref=editButton] ":{
-		   click:function(btn){
-			var modulegrid = btn.up("grid[xtype=fees.gridModue]");	
-			 var viewModel=system.getViewModel(201);
-			var  window=  Ext.createWidget("fees.window",{
-			                   viewModel:viewModel,
-				                grid:modulegrid
-			                 });
-			var selection= modulegrid.getSelectionModel().getSelection()                 
-	       window.down('baseform').setData(selection[0]);
-	          var title="修改录入信息";
-			                    window.setTitle(title);
-	                            window.show();
-	       window.show();
+							});
+
 				}
-			},	
-		*//**
-		 * 结束整栋楼抄表 
-		 *//*
-		"form[xtype=fees.settingform] #save":{
-		  click:function(btn){
-			   	 var form= btn.up("form[xtype=fees.settingform]");
-			   	 var rendField=form.down("#reddate");
-			   	 var reddate=rendField.getValue();
-              var tree=form.grid.ownerCt.down("container[xtype=fees.levelTree]");
-              var selection=tree.getSelectionModel().getSelection();
-              if(!selection&&selection.length==0){
-               return ;
-              }else{
-                 if(selection[0].get("nodeInfoType")!="0"){
-                 system.errorInfo("请选择对应的栋数进行结束抄表","错误提示");
-                 return ;
-                }
-              }
-			  var leveid=selection[0].get("code");
-				Ext.MessageBox.confirm('结束抄表', '确定' +selection[0].get("text")+" "+ Ext.Date.format(new Date(reddate),'Y-m')+"结束抄表",
-						function(btn) {
-							if (btn == 'yes') {
-							   	 var resObj=self.ajax({url:"/201/acount.action",params:{rendate:reddate,type:"B001",leveid:leveid}});
-							   	 form.grid.reloade();
-								
-							}});
-		  }
-		},
+
+			},
+			"grid[xtype=feesgtset.gridModue] button[ref=addButton]" : {
+				click : function(btn) {
+					var modulegrid = btn.up("grid[xtype=feesgtset.gridModue]");
+					var tree = modulegrid.ownerCt
+							.down("container[xtype=feesgtset.levelTree]");
+					var selection = tree.getSelectionModel().getSelection();
+					if (!selection || selection.length == 0) {
+						system.errorInfo("请选择一个小区再进行添加", "错误提示");
+						return;
+					}
+					var vid = selection[0].get("code");
+					var window = Ext.createWidget("feesgtset.window", {
+								viewModel : viewModel,
+								vid : vid,
+								grid : modulegrid
+							});
+					var model = Ext.create(modulegrid.getStore().model);
+					window.down('form[xtype=feesgtset.form]').getForm()
+							.loadRecord(model);
+					window.setTitle("公表信息录入");
+					window.show();
+
+				}
+			},
+
+			"form[xtype=feesgtset.form] #feeeItemCombobox" : {
+				render : function(combo) {
+					var from = combo.ownerCt.ownerCt.ownerCt;
+					var window = from.up("window[xtype=feesgtset.window]");
+					var vid = window.vid;
+					var ddCode = {
+						whereSql : ' and tf_Village=' + vid
+					}
+					Ext.apply(combo.ddCode, ddCode);
+					var store = combo.store;
+					var proxy = store.getProxy();
+					proxy.extraParams = combo.ddCode;
+					store.load();
+
+				}
+			},
+
 			
-			
-		"container[xtype=fees.gridModue]  button[ref=seting] ":{
-           click:function(btn){
-           	var modulegrid=btn.up("grid[xtype=fees.gridModue]");
-           	 var window= Ext.createWidget("window",{
-           	  title:"结束抄表",
-           	  width:300,
-           	  height:100,
-           	  items:[{xtype:"fees.settingform", grid:modulegrid}]
-           	 });
-           	 window.show();
-           	
-           	
-           	      Ext.MessageBox.prompt('结束抄表', '请填入日期', function(btn, leveName) {
-                         if(btn=="ok"){
-         	            var params={vid:vid,leveName:leveName,level:"1",parent:parent.get("id")}
-         	            var resObj=self.ajax({url:"/102/A001.action",params:params});
-         	            var store=tree.getStore();
-                     	var proxy=store.getProxy();
-											proxy.extraParams.vid=vid;
-											store.load();	
-                       } });
-           
-           }			
-		},	
-			*//**
-			 * 删除
-			 *//*
-		"container[xtype=fees.gridModue]  button[ref=removeButton] ":{
+				"grid[xtype=feesgtset.gridModue] button[ref=removeButton] ":{
 			click:function(btn){
-			var modulegrid=btn.up("grid[xtype=fees.gridModue]");
-			var module=modulegrid.viewModel;
+			var modulegrid=btn.up("grid[xtype=feesgtset.gridModue]");
+			var module=system.getViewModel(320);
 			var selection=modulegrid.getSelectionModel().getSelection();
 			var message='';
 			var infoMessage='';
@@ -239,7 +117,7 @@ init:function(){
 								ids.push(pkValue);
 							  });
 							  console.log(ids);
-							 var resObj=self.ajax({url:"rest/module/removerecords.do",params:{ids:ids,moduleName:"MeterInfo"}});
+							 var resObj=self.ajax({url:"/201/removerecords.action",params:{ids:ids,moduleName:"MeterInfo"}});
 							 modulegrid.getStore().reload();
 							 modulegrid.setTitle("抄表信息");
 							 return;
@@ -288,120 +166,56 @@ init:function(){
 											})
 								}
 				},
-				*//**
-				 * 点击
-				 *//*
-			"container[xtype=fees.levelTree]":{
-				itemclick:function(treeview,node,item,index,e,eOpts){
-					var tree=treeview.ownerCt;
-					var gridModue=treeview.ownerCt.ownerCt.down("grid[xtype=fees.gridModue]");
-					var modue=system.getModuleDefine(node.raw.nodeInfo);
-					var nodeInfoType=node.raw.nodeInfoType;
-					var fieldtitle=node.raw.descriptionnodeInfoType;
-					if(node.raw.descriptionnodeInfoType=="0"){
-						fieldtitle="tf_pid";
-					}else(node.raw.descriptionnodeInfoType=="1"){
-						
+			
+			
+			"form[xtype=feesgtset.form] #save" : {
+				click : function(btn) {
+					var form = btn.up("form[xtype=feesgtset.form]");
+					var formObj = form.getForm();
+					var feesid = form.down("#feeeItemCombobox").getValue();
+					var window = form.up("window[xtype=feesgtset.window]");
+					var vid = window.vid;
+					var params = {
+						feedid : feesid,
+						vid : vid
 					}
-				
-					if("ResidentInfo"!=node.raw.nodeInfo){
-						return;
-					}
-					var navigate={
-                			moduleName:node.raw.nodeInfo,
-                			tableAsName:"_t"+modue.tf_moduleId,
-                			text:"B001",
-                			primarykey:modue.tf_primaryKey,
-                		    fieldtitle:fieldtitle,
-                		    equalsValue:node.raw.code,
-                		    isCodeLevel:false
-                	};
-                	var store=gridModue.store;
-                	if(store.navigates){
-                		store.navigates.splice(0,store.navigates.length);
-                		store.navigates.push(navigate);
-                	}
-                  	var proxy=store.getProxy();
-                  	console.log(proxy.extraParams);
-                    proxy.extraParams.nodeInfoType=nodeInfoType;
-                    proxy.extraParams.type="B001";
-					proxy.extraParams.navigates=Ext.encode(store.navigates);
-					store.load();	  
+					formObj.submit({
+						url : "/201/addinns.action",
+						params : params,
+						// 可以提交空的字段值
+						submitEmptyText : true,
+						// 成功回调函数
+						success : function(form, action) {
+							var obj = action.result.obj;
+							if (action.result.success) {
+								self.setFormValue(formObj, obj);
+								system.smileInfo("添加成功!");
+								var form = btn.up("form[xtype=feesgtset.form]");
+								form.down("#feeeItemCombobox").setValue(feesid);
+							}
+						},
+						// 错误信息处理
+						failure : function(form, action) {
+							var obj = action.result.obj;
+							// 前台表单校验错误
+							system.errorAlertInfo(obj)
+						}
+					})
+
 				}
-			},
-			*//**
-			 * 加载节点
-			 *//*
-			"container[xtype=fees.levelTree] combobox[ref=vicombobox]":{
-				 select:function(combo,record,opts) {  
-				 	 var  vid=record[0].get("itemCode");
-				 	 var tree= combo.ownerCt.ownerCt;
-			        var store=tree.getStore();
-				   	var proxy=store.getProxy();
-											proxy.extraParams.vid=vid;
-											store.load();	
-											
-				}
-			},
-		"window[xtype=fees.window] baseform #save":{
-			beforeclick:function(btn){
-				btn.callback=function(info){
-					var resutlCode= info.errorInfo.resultCode;
-					var vid=btn.up("window[xtype=fees.window]").vid;
-					 if(300==resutlCode){
-						 btn.ownerCt.ownerCt.ownerCt.close();
-				    	 var window= Ext.createWidget("window",{
-				           	  title:"并联收费标准",
-				           	  width:300,
-				           	  height:100,
-				           	  items:[{xtype:"fees.feesitemform",vid:vid}]
-				           	 });
-				           	 window.show();
-					 }
-				}
-			 }
-			},
-	         *//**
-	          * 加载combox数据
-	          *//*
-	         "form[xtype=fees.feesitemform] #feeeItemCombobox":{
-	         	  render:function(combo) {
-	         	  	var from= combo.ownerCt;
-	         	  	var vid=from.vid;
-	         	    var ddCode ={
-                          whereSql:' and tf_Village='+vid
-                       }
-                 Ext.apply(combo.ddCode,ddCode);
-                 var store=combo.store;
-                 var proxy=store.getProxy();
-				  proxy.extraParams=combo.ddCode;
-			      store.load();	
-	         	  }
-	         },
-	           "form[xtype=fees.feesitemform] #save":{
-	           	click:function(btn){
-	           			 var from= btn.ownerCt.ownerCt;
-	           			 var comm=from.down("#feeeItemCombobox");
-	           			 var feessid=comm.getValue();
-	         	  	     var vid=from.vid;
-                       	 var resObj=self.ajax({url:"/201/linkFess.action",params:{vid:vid,type:"B001",feessid:feessid}});	           	
-	           	
-	           	}
-	           }, */
+			}
+
 		});
 	},
-	views:[
-	'core.prop.feesgtset.view.MainLayout',
-	'core.prop.feesgtset.view.LevelTree',
-	"core.prop.feesgtset.view.FeesGrid",
-	"core.prop.feesgtset.view.FeeWinodw",
-	"core.prop.feesgtset.view.FeesgtForm",
-	"core.prop.feesgtset.view.LevelTree"
+	views : ['core.prop.feesgtset.view.MainLayout',
+			'core.prop.feesgtset.view.LevelTree',
+			"core.prop.feesgtset.view.FeesGrid",
+			"core.prop.feesgtset.view.FeeWinodw",
+			"core.prop.feesgtset.view.FeesgtForm",
+			"core.prop.feesgtset.view.LevelTree"],
+	stores : ['core.prop.feesgtset.store.LevelStore',
+			"core.prop.feesgtset.store.LevelStore"
+
 	],
-	stores:[
-	'core.prop.feesgtset.store.LevelStore',
-	"core.prop.feesgtset.store.LevelStore"
-	
-	],
-    models : []
+	models : []
 });

@@ -10,9 +10,12 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,24 +24,32 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.model.hibernate.property.FeesInfo;
 import com.model.hibernate.property.FeesItemLink;
+import com.model.hibernate.property.InnstallBill;
 import com.model.hibernate.property.LevelInfo;
 import com.model.hibernate.property.ResidentInfo;
 import com.model.hibernate.property.Village;
 import com.model.hibernate.system._Module;
 import com.property.base.ebi.FeesEbi;
 import com.ufo.framework.common.core.exception.ResponseErrorInfo;
+import com.ufo.framework.common.core.exception.TimeoutException;
 import com.ufo.framework.common.core.ext.model.JSONTreeNode;
 import com.ufo.framework.common.core.properties.PropUtil;
+import com.ufo.framework.common.core.utils.AppUtils;
+import com.ufo.framework.common.core.utils.JsonBuilder;
 import com.ufo.framework.common.log.LogerManager;
+import com.ufo.framework.system.controller.BaseAppController;
+import com.ufo.framework.system.controller.SimpleBaseController;
 import com.ufo.framework.system.ebi.CommonException;
 import com.ufo.framework.system.ebi.Ebi;
 import com.ufo.framework.system.ebo.ApplicationService;
+import com.ufo.framework.system.shared.module.DataDeleteResponseInfo;
 import com.ufo.framework.system.shared.module.DataFetchResponseInfo;
 import com.ufo.framework.system.shared.module.DataInsertResponseInfo;
+import com.ufo.framework.system.web.SecurityUserHolder;
 
 @Controller
 @RequestMapping("/201")
-public class FeesController implements LogerManager, CommonException {
+public class FeesController extends BaseAppController implements  CommonException {
 	@Resource(name = "ebo")
 	private Ebi ebi;
 
@@ -236,9 +247,113 @@ public class FeesController implements LogerManager, CommonException {
 		return result;
 	}
 
-	private @ResponseBody String getList(HttpServletRequest request) {
+/*	@RequestMapping(value = "/instbille", method = RequestMethod.POST)
+	public @ResponseBody DataInsertResponseInfo addWithNoPrimaryKey(
+			@RequestBody String inserted,
+			@RequestParam(value = "vid", required = true) int vid,
+			HttpServletRequest request) throws Exception {
+		DataInsertResponseInfo result = new DataInsertResponseInfo();
+		try {
+			JSONObject updateJsonObject = JSONObject.fromObject(inserted);
+			String tf_name=updateJsonObject.getString("tf_name");
+			String tf_remark=updateJsonObject.getString("tf_remark");
+			int tf_FeesInfo=updateJsonObject.getInt("tf_FeesInfo");
+			FeesInfo fees=new FeesInfo();
+			fees.setTf_feesid(tf_FeesInfo);
+			Village tf_Village=new Village();
+			tf_Village.setTf_viid(vid);
+		    String tf_billType=updateJsonObject.getString("tf_billType");
+			InnstallBill insBill=new InnstallBill();
+			insBill.setTf_billType(tf_billType);
+			insBill.setTf_crateTime(AppUtils.getCurrentTime());
+			insBill.setTf_enabled(true);
+			insBill.setTf_name(tf_name);
+			insBill.setTf_remark(tf_remark);
+			insBill.setTf_Village(tf_Village);
+			insBill.setTf_FeesInfo(fees);
+			ebi.save(insBill);
+		} catch (DataAccessException e) {
+			error("DataAccessException异常", e);
+			if (e.getRootCause().getMessage().toLowerCase().indexOf("primary") != -1) {
+				getInsertException("InnstallBill", "插入记录的主键值与数据库中原有的值重复!",
+						ResponseErrorInfo.STATUS_VALIDATION_ERROR);
+			} else {
+				getInsertException("InnstallBill", e.getMessage(),
+						ResponseErrorInfo.STATUS_VALIDATION_ERROR);
+			}
+		} catch (Exception e) {
+			error("添加异常", e);
+			// TODO Auto-generated catch block
+			getInsertException("InnstallBill", "添加业主信息失败!",
+					ResponseErrorInfo.STATUS_FAILURE);
+		}
+		return result;
 
-		return null;
+	}
+	*/
+
+	@RequestMapping("/addinns")
+	public void doSave(InnstallBill  model,BindingResult br, HttpServletRequest request,HttpServletResponse response,
+			@RequestParam(value = "vid", required = true) int vid,
+			@RequestParam(value = "feedid", required = true) int feedid
+			) {
+		FeesInfo fees=new FeesInfo();
+		fees.setTf_feesid(feedid);
+		Village tf_Village=new Village();
+		tf_Village.setTf_viid(vid);
+		model.setTf_FeesInfo(fees);
+		model.setTf_Village(tf_Village);
+		model.setTf_crateTime(AppUtils.getCurDate());
+		model.setTf_enabled(true);
+		
+		try {
+			model.setXcode(SecurityUserHolder.getIdentification());
+			Object obj =ebi.save(model);
+			toWrite(response,jsonBuilder.returnSuccessJson(jsonBuilder.toJson(obj)));
+		}catch(TimeoutException e){
+			SimpleBaseController.toWrite(response, jsonBuilder.returnFailureJson("'用户未登陆或会话超时!'"));
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			toWrite(response, jsonBuilder.returnFailureJson("'添加失败!'"));
+		}
+	}
+	
+	
+	@RequestMapping("/loadins")
+	public void load(HttpServletRequest request, HttpServletResponse response,
+			String modueName) throws Exception {
+		// TODO Auto-generated method stub
+		super.load(request, response, "InnstallBill", (list->{
+		    List<Map< String,Object>> views=new ArrayList<>();
+		    views=list.stream().map(a->{
+		    	InnstallBill bill=(InnstallBill)a;
+		    	Map< String,Object> item=new HashMap<>();
+		    	item.put("tf_insid", bill.getTf_insid());
+		    	item.put("tf_name", bill.getTf_name());
+		    	item.put("tf_remark", bill.getTf_remark());
+		    	item.put("tf_crateTime", bill.getTf_crateTime());
+		    	item.put("tf_enabled", bill.getTf_enabled());
+		    	item.put("tf_FeesInfo", bill.getTf_FeesInfo().getTf_freesName());
+		    	item.put("tf_Village", bill.getTf_Village().getTf_name());
+		    	item.put("tf_billType", bill.getTf_billType());
+				return item ;
+			}).collect(Collectors.toList());
+			return views;
+		}));
+		
 	}
 
+	@RequestMapping(value = "/removerecords")
+	public @ResponseBody
+	DataDeleteResponseInfo removeRecords(String moduleName, String[] titles,
+			@RequestParam(value="ids",required=true) int[] ids,
+			HttpServletRequest request) throws Exception {
+		DataDeleteResponseInfo deleteResponseInfo=new DataDeleteResponseInfo();
+		for(int id : ids){
+			ebi.removeById(id, InnstallBill.class);
+		}
+		return deleteResponseInfo;
+	}
+	
 }

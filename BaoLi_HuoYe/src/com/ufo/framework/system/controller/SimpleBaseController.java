@@ -37,7 +37,7 @@ public abstract class SimpleBaseController<M extends Model> implements LogerMana
 	/** 项目部署的class路径 */
 	public static String absClassPath;
 	/** Json工具类 */
-	protected static JsonBuilder jsonBuilder;
+	public static JsonBuilder jsonBuilder;
 	/** 应用名称 */
 	public static String appName;
 	@Autowired
@@ -52,7 +52,7 @@ public abstract class SimpleBaseController<M extends Model> implements LogerMana
 		this.ebi = ebi;
 	}
 
-	protected final Class<? extends M> clazz;
+	public final Class<? extends M> clazz;
 
 	static {
 		jsonBuilder = JsonBuilder.getInstance();
@@ -333,7 +333,7 @@ public abstract class SimpleBaseController<M extends Model> implements LogerMana
 		return new Department();
 	}
 
-	protected void toWrite(HttpServletResponse response, String contents) {
+	public static void toWrite(HttpServletResponse response, String contents) {
 		if (ModelUtil.isNotNull(response)) {
 			response.setContentType("text/html;charset=UTF-8;");
 			Writer writer = null;
