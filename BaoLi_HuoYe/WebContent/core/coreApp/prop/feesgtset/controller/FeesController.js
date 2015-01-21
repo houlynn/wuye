@@ -20,6 +20,13 @@ Ext.define("core.prop.feesgtset.controller.FeesController", {
 						system.errorInfo("请选择一个小区再进行添加", "错误提示");
 						return;
 					}
+					var selection=modulegrid.getSelectionModel().getSelection();
+					 if (!selection || selection.length == 0) {
+						          system.errorInfo("请选择个公表进行安装!", "错误提示");
+						          return;
+					       }
+					 var  installid=  selection[0].get("tf_billitemid");  
+					 alert(installid);
 					var vid = selection[0].get("code");
 					var itemName = selection[0].get("text");
 					self.selTreeWin({
@@ -36,6 +43,17 @@ Ext.define("core.prop.feesgtset.controller.FeesController", {
 								},
 								callback : function(win, records) {
 									// 点击确定之后会得到选中的数据做处理
+										if (!records || records.length == 0) {
+						                system.errorInfo("请选择至少一个节点", "错误提示");
+						                return;
+					                   }
+					            var ids=new Array();
+							   Ext.each(records,function(rec){
+								var pkValue=rec.get("code");
+								ids.push(pkValue);
+							  });
+					         	 var resObj=self.ajax({url:"/201/innstall.action",params:{levfs:ids,installid:1 }});
+					                   
 
 								}
 							});

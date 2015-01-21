@@ -30,6 +30,7 @@ import com.model.hibernate.property.ResidentInfo;
 import com.model.hibernate.property.Village;
 import com.model.hibernate.system._Module;
 import com.property.base.ebi.FeesEbi;
+import com.ufo.framework.common.core.exception.CustomException;
 import com.ufo.framework.common.core.exception.ResponseErrorInfo;
 import com.ufo.framework.common.core.exception.TimeoutException;
 import com.ufo.framework.common.core.ext.model.JSONTreeNode;
@@ -45,6 +46,7 @@ import com.ufo.framework.system.ebo.ApplicationService;
 import com.ufo.framework.system.shared.module.DataDeleteResponseInfo;
 import com.ufo.framework.system.shared.module.DataFetchResponseInfo;
 import com.ufo.framework.system.shared.module.DataInsertResponseInfo;
+import com.ufo.framework.system.shared.module.DataUpdateResponseInfo;
 import com.ufo.framework.system.web.SecurityUserHolder;
 
 @Controller
@@ -355,5 +357,28 @@ public class FeesController extends BaseAppController implements  CommonExceptio
 		}
 		return deleteResponseInfo;
 	}
+	@RequestMapping(value = "/innstall")
+	public DataInsertResponseInfo InnstallBill(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam(value = "levfs", required = true) int levfs[],
+			@RequestParam(value = "installid", required = true) int installid
+			) throws Exception{
+		   DataInsertResponseInfo result=new DataInsertResponseInfo();
+	          try {
+				boolean flag=	feeEbi.addInnstallBill(levfs, installid);
+				if(flag){
+					result.setDefaultMsg("'安装成功");
+				}else{
+				getAppException("", "安装失败!",ResponseErrorInfo.STATUS_FAILURE );
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				getAppException("", "安装失败!错误信息"+e.getMessage(),ResponseErrorInfo.STATUS_FAILURE,e );
+			}
+		  return result;
+		
+	}
+	
+	
 	
 }

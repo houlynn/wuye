@@ -1,5 +1,8 @@
 package com.model.hibernate.property;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.DynamicInsert;
@@ -25,8 +30,7 @@ import com.ufo.framework.common.model.BaseEntity;
 @Entity
 public class InnstallBill extends BaseEntity {
 	
-  public final static String BILL_PWER="000";
-  public final static String BILL_WARER="001";
+
 	@DDItemCode
 	@Id
 	@GeneratedValue(generator = "increment")
@@ -57,6 +61,13 @@ public class InnstallBill extends BaseEntity {
 	@JoinColumn(name = "tf_viid",nullable=false)
 	@FieldInfo(title = "所属小区", number =50)
 	private Village tf_Village;
+    
+    @JsonIgnore
+	@OneToMany(targetEntity = LevelInfo.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "tf_insid")
+	@OrderBy("tf_leveName")
+	private List<LevelInfo> tf_LevelInfos=new ArrayList<>();
+    
 	public int getTf_insid() {
 		return tf_insid;
 	}
@@ -104,6 +115,12 @@ public class InnstallBill extends BaseEntity {
 	}
 	public void setTf_Village(Village tf_Village) {
 		this.tf_Village = tf_Village;
+	}
+	public List<LevelInfo> getTf_LevelInfos() {
+		return tf_LevelInfos;
+	}
+	public void setTf_LevelInfos(List<LevelInfo> tf_LevelInfos) {
+		this.tf_LevelInfos = tf_LevelInfos;
 	}
 	
 }
