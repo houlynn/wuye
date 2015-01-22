@@ -324,9 +324,9 @@ public class ResidentController    implements LogerManager,CommonException {
 	            	String souQcare=String.valueOf(rowData.get(5));//收楼情况
 	            	info.setTf_sffloorType(souQcare);
 	            	if(StringUtil.isEmpty(souQcare)){
-	            		info.setTf_repossession("false");
+	            		info.setTf_repossession(false);
 	            	}else{
-	            		info.setTf_repossession("true");
+	            		info.setTf_repossession(true);
 	            	}
 	            	String reName=String.valueOf(rowData.get(6));//业主姓名
 	            	info.setTf_residentName(reName);
@@ -343,7 +343,9 @@ public class ResidentController    implements LogerManager,CommonException {
 	            	}
 	                 info.setTf_adate(souAdvDate);
 	            	String soutFuce=String.valueOf(rowData.get(10));//是否已经收房产信息通知书
-	            	info.setTf_isposttip(soutFuce);
+	            	if(StringUtil.isNotEmpty(soutFuce)){
+	            		info.setTf_isposttip(true);
+	            	}
 	            	String doWithMane=String.valueOf(rowData.get(11));//经办人
 	            	info.setTf_doman(doWithMane);
 	            	String remrak1=String.valueOf(rowData.get(12));//备注住户联系信息
@@ -369,9 +371,9 @@ public class ResidentController    implements LogerManager,CommonException {
 	            	info.setTf_userArea(resarea);
 	            	String fddoc=String.valueOf(rowData.get(19));//是否装了防盗门
 	            	if(StringUtil.isEmpty(fddoc)){
-	            		info.setTf_isburglar("false");
+	            		info.setTf_isburglar(false);
 	            	}else{
-	            		info.setTf_isburglar("true");
+	            		info.setTf_isburglar(true);
 	            	}
 	             if(add){
 	            	 ebi.save(info);

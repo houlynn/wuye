@@ -26,6 +26,7 @@ import com.model.hibernate.property.FeesInfo;
 import com.model.hibernate.property.FeesItemLink;
 import com.model.hibernate.property.InnstallBill;
 import com.model.hibernate.property.LevelInfo;
+import com.model.hibernate.property.MeterInfo;
 import com.model.hibernate.property.ResidentInfo;
 import com.model.hibernate.property.Village;
 import com.model.hibernate.system._Module;
@@ -326,6 +327,7 @@ public class FeesController extends BaseAppController implements  CommonExceptio
 	public void load(HttpServletRequest request, HttpServletResponse response,
 			String modueName) throws Exception {
 		// TODO Auto-generated method stub
+		
 		super.load(request, response, "InnstallBill", (list->{
 		    List<Map< String,Object>> views=new ArrayList<>();
 		    views=list.stream().map(a->{
@@ -339,6 +341,14 @@ public class FeesController extends BaseAppController implements  CommonExceptio
 		    	item.put("tf_FeesInfo", bill.getTf_FeesInfo().getTf_freesName());
 		    	item.put("tf_Village", bill.getTf_Village().getTf_name());
 		    	item.put("tf_billType", bill.getTf_billType());
+		    	List<LevelInfo> levfs=bill.getTf_LevelInfos();
+		    	String itemRemark="";
+		    	if(levfs!=null&&levfs.size()>0){
+		    		for(LevelInfo l :levfs ){
+		    			itemRemark+=l.getTf_leveName();
+		    		}
+		    	}
+		    	item.put("itemRemark", itemRemark);
 				return item ;
 			}).collect(Collectors.toList());
 			return views;
@@ -376,8 +386,29 @@ public class FeesController extends BaseAppController implements  CommonExceptio
 				getAppException("", "安装失败!错误信息"+e.getMessage(),ResponseErrorInfo.STATUS_FAILURE,e );
 			}
 		  return result;
-		
 	}
+	
+	@RequestMapping("/loadgtpwer")
+	public void loadgtw(HttpServletRequest request, HttpServletResponse response,
+			String modueName) throws Exception {
+		// TODO Auto-generated method stub
+		
+		super.load(request, response, "MeterInfo", (list->{
+		    List<Map< String,Object>> views=new ArrayList<>();
+		    views=list.stream().map(a->{
+		    	MeterInfo meterInfo=(MeterInfo)a;
+		    	Map< String,Object> item=new HashMap<>();
+		    	
+		    	
+		    	
+		    	
+				return item ;
+			}).collect(Collectors.toList());
+			return views;
+		}));
+	}
+		
+	
 	
 	
 	

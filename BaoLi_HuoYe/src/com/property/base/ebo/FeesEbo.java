@@ -197,15 +197,17 @@ public class FeesEbo implements FeesEbi, CommonException {
 			if (levfslist != null && levfslist.size() > 0) {
 				for (LevelInfo l : levfslist) {
 					l.setTf_InnstallBill(null);
-					ebi.update(l);
+					Map<String,Object> values=new HashMap<String, Object>();
+					values.put("tf_InnstallBill", null);
+					ebi.update(values, LevelInfo.class, l.getTf_leveId());
 				}
 			}
 		}
 		if(bill!=null){
 		for (int levf : levfs) {
-			LevelInfo levelInfo = ebi.findById(LevelInfo.class, levf);
-			levelInfo.setTf_InnstallBill(bill);
-			ebi.update(levelInfo);
+			Map<String,Object> values=new HashMap<String, Object>();
+			values.put("tf_InnstallBill", bill);
+			ebi.update(values, LevelInfo.class, levf);
 		}
 		flag=true;
 		}

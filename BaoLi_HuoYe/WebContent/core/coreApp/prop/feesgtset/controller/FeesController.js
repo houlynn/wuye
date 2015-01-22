@@ -20,13 +20,12 @@ Ext.define("core.prop.feesgtset.controller.FeesController", {
 						system.errorInfo("请选择一个小区再进行添加", "错误提示");
 						return;
 					}
-					var selection=modulegrid.getSelectionModel().getSelection();
-					 if (!selection || selection.length == 0) {
+					var selectiongrid=modulegrid.getSelectionModel().getSelection();
+					 if (!selectiongrid || selectiongrid.length == 0) {
 						          system.errorInfo("请选择个公表进行安装!", "错误提示");
 						          return;
 					       }
-					 var  installid=  selection[0].get("tf_billitemid");  
-					 alert(installid);
+					 var  installid=  selectiongrid[0].get("tf_insid");  
 					var vid = selection[0].get("code");
 					var itemName = selection[0].get("text");
 					self.selTreeWin({
@@ -52,8 +51,10 @@ Ext.define("core.prop.feesgtset.controller.FeesController", {
 								var pkValue=rec.get("code");
 								ids.push(pkValue);
 							  });
-					         	 var resObj=self.ajax({url:"/201/innstall.action",params:{levfs:ids,installid:1 }});
-					                   
+					         	 var resObj=self.ajax({url:"/201/innstall.action",params:{levfs:ids,installid:installid}});
+					             system.smileInfo("安装成功!");    
+					             store.load();
+					             
 
 								}
 							});
@@ -221,7 +222,23 @@ Ext.define("core.prop.feesgtset.controller.FeesController", {
 					})
 
 				}
-			}
+			},
+			"container[xtype=feesgtset.levelTree]":{
+			itemclick:function(treeview,node,item,index,e,eOpts){
+					var tree=treeview.ownerCt;
+					var gridModue=treeview.ownerCt.ownerCt.down("grid[xtype=feesgtset.gridModue]");
+                	var store=gridModue.store;
+                	var vid=tree.getSelectionModel().getSelection()[0].get("code");
+                  	var proxy=store.getProxy();
+                    proxy.extraParams.whereSql=" and tf_Village="+vid;
+					proxy.extraParams.navigates=Ext.encode(store.navigates);
+					store.load();	  
+				}
+				
+			},
+			
+			
+			
 
 		});
 	},

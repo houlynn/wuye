@@ -4,20 +4,14 @@ Ext.define("core.prop.feesgt.view.FeesGrid", {
 			style : 'border-width:0 0 0 0;',
 			columnLines : true, // 加上表格线
 			multiSelect : true,
+				border:false,
 			width : "100%",
-			/*columns : [{
+			columns : [{
 						align : "right",
-						dataIndex : "tf_ResidentInfo",
+						dataIndex : "tf_MeterId",
 						maxWidth : 800,
 						width : 110,
-						text : "房号",
-						renderer: function(e, t, i, o, n, a, l) {
-		              var r = e;
-		                try {
-		                        r = '<span class="gridNameField"><a onclick="javascript:return false;" href="#">' + filterTextSetBk(a, e) + "</a></span>"
-		                } catch(u) {}
-		                return r
-						}
+						hidden:true
 
 					}, {
 						align : "right",
@@ -29,7 +23,7 @@ Ext.define("core.prop.feesgt.view.FeesGrid", {
 						renderer : system.floatRenderer,
 						locked : false,
 						maxWidth : 800,
-						text : "开始度数",
+						text : "上月度数",
 						triStateSort : false,
 						width : 110,
 						xtype : "numbercolumn"
@@ -49,6 +43,7 @@ Ext.define("core.prop.feesgt.view.FeesGrid", {
 						xtype : "numbercolumn"
 					}, {
 						align : "center",
+						text : "抄表时间",
 						dataIndex : "tf_meterdate",
 						editor : {
 							editable : false,
@@ -59,7 +54,6 @@ Ext.define("core.prop.feesgt.view.FeesGrid", {
 						maxWidth : 800,
 						renderer : system.dateRenderer,
 						sortable : true,
-						text : "抄表时间",
 						triStateSort : false,
 						width : 100,
 						xtype : "datecolumn"
@@ -69,7 +63,7 @@ Ext.define("core.prop.feesgt.view.FeesGrid", {
 						locked : false,
 						maxWidth : 800,
 						sortable : true,
-						text : "抄表人员",
+						text : "录入人员",
 						triStateSort : false,
 						width : 100
 					}, {
@@ -77,7 +71,7 @@ Ext.define("core.prop.feesgt.view.FeesGrid", {
 						locked : false,
 						maxWidth : 800,
 						sortable : true,
-						text : "状态",
+						text : "审核状态",
 						triStateSort : false,
 						width : 100
 					}, {
@@ -88,9 +82,8 @@ Ext.define("core.prop.feesgt.view.FeesGrid", {
 						text : "备注",
 						triStateSort : false,
 						width : 300
-					}],*/
+					}],
 
-			enableLocking : true, // 使grid可以锁定列
 			tools : [{
 						type : 'gear'
 					}],
@@ -129,7 +122,7 @@ Ext.define("core.prop.feesgt.view.FeesGrid", {
 						this.model = core.app.module.factory.ModelFactory
 						.getModelByModule(viewModel.data,{
 						//read : 'rest/201/fetchdata.do',
-					    read : 'rest/module/fetchdata.do',
+					    read : '/201/loadgtpwer.action',
 					    update : 'rest/module/update.do',
 						create : 'rest/module/create.do',
 						destroy : 'rest/module/remove.do'
@@ -145,6 +138,7 @@ Ext.define("core.prop.feesgt.view.FeesGrid", {
 					ref : 'addButton',
 					xtype : 'splitbutton',
 					itemId : 'new',
+						border:0,
 					glyph : 0xf016,
 					menu : [{
 						text : '复制新增',
@@ -210,11 +204,6 @@ Ext.define("core.prop.feesgt.view.FeesGrid", {
 					glyph : 0xf014,
 					ref : "removeButton",
 					itemId : 'delete'
-				}, {
-					text : '结束抄表',
-					glyph : 0xf014,
-					ref : "seting",
-					itemId : 'setting'
 				}
 
 				, '-', '-', '筛选', {
@@ -250,7 +239,7 @@ Ext.define("core.prop.feesgt.view.FeesGrid", {
 						//xtype : 'gridschemecombo'
 					}]
 				}];	
-				 this.columns = core.app.module.factory.ColumnsFactory.getColumns(viewModel);	
+				// this.columns = core.app.module.factory.ColumnsFactory.getColumns(viewModel);	
 				this.store.modulegrid = this;
 			
 				var title = viewModel.get('tf_title');

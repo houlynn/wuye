@@ -2,6 +2,7 @@ package com.ufo.framework.system.irepertory;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.jdbc.Work;
 
@@ -329,5 +330,8 @@ public interface ICommonRepertory  extends LogerManager{
 	public <T extends Model> T update(Class<T> clazz,Serializable pk,String updateStr) throws Exception;
 	
 	public  float sum(String sql);
+	
+	public void update(Map<String,Object> values, Class<? extends Model> calzz, Serializable pk ) throws Exception;
 
+	public void update(Map<String,Object> values,Model obj, Serializable pk ) throws Exception;
 }

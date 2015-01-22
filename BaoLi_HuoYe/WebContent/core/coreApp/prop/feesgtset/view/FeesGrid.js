@@ -150,6 +150,7 @@ Ext.define("core.prop.feesgtset.view.FeesGrid", {
 					itemId : 'new',
 					glyph : 0xf016,
 					menu : [{
+						hidden:true,
 						text : '复制新增',
 						ref : 'copyadd',
 						tooltip : '新增时先将当前记录添入到新记录中',
@@ -206,6 +207,7 @@ Ext.define("core.prop.feesgtset.view.FeesGrid", {
 					glyph : 0xf044,
 					itemId : 'edit',
 					disabled : true,
+						hidden:true,
 					ref : "editButton"
 				}, {
 					text : '删除',
@@ -257,6 +259,16 @@ Ext.define("core.prop.feesgtset.view.FeesGrid", {
 				 this.columns = core.app.module.factory.ColumnsFactory.getColumns(viewModel);	
 				this.store.modulegrid = this;
 			
+						var feesItem={
+		width : 250,
+		dataIndex:"itemRemark",
+		text :'收费项目',
+		align : 'center',
+		renderer : function(val){
+		  return '<span class="gridNameField"><a onclick="javascript:return false;" href="#">' + val + "</a></span>"
+		}
+		};
+			this.columns.push(feesItem);		
 				var title = viewModel.get('tf_title');
 				this.setTitle(title);
 				// 可以在grid中进行行编辑的设置

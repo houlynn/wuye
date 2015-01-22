@@ -17,11 +17,6 @@ init:function(){
 			                 var selection=tree.getSelectionModel().getSelection();
 			                 if(!selection&&selection.length==0){
 			                  return ;
-			                 }else{
-			                    if(selection[0].get("nodeInfoType")=="0"||selection[0].get("nodeInfoType")=="1"){
-			                    system.errorInfo("请选择对应的房号在进行添加","错误提示");
-			                    return ;
-			                   }
 			                 }
 							 var viewModel=system.getViewModel(201);
                 	         if(!store.navigates||store.navigates.length==0){
@@ -227,37 +222,10 @@ init:function(){
 				itemclick:function(treeview,node,item,index,e,eOpts){
 					var tree=treeview.ownerCt;
 					var gridModue=treeview.ownerCt.ownerCt.down("grid[xtype=feesgt.gridModue]");
-					var modue=system.getModuleDefine(node.raw.nodeInfo);
-					var nodeInfoType=node.raw.nodeInfoType;
-					var fieldtitle=node.raw.descriptionnodeInfoType;
-					/*if(node.raw.descriptionnodeInfoType=="0"){
-						fieldtitle="tf_pid";
-					}else(node.raw.descriptionnodeInfoType=="1"){
-						
-					}
-				*/
-					if("ResidentInfo"!=node.raw.nodeInfo){
-						return;
-					}
-					var navigate={
-                			moduleName:node.raw.nodeInfo,
-                			tableAsName:"_t"+modue.tf_moduleId,
-                			text:"B001",
-                			primarykey:modue.tf_primaryKey,
-                		    fieldtitle:fieldtitle,
-                		    equalsValue:node.raw.code,
-                		    isCodeLevel:false
-                	};
                 	var store=gridModue.store;
-                	if(store.navigates){
-                		store.navigates.splice(0,store.navigates.length);
-                		store.navigates.push(navigate);
-                	}
+                	var vid= tree.getSelectionModel().getSelection()[0].get("code");
                   	var proxy=store.getProxy();
-                  	console.log(proxy.extraParams);
-                    proxy.extraParams.nodeInfoType=nodeInfoType;
-                    proxy.extraParams.type="B001";
-					proxy.extraParams.navigates=Ext.encode(store.navigates);
+                    proxy.extraParams.whereSql="  and tf_Village="+vid+" and tf_mtype='003'";
 					store.load();	  
 				}
 			},

@@ -2,6 +2,7 @@ package com.ufo.framework.system.ebi;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.jdbc.Work;
 
@@ -337,4 +338,10 @@ public interface Ebi extends LogerManager,XcodeInterface {
 	
 	
 	public  float sum(String sql);
+	
+	
+	public void update(Map<String,Object> values, Class<? extends Model> calzz, Serializable pk ) throws Exception;
+	
+	
+	public void update(Map<String,Object> values,Model obj, Serializable pk ) throws Exception;
 }

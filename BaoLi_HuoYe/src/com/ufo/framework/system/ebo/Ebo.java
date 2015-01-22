@@ -2,6 +2,7 @@ package com.ufo.framework.system.ebo;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -250,6 +251,18 @@ public class Ebo implements Ebi {
 	public float sum(String sql) {
 		// TODO Auto-generated method stub
 		return repertory.sum(sql);
+	}
+	@Override
+	public void update(Map<String, Object> values,
+			Class<? extends Model> calzz, Serializable pk) throws Exception {
+		// TODO Auto-generated method stub
+		 repertory.update(values, calzz, pk);
+	}
+	@Override
+	public void update(Map<String, Object> values, Model obj, Serializable pk)
+			throws Exception {
+		repertory.update(values, obj, pk);
+		
 	}
 
 }

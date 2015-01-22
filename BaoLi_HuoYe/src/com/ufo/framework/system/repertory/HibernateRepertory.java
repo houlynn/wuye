@@ -1,11 +1,13 @@
 package com.ufo.framework.system.repertory;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.ezmorph.object.DateMorpher;
 import net.sf.json.JSONObject;
@@ -415,6 +417,29 @@ public class HibernateRepertory implements ICommonRepertory {
 		 return reslut;
 		
 	}
+	
+	
+	
+	
+	
+	
+	public void update(Map<String,Object> values, Class<? extends Model> calzz, Serializable pk ) throws Exception{
+		  Model obj=(Model) sf.getCurrentSession().load(calzz, pk);
+		  for(String key : values.keySet()){
+			 // bean
+			  BeanUtils.setProperty(obj, key, values.get(key));
+		  }
+		sf.getCurrentSession().update(obj);
+	}
+	
+	public void update(Map<String,Object> values,Model obj, Serializable pk ) throws Exception{
+		  for(String key : values.keySet()){
+			 // bean
+			  BeanUtils.setProperty(obj, key, values.get(key));
+		  }
+		sf.getCurrentSession().update(obj);
+	}
+	
 	
 	public  float sum(String sql){
 		 StringBuffer buffer=new StringBuffer();

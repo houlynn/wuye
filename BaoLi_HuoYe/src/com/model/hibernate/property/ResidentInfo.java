@@ -33,128 +33,176 @@ public class ResidentInfo  extends BaseEntity{
 	@Id
 	@GeneratedValue(generator = "increment")
 	@GenericGenerator(name = "increment", strategy = "increment")
-	@FieldInfo(title = "ID号", number = 10, hidden = false)
+	@FieldInfo(title = "ID号", number = 00, hidden = false)
 	private int tf_residentId;
-	  ///////////////业主信息///////////////////////////////
-	 @FieldInfo(title = "业主名称", number = 20)
-	 @Column(length=25)
-	  private String tf_residentName;
-	  @FieldInfo(title = "业主编号", number = 30)
-	  @Column(length=25)
-	  private String tf_residentCode;
-	  @FieldInfo(title = "业主类型", number = 40)
-	  @Column(length=25)
-	  private String tf_residentType;
-	  @Column(length=500)
-	  @FieldInfo(title = "联系地址", number = 50)
-	  private String tf_residentAddress;
-	  @Column(length=50)
-	  @FieldInfo(title = "联系电话", number = 60)
-	  private String tf_residentPhone;
-	  @Column(length=50)
-	  @FieldInfo(title = "Email", number = 70)
-	  private String tf_residentEmail;
-	  @Column(length=10)
-	  @FieldInfo(title = "性别", number = 80)
-	  private String tf_residentSex;
-	  @Column(length=20)
-	  @FieldInfo(title = "生日", number = 90)
-	  private String tf_residentBirthDate;
-	  @Column(length=50)
-	  @FieldInfo(title = "身份证号码", number = 100)
-	  private String tf_residentCard;
-	  @Column(length=20)
-	  @FieldInfo(title = "户口所在地", number = 110)
-	  private String tf_residentPlace;
-	  @Column(length=500)
-	  @FieldInfo(title = "附加说明", number = 120)
-	  private String tf_remarks;
-	  
-	  ///////////////  紧急联系人资料：//////////////////////////
-	  @FieldInfo(title = "姓名", number = 130)
-	  @Column(length=25)
-	  private String tf_tf_residentAsName;
-	  @Column(length=500)
-	  @FieldInfo(title = "联系地址", number = 140)
-	  private String tf_residentAsAddress;
-	  @Column(length=50)
-	  @FieldInfo(title = "联系电话", number = 150)
-	  private String tf_residentAsPhone;
-	
-	  ////////////////////房屋信息/////////////////////////////
-	@FieldInfo(title = "房号", uniqueField = true, number = 160)
-	@Column(length = 50, nullable = false)
-	private String tf_number;
-	@FieldInfo(title = "房屋编码", number = 180)
-	@Column(length = 50)
-    private String tf_code;
-	@FieldInfo(title = "使用面积", number = 190)
-    private double tf_userArea;
-	@FieldInfo(title = "建筑面积", number = 200)
-    private double tf_builArea;
-	@FieldInfo(title = "产权面积", number = 210)
-	private double tf_rightArea;
-	@FieldInfo(title = "分摊面积", number = 220)
-	private double tf_shareArea;
-	@FieldInfo(title = "装修标准", number = 230)
-	@Column(length = 50)
-	private String   tf_decovolume;
-	@FieldInfo(title = "收费日期", number = 240)
-	@Column(length = 50)
-    private String  tf_chargingDate;
-	@FieldInfo(title = "认购日期", number = 250)
-	@Column(length = 50)
-    private String tf_subsDate;
-	
-	/////////////////房屋状态//////////////////////////////////
-	@FieldInfo(title = "备用状态", number = 260)
-	@Column(length = 25)
-    private String tf_state;
-	
-	
-    /**
-     * 入住状态
-     */
-	@FieldInfo(title = "入住状态", number = 270)
-	@Column(length = 25)
-	private String tf_stateOccupancy;
-	
-	/**
-	 * 欠费状态
-	 */
-	@FieldInfo(title = "欠费状态", number = 280)
-	@Column(length = 25)
-	private String tf_stateFees;
-	
-	
-	/**
-	 * 报修状态
-	 */
-	@FieldInfo(title = "报修状态", number = 290)
-	@Column(length = 25)
-	private String tf_stateRepair;
-	
-
-	@FieldInfo(title = "出租", number = 300)
-	@Column(length = 25)
-	private String tf_rental;
-	
-	@FieldInfo(title = "出售", number = 310)
-	@Column(length = 25)
-	private String tf_sell;
-	
-	@FieldInfo(title = "APP账户", number = 320)
-	@Column(length = 25)
-	private String tf_appPhone;
-	
-	@Transient
-	private String tf_lefStr;
+	  ///////////////业主基本信息///////////////////////////////
 	
 	@JsonIgnore
 	@ManyToOne(optional=true,fetch=FetchType.LAZY)
 	@JoinColumn(name="tf_leveId")
-	@FieldInfo(title = "楼宇", number = 0)
+	@FieldInfo(title = "楼宇", number = 10)
 	private LevelInfo tf_levelInfo;
+	@FieldInfo(title = "房号", uniqueField = true, number = 20)
+	@Column(length = 50, nullable = false)
+	private String tf_number;
+	 @FieldInfo(title = "业主名称", number = 30)
+	 @Column(length=25)
+	private String tf_residentName;
+		@FieldInfo(title = "业主电话（1)APP账户", number = 40)
+		@Column(length = 25)
+	private String tf_appPhone;
+		@FieldInfo(title = "业主电话（2)", number = 50)
+		@Column(length = 25)
+   private String tf_appPhone1;
+		@FieldInfo(title = "业主电话（3)", number = 60)
+		@Column(length = 25)
+   private String tf_appPhone2;
+		
+		///房产信息
+		
+		@FieldInfo(title = "是否已经收楼", number = 70)
+		private boolean tf_repossession; 
+		@FieldInfo(title = "收楼日期", number = 80)
+		private String tf_sdate;
+		@FieldInfo(title = "收楼通知书日期", number = 90)
+		private String tf_adate;
+		@FieldInfo(title = "建筑面积", number = 100)
+	    private double tf_builArea;
+		@FieldInfo(title = "实侧面积", number = 110)
+	    private double tf_userArea;
+		@FieldInfo(title = "经办人", number = 120)
+		private String tf_doman;
+		@FieldInfo(title = "交楼类型", number = 130)
+		  private String tf_jfloorType;
+		@FieldInfo(title = "性质", number = 140)
+		private String tf_nature;
+		@FieldInfo(title = "是否已经交房产复印件", number = 150)
+		private boolean tf_isposttip;
+		@FieldInfo(title = "车牌", number = 160)
+		private String tf_license;
+		@FieldInfo(title = "是否装防盗门", number = 170)
+		private boolean tf_isburglar;
+		//////////////////////////备注信息//////////////////////////////////////
+		@FieldInfo(title = "备注1家庭成员名单", number = 180)
+		private String tf_remark1;
+		@FieldInfo(title = "备注2业主、住户联系电话", number = 190)
+		private String tf_remark2;
+		@FieldInfo(title = "备注3业主身份证号码", number = 200)
+		private String tf_remark3;
+		@FieldInfo(title = "备注4", number = 210)
+		private String tf_remark4;
+		@FieldInfo(title = "备注5", number = 220)
+		private String tf_remark5;
+		
+		/////////////////房屋状态//////////////////////////////////
+		@FieldInfo(title = "备用状态", number = 260)
+		@Column(length = 25)
+	    private String tf_state;
+		
+		
+	    /**
+	     * 入住状态
+	     */
+		@FieldInfo(title = "入住状态", number = 270)
+		@Column(length = 25)
+		private String tf_stateOccupancy;
+		
+		/**
+		 * 欠费状态
+		 */
+		@FieldInfo(title = "欠费状态", number = 280)
+		@Column(length = 25)
+		private String tf_stateFees;
+		
+		
+		/**
+		 * 报修状态
+		 */
+		@FieldInfo(title = "报修状态", number = 290)
+		@Column(length = 25)
+		private String tf_stateRepair;
+		
+
+		@FieldInfo(title = "出租", number = 300)
+		@Column(length = 25)
+		private String tf_rental;
+		
+		@FieldInfo(title = "出售", number = 310)
+		@Column(length = 25)
+		private String tf_sell;
+		
+		
+	 
+	 
+	  @FieldInfo(title = "业主编号", number = 320)
+	  @Column(length=25)
+	  private String tf_residentCode;
+	  @FieldInfo(title = "业主类型", number = 330)
+	  @Column(length=25)
+	  private String tf_residentType;
+	  @Column(length=500)
+	  @FieldInfo(title = "联系地址", number = 340)
+	  private String tf_residentAddress;
+	  @Column(length=50)
+	  @FieldInfo(title = "联系电话", number = 350)
+	  private String tf_residentPhone;
+	  @Column(length=50)
+	  @FieldInfo(title = "Email", number = 360)
+	  private String tf_residentEmail;
+	  @Column(length=10)
+	  @FieldInfo(title = "性别", number = 370)
+	  private String tf_residentSex;
+	  @Column(length=20)
+	  @FieldInfo(title = "生日", number = 380)
+	  private String tf_residentBirthDate;
+	  @Column(length=50)
+	  @FieldInfo(title = "身份证号码", number = 390)
+	  private String tf_residentCard;
+	  @Column(length=20)
+	  @FieldInfo(title = "户口所在地", number = 400)
+	  private String tf_residentPlace;
+	  @Column(length=500)
+	  @FieldInfo(title = "附加说明", number = 420)
+	  private String tf_remarks;
+	  
+	  ///////////////  紧急联系人资料：//////////////////////////
+	  @FieldInfo(title = "姓名", number = 430)
+	  @Column(length=25)
+	  private String tf_tf_residentAsName;
+	  @Column(length=500)
+	  @FieldInfo(title = "联系地址", number = 440)
+	  private String tf_residentAsAddress;
+	  @Column(length=50)
+	  @FieldInfo(title = "联系电话", number = 450)
+	  private String tf_residentAsPhone;
+	
+	  ////////////////////房屋信息/////////////////////////////
+
+	@FieldInfo(title = "房屋编码", number = 460)
+	@Column(length = 50)
+    private String tf_code;
+
+	@FieldInfo(title = "产权面积", number = 470)
+	private double tf_rightArea;
+	@FieldInfo(title = "分摊面积", number = 480)
+	private double tf_shareArea;
+	@FieldInfo(title = "装修标准", number = 490)
+	@Column(length = 50)
+	private String   tf_decovolume;
+	@FieldInfo(title = "收费日期", number = 500)
+	@Column(length = 50)
+    private String  tf_chargingDate;
+	@FieldInfo(title = "认购日期", number = 510)
+	@Column(length = 50)
+    private String tf_subsDate;
+	
+
+	
+	
+	@Transient
+	private String tf_lefStr;
+	
+
 	
 	
 	
@@ -165,54 +213,21 @@ public class ResidentInfo  extends BaseEntity{
 	
 	//////////////////////////房产其他信息///////////////////////////////////////
 	
-	@FieldInfo(title = "是否已经收楼", number = 10)
-	private String tf_repossession; 
-	@FieldInfo(title = "交楼类型", number = 20)
-	  private String tf_jfloorType;
-	@FieldInfo(title = "收楼类型", number = 20)
+	
+
+	@FieldInfo(title = "收楼类型", number = 520)
 	private String tf_sffloorType;
-	@FieldInfo(title = "收楼日期", number = 25)
-	private String tf_sdate;
-	@FieldInfo(title = "收楼通知书日期", number = 25)
-	private String tf_adate;
-	@FieldInfo(title = "是否已经交房产复印件", number = 10)
-	private String tf_isposttip;
-	@FieldInfo(title = "经办人", number = 10)
-	private String tf_doman;
-	@FieldInfo(title = "车牌", number = 10)
-	private String tf_license;
-	@FieldInfo(title = "是否装防盗门", number = 5)
-	private String tf_isburglar;
-	
-	
-	//////////////////////备注一//////////////////////////////////
-	@FieldInfo(title = "备注性质", number = 50)
-	private String tf_remark1;
-	
-	@FieldInfo(title = "备注业主住户联系电话", number = 50)
-	private String tf_remark2;
-	
-	@FieldInfo(title = "备注3业主身份证号码", number = 250)
-	private String tf_remark3;
-	
-	@FieldInfo(title = "备注4家庭成员名单", number = 250)
-	private String tf_remark4;
-	
-	
-	//////////////////////备注二///////////////////////////////
-	@FieldInfo(title = "备注1", number = 50)
-	private String tf_remark5;
-	
-	@FieldInfo(title = "备注2", number = 50)
+
+	@FieldInfo(title = "备注2", number = 530)
 	private String tf_remark6;
 	
-	@FieldInfo(title = "备注3", number = 250)
+	@FieldInfo(title = "备注3", number = 540)
 	private String tf_remark7;
 	
-	@FieldInfo(title = "备注4", number = 250)
+	@FieldInfo(title = "备注4", number = 550)
 	private String tf_remark8;
 	
-	@FieldInfo(title = "备注5", number = 250)
+	@FieldInfo(title = "备注5", number = 560)
 	private String tf_remark9;
 	
 	@Transient
@@ -498,13 +513,6 @@ public class ResidentInfo  extends BaseEntity{
 		this.tf_vid = tf_vid;
 	}
 
-	public String getTf_repossession() {
-		return tf_repossession;
-	}
-
-	public void setTf_repossession(String tf_repossession) {
-		this.tf_repossession = tf_repossession;
-	}
 
 	public String getTf_jfloorType() {
 		return tf_jfloorType;
@@ -538,13 +546,6 @@ public class ResidentInfo  extends BaseEntity{
 		this.tf_adate = tf_adate;
 	}
 
-	public String getTf_isposttip() {
-		return tf_isposttip;
-	}
-
-	public void setTf_isposttip(String tf_isposttip) {
-		this.tf_isposttip = tf_isposttip;
-	}
 
 	public String getTf_doman() {
 		return tf_doman;
@@ -562,13 +563,6 @@ public class ResidentInfo  extends BaseEntity{
 		this.tf_license = tf_license;
 	}
 
-	public String getTf_isburglar() {
-		return tf_isburglar;
-	}
-
-	public void setTf_isburglar(String tf_isburglar) {
-		this.tf_isburglar = tf_isburglar;
-	}
 
 	public String getTf_remark1() {
 		return tf_remark1;
@@ -640,6 +634,54 @@ public class ResidentInfo  extends BaseEntity{
 
 	public void setTf_remark9(String tf_remark9) {
 		this.tf_remark9 = tf_remark9;
+	}
+
+	public String getTf_appPhone1() {
+		return tf_appPhone1;
+	}
+
+	public void setTf_appPhone1(String tf_appPhone1) {
+		this.tf_appPhone1 = tf_appPhone1;
+	}
+
+	public String getTf_appPhone2() {
+		return tf_appPhone2;
+	}
+
+	public void setTf_appPhone2(String tf_appPhone2) {
+		this.tf_appPhone2 = tf_appPhone2;
+	}
+
+	public boolean isTf_repossession() {
+		return tf_repossession;
+	}
+
+	public void setTf_repossession(boolean tf_repossession) {
+		this.tf_repossession = tf_repossession;
+	}
+
+	public String getTf_nature() {
+		return tf_nature;
+	}
+
+	public void setTf_nature(String tf_nature) {
+		this.tf_nature = tf_nature;
+	}
+
+	public boolean isTf_isposttip() {
+		return tf_isposttip;
+	}
+
+	public void setTf_isposttip(boolean tf_isposttip) {
+		this.tf_isposttip = tf_isposttip;
+	}
+
+	public boolean isTf_isburglar() {
+		return tf_isburglar;
+	}
+
+	public void setTf_isburglar(boolean tf_isburglar) {
+		this.tf_isburglar = tf_isburglar;
 	}
 	
 	
