@@ -7,6 +7,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,10 +32,12 @@ import com.model.hibernate.property.FeesItemLink;
 import com.model.hibernate.property.InnstallBill;
 import com.model.hibernate.property.LevelInfo;
 import com.model.hibernate.property.MeterInfo;
+import com.model.hibernate.property.PoollGtinfo;
 import com.model.hibernate.property.ResidentInfo;
 import com.model.hibernate.property.Village;
 import com.model.hibernate.system._Module;
 import com.property.base.ebi.FeesEbi;
+import com.ufo.framework.annotation.FieldInfo;
 import com.ufo.framework.common.core.exception.CustomException;
 import com.ufo.framework.common.core.exception.ResponseErrorInfo;
 import com.ufo.framework.common.core.exception.TimeoutException;
@@ -392,16 +399,24 @@ public class FeesController extends BaseAppController implements  CommonExceptio
 	public void loadgtw(HttpServletRequest request, HttpServletResponse response,
 			String modueName) throws Exception {
 		// TODO Auto-generated method stub
-		
-		super.load(request, response, "MeterInfo", (list->{
+		super.load(request, response, "PoollGtinfo", (list->{
 		    List<Map< String,Object>> views=new ArrayList<>();
 		    views=list.stream().map(a->{
-		    	MeterInfo meterInfo=(MeterInfo)a;
+		    	PoollGtinfo poollGtinfo=(PoollGtinfo)a;
 		    	Map< String,Object> item=new HashMap<>();
-		    	
-		    	
-		    	
-		    	
+		    	item.put("tf_poolid", poollGtinfo.getTf_poolid());
+		    	item.put("tf_startnumber", poollGtinfo.getTf_startnumber());
+		    	item.put("tf_endnumber", poollGtinfo.getTf_endnumber());
+		    	item.put("tf_count", poollGtinfo.getTf_count());
+		    	item.put("tf_coefficient", poollGtinfo.getTf_coefficient());
+		    	item.put("tf_areaCount", poollGtinfo.getTf_areaCount());
+		    	item.put("tf_meterdate", poollGtinfo.getTf_meterdate());
+		    	item.put("tf_mtermane", poollGtinfo.getTf_mtermane());
+		    	item.put("tf_InnstallBill", poollGtinfo.getTf_InnstallBill().getTf_name());
+		    	item.put("tf_Acount", poollGtinfo.getTf_Acount());
+		    	item.put("tf_Village", poollGtinfo.getTf_Village().getTf_name());
+		    	item.put("tf_state", poollGtinfo.isTf_state());
+		    	item.put("tf_remark", poollGtinfo.getTf_remark());
 				return item ;
 			}).collect(Collectors.toList());
 			return views;

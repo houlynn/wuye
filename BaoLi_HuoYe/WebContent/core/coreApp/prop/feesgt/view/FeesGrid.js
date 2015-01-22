@@ -6,84 +6,6 @@ Ext.define("core.prop.feesgt.view.FeesGrid", {
 			multiSelect : true,
 				border:false,
 			width : "100%",
-			columns : [{
-						align : "right",
-						dataIndex : "tf_MeterId",
-						maxWidth : 800,
-						width : 110,
-						hidden:true
-
-					}, {
-						align : "right",
-						dataIndex : "tf_startnumber",
-						editor : {
-							decimalPrecision : 3,
-							xtype : "numberfield"
-						},
-						renderer : system.floatRenderer,
-						locked : false,
-						maxWidth : 800,
-						text : "上月度数",
-						triStateSort : false,
-						width : 110,
-						xtype : "numbercolumn"
-					}, {
-						align : "right",
-						dataIndex : "tf_endnumber;",
-						editor : {
-							decimalPrecision : 3,
-							xtype : "numberfield"
-						},
-						renderer : system.floatRenderer,
-						locked : false,
-						maxWidth : 800,
-						text : "本月度数",
-						triStateSort : false,
-						width : 110,
-						xtype : "numbercolumn"
-					}, {
-						align : "center",
-						text : "抄表时间",
-						dataIndex : "tf_meterdate",
-						editor : {
-							editable : false,
-							format : "Y-m-d",
-							xtype : "datefield"
-						},
-						locked : false,
-						maxWidth : 800,
-						renderer : system.dateRenderer,
-						sortable : true,
-						triStateSort : false,
-						width : 100,
-						xtype : "datecolumn"
-					}, {
-						dataIndex : "tf_mtermane",
-						editor : "textfield",
-						locked : false,
-						maxWidth : 800,
-						sortable : true,
-						text : "录入人员",
-						triStateSort : false,
-						width : 100
-					}, {
-						dataIndex : "tf_state",
-						locked : false,
-						maxWidth : 800,
-						sortable : true,
-						text : "审核状态",
-						triStateSort : false,
-						width : 100
-					}, {
-						dataIndex : "tf_remark",
-						locked : false,
-						maxWidth : 800,
-						sortable : true,
-						text : "备注",
-						triStateSort : false,
-						width : 300
-					}],
-
 			tools : [{
 						type : 'gear'
 					}],
@@ -117,7 +39,7 @@ Ext.define("core.prop.feesgt.view.FeesGrid", {
 			},
 			initComponent : function() {
 				var self = this;
-					var viewModel = system.getViewModel(this.code)
+					var viewModel = system.getViewModel(321)
 					this.viewModel = viewModel;
 						this.model = core.app.module.factory.ModelFactory
 						.getModelByModule(viewModel.data,{
@@ -239,7 +161,7 @@ Ext.define("core.prop.feesgt.view.FeesGrid", {
 						//xtype : 'gridschemecombo'
 					}]
 				}];	
-				// this.columns = core.app.module.factory.ColumnsFactory.getColumns(viewModel);	
+				this.columns = core.app.module.factory.ColumnsFactory.getColumns(viewModel);	
 				this.store.modulegrid = this;
 			
 				var title = viewModel.get('tf_title');

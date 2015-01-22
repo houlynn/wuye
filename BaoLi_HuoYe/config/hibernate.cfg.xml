@@ -48,6 +48,7 @@
 		    <mapping class="com.model.hibernate.system.shared.XCodeInfo"/>
 		    <mapping class="com.model.hibernate.property.PayKey"/>
 		    <mapping class="com.model.hibernate.property.InnstallBill"/>
+		     <mapping class="com.model.hibernate.property.PoollGtinfo"/>
 		    
 		    
 		    
