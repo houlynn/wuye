@@ -1,9 +1,11 @@
 package com.property.base.controllers;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONObject;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
@@ -417,12 +420,84 @@ public class FeesController extends BaseAppController implements  CommonExceptio
 		    	item.put("tf_Village", poollGtinfo.getTf_Village().getTf_name());
 		    	item.put("tf_state", poollGtinfo.isTf_state());
 		    	item.put("tf_remark", poollGtinfo.getTf_remark());
+		    	item.put("itemRemark",poollGtinfo.getTf_InnstallBill().getTf_insid());
 				return item ;
 			}).collect(Collectors.toList());
 			return views;
 		}));
 	}
+	
+	@RequestMapping("/addpool")
+	public void doSave(PoollGtinfo  model,BindingResult br, HttpServletRequest request,HttpServletResponse response,
+			@RequestParam(value = "vid", required = true) int vid,
+			@RequestParam(value = "intsrid", required = true) int intsrid,
+			@RequestParam(value = "type", required = true) String type
+			) {
 		
+		try{
+	
+			
+			
+			
+		Village tf_Village=new Village();
+		tf_Village.setTf_viid(vid);
+		InnstallBill tf_InnstallBill=ebi.findById(InnstallBill.class, intsrid);
+		model.setTf_Village(tf_Village);
+		model.setTf_InnstallBill(tf_InnstallBill);
+		model.setTf_mtype(type);
+		String date=model.getTf_meterdate();
+		SimpleDateFormat sdm=new SimpleDateFormat("yyyy-MM");
+		String month= sdm.format(sdm.parse(date));
+		model.setTf_rendMonth(month);
+		String hql=" select sum(o.tf_builArea) from  ResidentInfo o where 1=1 and o.tf_levelInfo.tf_parent.tf_InnstallBill="+tf_InnstallBill.getTf_insid();
+		double area=ebi.getCount(hql);
+		model.setTf_areaCount(area);
+		model.setXcode(SecurityUserHolder.getIdentification());
+		ebi.save(model);
+		toWrite(response,jsonBuilder.returnSuccessJson(jsonBuilder.toJson(model)));
+		}catch(TimeoutException e){
+			toWrite(response, jsonBuilder.returnFailureJson("'用户未登陆或会话超时!'"));
+		}catch (Exception e) {
+			e.printStackTrace();
+			toWrite(response, jsonBuilder.returnFailureJson("'添加失败!'"));
+		}
+		
+	}
+	
+	
+	@RequestMapping("/updatedpool")
+	public void doUpdate(PoollGtinfo  model,BindingResult br, HttpServletRequest request,HttpServletResponse response,
+			@RequestParam(value = "vid", required = true) int vid,
+			@RequestParam(value = "intsrid", required = true) int intsrid,
+			@RequestParam(value = "type", required = true) String type
+			) {
+		try{
+		Village tf_Village=new Village();
+		tf_Village.setTf_viid(vid);
+		InnstallBill tf_InnstallBill=ebi.findById(InnstallBill.class, intsrid);
+		model.setTf_Village(tf_Village);
+		model.setTf_InnstallBill(tf_InnstallBill);
+		model.setTf_mtype(type);
+		String date=model.getTf_meterdate();
+		SimpleDateFormat sdm=new SimpleDateFormat("yyyy-MM");
+		String month= sdm.format(sdm.parse(date));
+		model.setTf_rendMonth(month);
+		String hql=" select sum(o.tf_builArea) from  ResidentInfo o where 1=1 and o.tf_levelInfo.tf_parent.tf_InnstallBill="+tf_InnstallBill.getTf_insid();
+		double area=ebi.getCount(hql);
+		model.setTf_areaCount(area);
+		model.setXcode(SecurityUserHolder.getIdentification());
+		ebi.update(model);
+		toWrite(response,jsonBuilder.returnSuccessJson(jsonBuilder.toJson(model)));
+		}catch(TimeoutException e){
+			toWrite(response, jsonBuilder.returnFailureJson("'用户未登陆或会话超时!'"));
+		}catch (Exception e) {
+			e.printStackTrace();
+			toWrite(response, jsonBuilder.returnFailureJson("'更失败!'"));
+		}
+	}
+	
+
+	
 	
 	
 	

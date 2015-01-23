@@ -16,6 +16,7 @@ import org.hibernate.annotations.GenericGenerator;
 import com.ufo.framework.annotation.DDItemCode;
 import com.ufo.framework.annotation.FieldInfo;
 import com.ufo.framework.annotation.TableInfo;
+import com.ufo.framework.common.core.ext.ExtFieldType;
 import com.ufo.framework.common.model.BaseEntity;
 @Entity
 @DynamicUpdate(true)
@@ -25,7 +26,7 @@ public class PoollGtinfo extends BaseEntity {
 	@Id
 	@GeneratedValue(generator = "increment")
 	@GenericGenerator(name = "increment", strategy = "increment")
-	@FieldInfo(title = "ID号", number = 10, hidden = false)
+	@FieldInfo(title = "ID号", number = 10, hidden = true,type=ExtFieldType.ID)
 	private int tf_poolid;
 	@FieldInfo(title = "上个月度数", number = 20)
 	private double tf_startnumber ;
@@ -35,7 +36,7 @@ public class PoollGtinfo extends BaseEntity {
     private  double tf_count;
 	@FieldInfo(title = "系数", number =50)
 	private double  tf_coefficient=1f; 
-	@FieldInfo(title = "一手楼面积", number =60)
+	@FieldInfo(title = "已收楼面积", number =60)
 	private double   tf_areaCount;
 	@Column(length=25,nullable=false)
 	@FieldInfo(title = "抄表时间", number =70,uniqueField=true)
@@ -60,10 +61,10 @@ public class PoollGtinfo extends BaseEntity {
 	@FieldInfo(title = "备注", number =130)
 	private String  tf_remark;
 	@Column(length=25,nullable=false)
-	@FieldInfo(title = "抄表周期", number =140)
+	@FieldInfo(title = "抄表周期", number =140,hidden = true)
 	private String tf_rendMonth;
 	@Column(length=10,nullable=false)
-	@FieldInfo(title = "种类", number =150)
+	@FieldInfo(title = "种类", number =150,hidden = true)
 	private String tf_mtype;
 	public int getTf_poolid() {
 		return tf_poolid;
