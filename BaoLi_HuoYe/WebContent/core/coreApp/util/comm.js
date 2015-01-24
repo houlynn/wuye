@@ -85,8 +85,8 @@ var ajax = function(config) {
 	 */
 
 	Ext.onReady(function() {
-		Ext.monetaryText = '千'; // 加在数字后面的金额单位
-		Ext.monetaryUnit = 1000;
+		Ext.monetaryText = '元'; // 加在数字后面的金额单位
+		Ext.monetaryUnit = 1;
 		if (Ext.util && Ext.util.Format) {
 			Ext.apply(Ext.util.Format, {
 				// 金额字段

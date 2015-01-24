@@ -124,7 +124,8 @@ Ext.override(Ext.form.field.File,{
 	},
 	buttonText: '浏览',
 	setValue : function(v){
-        var me = this,inputEl = me.inputEl;
+        var me = this;
+        var inputEl = me.inputEl;
 		var data = {docName : ''};
 		if(!Ext.isEmpty(v)){
 			//截取文件名

@@ -1,6 +1,6 @@
-Ext.define("core.prop.feesgt.view.FeesgtForm", {
+Ext.define("core.prop.feesgtp.view.FeesgtForm", {
 			extend : "Ext.form.Panel",
-			alias : 'widget.feesgt.form',
+			alias : 'widget.feesgtp.form',
 			border : !1,
 			title : null,
 			autoHeight : true,

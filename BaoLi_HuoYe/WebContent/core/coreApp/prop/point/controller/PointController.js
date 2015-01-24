@@ -207,6 +207,23 @@ init:function(){
 					store.load();	  
 				}
 			},
+			"form[xtype=point.form] #tf_topUrl":{	
+			 render:function(f){
+				var form= f.up("form[xtype=point.form]")
+				var grid=form.up("window[xtype=point.window]").grid;
+				var formRecord=form.getForm().getRecord();
+				 var tf_pointId= formRecord.get("tf_pointId");
+				 if(tf_pointId){
+				var record=grid.getSelectionModel().getSelection()[0];
+				var topUrl=record.get("tf_topUrl");
+				 f.inputEl.dom.value=topUrl;
+				 }
+				
+				
+			}
+			},
+			
+			
 		});
 	},
 	views:[

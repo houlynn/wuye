@@ -146,20 +146,16 @@ Ext.define('core.prop.point.view.PointForm', {
 				     allowBlank : false,
 			}]},
 			{
-				/*	 xtype:"filefield",
-				      fieldLabel : "头像",
-				      name : "tf_topUrl",
-				      renderer:function(){
-				       alert(0);
-				      }*/
-				      
+				         
 					xtype: "fieldcontainer",
                     layout: "hbox",
                    items:[{
-                    	//xtype : "textfield",
+                      flex:5,
+                      itemId:"tf_topUrl",
 					  xtype:"filefield",
 				      fieldLabel : "头像",
 				      name : "tf_topUrl",
+				      
 				      
 			}]
 			},

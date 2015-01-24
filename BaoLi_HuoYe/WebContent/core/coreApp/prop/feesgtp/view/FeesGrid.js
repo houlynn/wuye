@@ -1,6 +1,6 @@
-Ext.define("core.prop.feesgt.view.FeesGrid", {
+Ext.define("core.prop.feesgtp.view.FeesGrid", {
 			extend : 'Ext.grid.Panel',
-			alias : 'widget.feesgt.gridModue',
+			alias : 'widget.feesgtp.gridModue',
 			style : 'border-width:0 0 0 0;',
 			columnLines : true, // 加上表格线
 			multiSelect : true,

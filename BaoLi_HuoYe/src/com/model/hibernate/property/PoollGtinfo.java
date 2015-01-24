@@ -47,6 +47,9 @@ public class PoollGtinfo extends BaseEntity {
 	@JoinColumn(name = "tf_insid",nullable=false)
 	@FieldInfo(title = "公摊表", number =90)
 	private InnstallBill tf_InnstallBill;
+	@FieldInfo(title = "小计", number =90)
+	private double tf_totaleAcount;
+	
 	@FieldInfo(title = "分摊金额", number =100)
 	private double tf_Acount;
 	///所属小区
@@ -156,6 +159,12 @@ public class PoollGtinfo extends BaseEntity {
 	}
 	public void setTf_mtype(String tf_mtype) {
 		this.tf_mtype = tf_mtype;
+	}
+	public double getTf_totaleAcount() {
+		return tf_totaleAcount;
+	}
+	public void setTf_totaleAcount(double tf_totaleAcount) {
+		this.tf_totaleAcount = tf_totaleAcount;
 	}
 	
 }

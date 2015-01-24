@@ -192,6 +192,10 @@ public class VillageController extends BaseController {
         File file=new File(realPath+"/"+logImageName);
         topUrl.transferTo(file); 
         model.setTf_topUrl(PropUtil.get("baoli.upload.path")+"/"+logImageName);
+		}else{
+			PointFrientInfo oFrientInfo=	ebi.findById(PointFrientInfo.class, model.getTf_pointId());
+			model.setTf_topUrl(oFrientInfo.getTf_topUrl());
+			
 		}
 		ebi.update(model);
 		reslut=jsonBuilder.returnSuccessJson(jsonBuilder.toJson(model));

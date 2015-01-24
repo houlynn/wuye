@@ -1,4 +1,4 @@
-Ext.define("core.prop.feesgt.controller.FeesController",{
+Ext.define("core.prop.feesgtp.controller.FeesController",{
 	extend:"Ext.app.Controller",
 	mixins: {
 		suppleUtil:"core.util.SuppleUtil",
@@ -10,11 +10,11 @@ init:function(){
 		/**
 		 * 添加 抄水表信息
 		 */
-			"container[xtype=feesgt.gridModue] button[ref=addButton]":{
+			"container[xtype=feesgtp.gridModue] button[ref=addButton]":{
 							click : function (btn){
-							 var modulegrid = btn.up("grid[xtype=feesgt.gridModue]");	
+							 var modulegrid = btn.up("grid[xtype=feesgtp.gridModue]");	
 							 var store=modulegrid.getStore();
-			                 var tree=modulegrid.ownerCt.down("container[xtype=feesgt.levelTree]");
+			                 var tree=modulegrid.ownerCt.down("container[xtype=feesgtp.levelTree]");
 			                 var selection=tree.getSelectionModel().getSelection();
 			                 if(!selection&&selection.length==0){
 			                  return ;
@@ -22,14 +22,14 @@ init:function(){
 							 var viewModel=system.getViewModel(321);
 						     var model = Ext.create(modulegrid.getStore().model);
 			                 model.set(model.idProperty, null); 
-			                 model.set("tf_mtype","006");
+			                 model.set("tf_mtype","003");
 			                var vid=selection[0].get("code");
 			                var window=  Ext.createWidget("window",{
-			             	   items:{xtype:"feesgt.form", vid:vid},
+			             	   items:{xtype:"feesgtp.form", vid:vid},
 				                grid:modulegrid
 				               
 			                 });
-			                    window.down('form[xtype=feesgt.form]').getForm().loadRecord(model);
+			                    window.down('form[xtype=feesgtp.form]').getForm().loadRecord(model);
 			                    var title=selection[0].get("text")+" 录入抄表信息";
 			                    window.setTitle(title);
 	                            window.show();
@@ -39,23 +39,23 @@ init:function(){
 			 * 编辑
 			 */	
 				
-			"container[xtype=feesgt.gridModue]  button[ref=editButton] ":{
+			"container[xtype=feesgtp.gridModue]  button[ref=editButton] ":{
 		   click:function(btn){
-			var modulegrid = btn.up("grid[xtype=feesgt.gridModue]");
+			var modulegrid = btn.up("grid[xtype=feesgtp.gridModue]");
 			 var selection;
-			 var tree=modulegrid.ownerCt.down("container[xtype=feesgt.levelTree]");
+			 var tree=modulegrid.ownerCt.down("container[xtype=feesgtp.levelTree]");
 			               selection= tree.getSelectionModel().getSelection();
 			                 if(!selection&&selection.length==0){
 			                  return ;
 			                 }
 			   var vid=selection[0].get("code");                 
              var  window=  Ext.createWidget("window",{
-			             	   items:{xtype:"feesgt.form",vid:vid},
+			             	   items:{xtype:"feesgtp.form",vid:vid},
 				                grid:modulegrid
 				               
 			                 });
 			 var model= modulegrid.getSelectionModel().getSelection()[0];
-			                   var form= window.down('form[xtype=feesgt.form]')
+			                   var form= window.down('form[xtype=feesgtp.form]')
 			                   form.getForm().loadRecord(model);
 			                    var insid= model.get("itemRemark");
 			                    var title=selection[0].get("text")+" 修改抄表信息";
@@ -69,9 +69,9 @@ init:function(){
 			/**
 			 * 删除
 			 */
-		"container[xtype=feesgt.gridModue]  button[ref=removeButton] ":{
+		"container[xtype=feesgtp.gridModue]  button[ref=removeButton] ":{
 			click:function(btn){
-			var modulegrid=btn.up("grid[xtype=feesgt.gridModue]");
+			var modulegrid=btn.up("grid[xtype=feesgtp.gridModue]");
 			var module=modulegrid.viewModel;
 			var selection=modulegrid.getSelectionModel().getSelection();
 			var message='';
@@ -152,14 +152,14 @@ init:function(){
 				/**
 				 * 点击
 				 */
-			"container[xtype=feesgt.levelTree]":{
+			"container[xtype=feesgtp.levelTree]":{
 				itemclick:function(treeview,node,item,index,e,eOpts){
 					var tree=treeview.ownerCt;
-					var gridModue=treeview.ownerCt.ownerCt.down("grid[xtype=feesgt.gridModue]");
+					var gridModue=treeview.ownerCt.ownerCt.down("grid[xtype=feesgtp.gridModue]");
                 	var store=gridModue.store;
                 	var vid= tree.getSelectionModel().getSelection()[0].get("code");
                   	var proxy=store.getProxy();
-                    proxy.extraParams.whereSql="  and tf_Village="+vid+" and tf_mtype='006'";
+                    proxy.extraParams.whereSql="  and tf_Village="+vid+" and tf_mtype='003'";
 					store.load();	  
 				}
 			},
@@ -168,7 +168,7 @@ init:function(){
 	         /**
 	          * 加载combox数据
 	          */
-	         "form[xtype=feesgt.form] #tf_InnstallBill":{
+	         "form[xtype=feesgtp.form] #tf_InnstallBill":{
 	         	  render:function(combo) {
 	         	  	var from= combo.ownerCt.ownerCt.ownerCt;
 	         	  	var vid=from.vid;
@@ -182,16 +182,16 @@ init:function(){
 			      store.load();	
 	         	  }
 	         },
-	            "form[xtype=feesgt.form] #save":{
+	            "form[xtype=feesgtp.form] #save":{
 	               click:function(btn){
-	               var form = btn.up("form[xtype=feesgt.form]");
+	               var form = btn.up("form[xtype=feesgtp.form]");
 					var formObj = form.getForm();
 					var intsrid = form.down("#tf_InnstallBill").getValue();
 					var vid = form.vid;
 					var params = {
 						intsrid : intsrid,
 						vid : vid,
-						type:"006"
+						type:"003"
 					}
 					var record= formObj.getRecord();
 					var tf_poolid= form.down("#tf_poolid").getValue();
@@ -210,7 +210,7 @@ init:function(){
 							if (action.result.success) {
 								self.setFormValue(formObj, obj);
 								system.smileInfo("添加成功!");
-								var form = btn.up("form[xtype=feesgt.form]");
+								var form = btn.up("form[xtype=feesgtp.form]");
 								form.down("#tf_InnstallBill").setValue(intsrid);
 								var grid=form.ownerCt.grid;
 							    grid.getStore().reload();
@@ -225,9 +225,9 @@ init:function(){
 					})
 	               }
 	            },
-	       "container[xtype=feesgt.gridModue]  button[ref=submit]":{    
+	       "container[xtype=feesgtp.gridModue]  button[ref=submit]":{    
 	       	 click:function(btn){
-	       	 var modulegrid=btn.up("grid[xtype=feesgt.gridModue]");
+	       	 var modulegrid=btn.up("grid[xtype=feesgtp.gridModue]");
 			 var selection=modulegrid.getSelectionModel().getSelection();
 			  if(!selection&&selection.length==0){
 			                  return ;
@@ -250,14 +250,14 @@ init:function(){
 		});
 	},
 	views:[
-	'core.prop.feesgt.view.MainLayout',
-	'core.prop.feesgt.view.LevelTree',
-	"core.prop.feesgt.view.FeesGrid",
-	"core.prop.feesgt.view.FeesgtForm"
+	'core.prop.feesgtp.view.MainLayout',
+	'core.prop.feesgtp.view.LevelTree',
+	"core.prop.feesgtp.view.FeesGrid",
+	"core.prop.feesgtp.view.FeesgtForm"
 
 	],
 	stores:[
-	'core.prop.feesgt.store.LevelStore'
+	'core.prop.feesgtp.store.LevelStore'
 	],
     models : []
 });

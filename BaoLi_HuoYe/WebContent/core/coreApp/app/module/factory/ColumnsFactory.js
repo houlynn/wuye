@@ -130,6 +130,24 @@ Ext.define('core.app.module.factory.ColumnsFactory', {
 							             }
 									});
 							break;
+						    case 'boolean' :
+							Ext.apply(field, {
+										align : 'right',
+										xtype : 'checkcolumn',
+										stopSelection:false,
+										processEvent:function(type) { // 加入这一句，可以防止点中修改
+								         if (type == 'click')
+									     return false;
+							             },
+							             
+							             editor:{
+									           xtype : "basecombobox",
+					                           ddCode : "BOLEAN",
+					                           allowBlank : false,
+					                           hideTrigger : false
+							             }
+									});
+							break;
 						case 'basecombobox' :
 							Ext.apply(field, {
 										align : 'right',

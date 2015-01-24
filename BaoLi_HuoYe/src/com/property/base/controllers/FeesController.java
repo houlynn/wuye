@@ -1,5 +1,6 @@
 package com.property.base.controllers;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -433,28 +434,45 @@ public class FeesController extends BaseAppController implements  CommonExceptio
 			@RequestParam(value = "intsrid", required = true) int intsrid,
 			@RequestParam(value = "type", required = true) String type
 			) {
-		
 		try{
-	
-			
-			
-			
+			SimpleDateFormat sdm=new SimpleDateFormat("yyyy-MM");
+			String date=model.getTf_meterdate();
+			String month= sdm.format(sdm.parse(date));
+			String  checkHql="  select count(*) from PoollGtinfo where 1=1 and tf_mtype='"+type+"' and tf_rendMonth='"+month+"' and  tf_InnstallBill="+intsrid+" and tf_Village="+vid;
+			Integer count=ebi.getCount(checkHql);
+			if(count>0){
+				toWrite(response, jsonBuilder.returnFailureJson("'"+month+"记录已存在,请修改即可!'"));
+			}else{
 		Village tf_Village=new Village();
 		tf_Village.setTf_viid(vid);
 		InnstallBill tf_InnstallBill=ebi.findById(InnstallBill.class, intsrid);
 		model.setTf_Village(tf_Village);
 		model.setTf_InnstallBill(tf_InnstallBill);
 		model.setTf_mtype(type);
-		String date=model.getTf_meterdate();
-		SimpleDateFormat sdm=new SimpleDateFormat("yyyy-MM");
-		String month= sdm.format(sdm.parse(date));
 		model.setTf_rendMonth(month);
+		String hqlo=" from PoollGtinfo where 1=1 and tf_mtype='"+type+"' and tf_state='1' and  tf_InnstallBill="+intsrid+" and tf_Village="+vid+" order by tf_rendMonth desc";
+		List<PoollGtinfo>  pools= (List<PoollGtinfo>) ebi.queryByHql(hqlo);
+		if(pools!=null&&pools.size()>0&&model.getTf_startnumber()==0){
+			 double startnuber= pools.get(0).getTf_endnumber();
+			 model.setTf_startnumber(startnuber);
+		}
+		
+		if(model.getTf_coefficient()==0){
+			model.setTf_coefficient(1);
+		}
 		String hql=" select sum(o.tf_builArea) from  ResidentInfo o where 1=1 and o.tf_levelInfo.tf_parent.tf_InnstallBill="+tf_InnstallBill.getTf_insid();
 		double area=ebi.getCount(hql);
-		model.setTf_areaCount(area);
+		if(model.getTf_areaCount()==0){
+		model.setTf_areaCount(area);//已收楼面积
+		}
+		double price =tf_InnstallBill.getTf_FeesInfo().getTf_price();
+		model.setTf_count(model.getTf_endnumber()-model.getTf_startnumber());
+		double totalAcount=model.getTf_count()*price;
+		model.setTf_totaleAcount(totalAcount);
 		model.setXcode(SecurityUserHolder.getIdentification());
 		ebi.save(model);
 		toWrite(response,jsonBuilder.returnSuccessJson(jsonBuilder.toJson(model)));
+			}
 		}catch(TimeoutException e){
 			toWrite(response, jsonBuilder.returnFailureJson("'用户未登陆或会话超时!'"));
 		}catch (Exception e) {
@@ -472,8 +490,8 @@ public class FeesController extends BaseAppController implements  CommonExceptio
 			@RequestParam(value = "type", required = true) String type
 			) {
 		try{
-		Village tf_Village=new Village();
-		tf_Village.setTf_viid(vid);
+	   Village tf_Village=new Village();
+        tf_Village.setTf_viid(vid);
 		InnstallBill tf_InnstallBill=ebi.findById(InnstallBill.class, intsrid);
 		model.setTf_Village(tf_Village);
 		model.setTf_InnstallBill(tf_InnstallBill);
@@ -484,7 +502,20 @@ public class FeesController extends BaseAppController implements  CommonExceptio
 		model.setTf_rendMonth(month);
 		String hql=" select sum(o.tf_builArea) from  ResidentInfo o where 1=1 and o.tf_levelInfo.tf_parent.tf_InnstallBill="+tf_InnstallBill.getTf_insid();
 		double area=ebi.getCount(hql);
-		model.setTf_areaCount(area);
+		if(model.getTf_areaCount()==0){
+			model.setTf_areaCount(area);//已收楼面积
+			}
+		double price =tf_InnstallBill.getTf_FeesInfo().getTf_price();
+		
+		String hqlo=" from PoollGtinfo where 1=1 and tf_mtype='"+type+"' and tf_state='1' and  tf_InnstallBill="+intsrid+" and tf_Village="+vid+" order by tf_rendMonth desc";
+		List<PoollGtinfo>  pools= (List<PoollGtinfo>) ebi.queryByHql(hqlo);
+		if(pools!=null&&pools.size()>0&&model.getTf_startnumber()==0){
+			 double startnuber= pools.get(0).getTf_endnumber();
+			 model.setTf_startnumber(startnuber);
+		}
+		model.setTf_count(model.getTf_endnumber()-model.getTf_startnumber());
+		double totalAcount=model.getTf_count()*price;
+		model.setTf_totaleAcount(totalAcount);
 		model.setXcode(SecurityUserHolder.getIdentification());
 		ebi.update(model);
 		toWrite(response,jsonBuilder.returnSuccessJson(jsonBuilder.toJson(model)));
@@ -494,6 +525,25 @@ public class FeesController extends BaseAppController implements  CommonExceptio
 			e.printStackTrace();
 			toWrite(response, jsonBuilder.returnFailureJson("'更失败!'"));
 		}
+	}
+	
+	@RequestMapping("/submit")
+	public DataUpdateResponseInfo submit(HttpServletRequest request,HttpServletResponse response,
+			@RequestParam(value = "id", required = true)int id
+			) throws Exception{
+		    DataUpdateResponseInfo result=new DataUpdateResponseInfo();
+			PoollGtinfo proll=ebi.findById(PoollGtinfo.class, id);
+			boolean flag=false;
+			flag= proll.isTf_state();
+			proll.setTf_state(true);
+			double tf_Acount=proll.getTf_totaleAcount()/12; //proll.getTf_areaCount();
+			proll.setTf_Acount(tf_Acount);
+			ebi.update(proll);
+			result.setDefaultMsg("审核成功!");
+			if(flag){
+			getAppException("", proll.getTf_rendMonth()+ "--记录已审核!",ResponseErrorInfo.STATUS_CUSTOM_WARM );
+			}
+		return result;
 	}
 	
 
