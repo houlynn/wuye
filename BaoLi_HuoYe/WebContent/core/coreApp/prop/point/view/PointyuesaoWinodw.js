@@ -9,7 +9,7 @@ Ext.define('core.prop.point.view.PointyuesaoWinodw', {
 			layout : 'fit',
 			width:600,
 			items:[{
-			 xtype:"point.form"
+			 xtype:"pointyuesao.form"
 			}],
 			 listeners: {
 		            hide: function (win, eOpts) {

@@ -189,6 +189,10 @@ public class VillageController extends BaseController {
         String suffix = topUrl.getOriginalFilename().substring  
                 (topUrl.getOriginalFilename().lastIndexOf("."));     
           String logImageName = UUID.randomUUID().toString()+ suffix;//构建文件名称     
+          File dir=new File(realPath);
+          if(!dir.exists()){
+        	  dir.mkdir();
+          }
         File file=new File(realPath+"/"+logImageName);
         topUrl.transferTo(file); 
         model.setTf_topUrl(PropUtil.get("baoli.upload.path")+"/"+logImageName);

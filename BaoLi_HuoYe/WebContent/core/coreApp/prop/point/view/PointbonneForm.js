@@ -159,6 +159,8 @@ Ext.define('core.prop.point.view.PointbonneForm', {
 					 xtype:"filefield",
 				      fieldLabel : "头像",
 				      name : "tf_topUrl",
+				      itemId:"tf_topUrl",
+				      flex:5,
 				      
 			}]
 			},

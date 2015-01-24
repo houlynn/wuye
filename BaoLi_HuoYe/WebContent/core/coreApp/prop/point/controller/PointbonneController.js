@@ -79,7 +79,7 @@ init:function(){
 			var record=formObj.getRecord();
 			var poinid=record.get("tf_pointId");
 			var params={vid:win.vid,
-			           ctype:"001"
+			           ctype:"002"
 			};
 			var flag=true;
 		    if (formObj.isValid()) {
@@ -203,10 +203,30 @@ init:function(){
                   	var proxy=store.getProxy();
                   	var selection=tree.getSelectionModel().getSelection()[0];
 					proxy.extraParams.vid=selection.get("code");
-				    proxy.extraParams.ctype="001";
+				    proxy.extraParams.ctype="002";
 					store.load();	  
 				}
 			},
+		 "form[xtype=pointbonne.form] #tf_topUrl":{	
+			 render:function(f){
+				var form= f.up("form[xtype=pointbonne.form]")
+				var grid=form.up("window[xtype=pointbonne.window]").grid;
+				var formRecord=form.getForm().getRecord();
+				 var tf_pointId= formRecord.get("tf_pointId");
+				 if(tf_pointId){
+				var record=grid.getSelectionModel().getSelection()[0];
+				var topUrl=record.get("tf_topUrl");
+				alert(topUrl);
+				 f.inputEl.dom.value=topUrl;
+				 }
+				
+				
+			}
+			},
+			
+			
+			
+			
 		});
 	},
 	views:[
@@ -218,7 +238,7 @@ init:function(){
 	],
 	stores:[
 	'core.prop.point.store.LevelStore',
-	"core.prop.point.store.PointStore"
+	"core.prop.point.store.PointbonneStore"
 	],
     models : []
 });

@@ -146,12 +146,6 @@ Ext.define('core.prop.point.view.PointyuesaoForm', {
 				     allowBlank : false,
 			}]},
 			{
-				/*	 xtype:"filefield",
-				      fieldLabel : "头像",
-				      name : "tf_topUrl",
-				      renderer:function(){
-				       alert(0);
-				      }*/
 				      
 					xtype: "fieldcontainer",
                     layout: "hbox",
@@ -159,6 +153,8 @@ Ext.define('core.prop.point.view.PointyuesaoForm', {
 					 xtype:"filefield",
 				      fieldLabel : "头像",
 				      name : "tf_topUrl",
+				       itemId : "tf_topUrl",
+				        flex:5,
 				      
 			}]
 			},

@@ -204,10 +204,10 @@ Ext.define("core.prop.point.view.PointbonneGrid", {
 		this.callParent(arguments);
 
 	},
- store:"core.prop.point.store.PointStore",
+ store:"core.prop.point.store.PointbonneStore",
 	bbar:{
 		xtype:'pagingtoolbar',
-		store:"core.prop.point.store.PointStore",
+		store:"core.prop.point.store.PointbonneStore",
 		dock:'bottom',
 		displayInfo:true
 	}
