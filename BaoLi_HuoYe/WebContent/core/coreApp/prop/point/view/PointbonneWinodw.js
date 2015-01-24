@@ -1,4 +1,4 @@
-Ext.define('core.prop.point.view.PointWinodw', {
+Ext.define('core.prop.point.view.PointbonneWinodw', {
 		  extend : 'Ext.window.Window',
 			alias : 'widget.pointbonne.window',
 			maximizable : true,

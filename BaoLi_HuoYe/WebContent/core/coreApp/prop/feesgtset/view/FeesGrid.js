@@ -262,7 +262,7 @@ Ext.define("core.prop.feesgtset.view.FeesGrid", {
 						var feesItem={
 		width : 250,
 		dataIndex:"itemRemark",
-		text :'收费项目',
+		text :'栋',
 		align : 'center',
 		renderer : function(val){
 		  return '<span class="gridNameField"><a onclick="javascript:return false;" href="#">' + val + "</a></span>"

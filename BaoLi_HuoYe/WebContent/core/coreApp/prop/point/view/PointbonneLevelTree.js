@@ -1,4 +1,4 @@
-Ext.define("core.prop.point.view.LevelTree",{
+Ext.define("core.prop.point.view.PointbonneLevelTree",{
 	extend:"Ext.tree.Panel",
 	alias : "widget.pointbonne.levelTree",
 	displayField : "text",
