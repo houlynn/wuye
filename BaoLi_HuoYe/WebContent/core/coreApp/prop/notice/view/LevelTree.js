@@ -1,6 +1,6 @@
-Ext.define("core.prop.point.view.LevelTree",{
+Ext.define("core.prop.notice.view.LevelTree",{
 	extend:"Ext.tree.Panel",
-	alias : "widget.point.levelTree",
+	alias : "widget.notice.levelTree",
 	displayField : "text",
 	rootVisible : false,
 	store : "core.prop.point.store.LevelStore",

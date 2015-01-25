@@ -423,21 +423,24 @@ public class HibernateRepertory implements ICommonRepertory {
 	
 	
 	
-	public void update(Map<String,Object> values, Class<? extends Model> calzz, Serializable pk ) throws Exception{
+	public Object update(Map<String,Object> values, Class<? extends Model> calzz, Serializable pk ) throws Exception{
 		  Model obj=(Model) sf.getCurrentSession().load(calzz, pk);
 		  for(String key : values.keySet()){
 			 // bean
 			  BeanUtils.setProperty(obj, key, values.get(key));
 		  }
 		sf.getCurrentSession().update(obj);
+		return obj;
 	}
 	
-	public void update(Map<String,Object> values,Model obj, Serializable pk ) throws Exception{
+	public Object update(Map<String,Object> values,Model obj, Serializable pk ) throws Exception{
 		  for(String key : values.keySet()){
 			 // bean
 			  BeanUtils.setProperty(obj, key, values.get(key));
 		  }
 		sf.getCurrentSession().update(obj);
+		return obj;
+		
 	}
 	
 	

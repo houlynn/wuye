@@ -331,17 +331,12 @@ public class VillageController extends BaseController {
 	});
 	}
 			  
-	
-	
-	
-	
-    
 	@RequestMapping("/loadNotice")
 	public @ResponseBody Map<String, Object> loadNotice(Integer start, Integer limit,
 			@RequestParam(value="whereSql",required=false,defaultValue="") String whereSql,
 	    	@RequestParam(value="parentSql",required=false,defaultValue="") String parentSql,
 	    	@RequestParam(value="querySql",required=false,defaultValue="") String querySql,
-	    	@RequestParam(value="orderSql",required=false,defaultValue="") String orderSql,
+	    	@RequestParam(value="orderSql",required=false,defaultValue=" order by tf_state , tf_createtime desc") String orderSql,
 	    	@RequestParam(value="vid",required=true) int vid,
 			HttpServletRequest request) throws Exception {
 		whereSql+=" and tf_Village="+vid;
@@ -357,6 +352,8 @@ public class VillageController extends BaseController {
 					view.put("tf_title", n.getTf_title());
 					view.put("tf_content", n.getTf_content());
 					view.put("tf_Village", n.getTf_Village().getTf_name());
+					view.put("tf_createtime", n.getTf_createtime());
+					view.put("tf_state", n.getTf_state());
 					datas.add(view);
 					view=null;
 			  }
@@ -373,8 +370,13 @@ public class VillageController extends BaseController {
 			Village village=new Village();
 			village.setTf_viid(vid);
 			model.setTf_Village(village);
-			ebi.update(model);
-			 String  reslut=jsonBuilder.returnSuccessJson(jsonBuilder.toJson(model));
+			Map<String,Object> values=new HashMap<String, Object>();
+			values.put("tf_souce", model.getTf_souce());
+			values.put("tf_levf", model.getTf_levf());
+			values.put("tf_title", model.getTf_title());
+		    values.put("tf_content", model.getTf_content());
+			Object obj= ebi.update(values, NoticeInfo.class, model.getTf_noticeId());
+			 String  reslut=jsonBuilder.returnSuccessJson(jsonBuilder.toJson(obj));
 			 return reslut;
 		}
 		
@@ -387,6 +389,9 @@ public class VillageController extends BaseController {
 		Village village=new Village();
 		village.setTf_viid(vid);
 		model.setTf_Village(village);
+		model.setTf_createtime(AppUtils.getCurrentTime());
+		model.setTf_state("0");
+		model.setTf_time("");
 		ebi.save(model);
     	String	reslut=jsonBuilder.returnSuccessJson(jsonBuilder.toJson(model));
 		return reslut;
@@ -404,5 +409,17 @@ public class VillageController extends BaseController {
 		}
 		return result;
 	}
+	
+	@RequestMapping("/auditNotice")
+	  public @ResponseBody DataUpdateResponseInfo auditNotice(
+			  @RequestParam(value="id",required=true) int id
+			  ) throws Exception{
+		  DataUpdateResponseInfo result=new DataUpdateResponseInfo();
+		  NoticeInfo info=ebi.findById(NoticeInfo.class, id);
+		  info.setTf_state("1");
+		  info.setTf_time(AppUtils.getCurrentTime());
+		  ebi.update(info);
+		  return result;
+	  }
 	
 }

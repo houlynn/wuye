@@ -1,6 +1,6 @@
-Ext.define("core.prop.point.view.NoticetGrid", {
+Ext.define("core.prop.notice.view.NoticeGrid", {
 	extend : 'Ext.grid.Panel',
-	alias : 'widget.point.grid',
+	alias : 'widget.notice.grid',
 	autoHeight : true,
 	style : 'border-width:0 0 0 0;',
 	columnLines : true, // 加上表格线
@@ -42,63 +42,41 @@ Ext.define("core.prop.point.view.NoticetGrid", {
 			}],
 		columns:[
 		  {text : "Id",
-		     dataIndex : "tf_pointId",
+		     dataIndex : "tf_noticeId",
 		     width : 2,
 		    columnType : "textfield",
 		     hidden:true
 		},
-	  {text : "终点工类型",
-		     dataIndex : "tf_type",
-		     width : 80,
-		    columnType : "basecombobox",
-		    ddCode:"POINTTYPE"
-		},
-		{text : "名字",
-		dataIndex : "tf_name",
-		width : 80,
+		{text : "发布单位",
+		dataIndex : "tf_souce",
+		width : 180,
 		columnType : "textfield"
 		},
-	   {text : "性别",
-		dataIndex : "tf_sex",
-		width : 80,
-		ddCode : "SEX",
-		columnType : "basecombobox"
-		},		{text : "年龄",
-		dataIndex : "tf_age",
-		width : 80,
-		columnType : "numberfield"
-		},
-			{text : "薪资",
-		dataIndex : "tf_price",
-		width : 80,
-		columnType : "numberfield"
-		},
-			{text : "工作年限",
-		  dataIndex : "tf_taex",
-		  width : 80,
-			ddCode : "NIANXIAN",
-		   columnType : "basecombobox"
-		},
-			{text : "头像",
-		  dataIndex : "tf_topUrl",
-		  width : 80,
-		  renderer:function(value,data,record){
-				var width=16;
-				var height=16;
-			 	return "<img src='"+value+"' width="+width+" height="+height+" />";
-		 }
-		}
-		,
-			{text : "简历",
-		dataIndex : "tf_rmark",
-		width : 320,
+	   {text : "发布时间",
+		dataIndex : "tf_time",
+		width : 180,
 		columnType : "textfield"
-		}
-			,
-			{text : "小区",
-		dataIndex : "tf_vname",
-		width : 120,
+		},	
+		{text : "级别",
+		dataIndex : "tf_levf",
+		width : 90,
+		columnType : "basecombobox",
+		ddCode : "NOTLEVF",
+		},
+	  {text : "标题",
+		dataIndex : "tf_title",
+		width : 280,
+	   columnType : "textfield"
+		},
+	   {text : "内容",
+		dataIndex : "tf_content",
+		width : 620,
 		columnType : "textfield"
+		},
+		  {text : "创建时间",
+		dataIndex : "tf_createtime",
+		width : 180,
+		columnType : "tf_createtime"
 		}
 		,
 		{text : "发布状态",
@@ -204,10 +182,10 @@ Ext.define("core.prop.point.view.NoticetGrid", {
 		this.callParent(arguments);
 
 	},
- store:"core.prop.point.store.PointStore",
+ store:"core.prop.notice.store.NoticeStore",
 	bbar:{
 		xtype:'pagingtoolbar',
-		store:"core.prop.point.store.PointStore",
+		store:"core.prop.notice.store.NoticeStore",
 		dock:'bottom',
 		displayInfo:true
 	}

@@ -253,15 +253,15 @@ public class Ebo implements Ebi {
 		return repertory.sum(sql);
 	}
 	@Override
-	public void update(Map<String, Object> values,
+	public Object update(Map<String, Object> values,
 			Class<? extends Model> calzz, Serializable pk) throws Exception {
 		// TODO Auto-generated method stub
-		 repertory.update(values, calzz, pk);
+		return  repertory.update(values, calzz, pk);
 	}
 	@Override
-	public void update(Map<String, Object> values, Model obj, Serializable pk)
+	public Object update(Map<String, Object> values, Model obj, Serializable pk)
 			throws Exception {
-		repertory.update(values, obj, pk);
+		return  repertory.update(values, obj, pk);
 		
 	}
 

@@ -1,6 +1,6 @@
 Ext.define("core.prop.notice.model.NoticeModel", {
 		extend : 'Ext.data.Model',
-		  idProperty : "tf_pointId",//主键
+		  idProperty : "tf_noticeId",//主键
 	    fields:factory.ModelFactory.getFields({modelName:"com.model.hibernate.property.NoticeInfo",excludes:""}),
 		proxy : {
 					type : 'rest',

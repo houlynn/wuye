@@ -1,13 +1,12 @@
-Ext.define('core.prop.point.view.PointForm', {
+Ext.define('core.prop.notice.view.PointForm', {
 	extend : "Ext.form.Panel",
-	alias : 'widget.point.form',
+	alias : 'widget.notice.form',
 	border:!1,
 	title:null,
 	autoHeight:true,  
     bodyPadding: 5,
     border: false,
     autoWidth:true,
-    width:600,
         fieldDefaults: {
         labelWidth: 80,
         labelAlign: "right"
@@ -59,7 +58,9 @@ Ext.define('core.prop.point.view.PointForm', {
 	items : [{
 	            xtype : 'fieldset',
 				autoHeight : true,
-				title : '终点工信息',
+				title : '公告信息',
+				 growMax : 2000,
+				 maxHeigth:2000,
 				width:"100%",
 				bodyStyle : 'padding : 5px 5px 5px 5px',
 				items:[
@@ -69,8 +70,8 @@ Ext.define('core.prop.point.view.PointForm', {
                    items:[{
 			      xtype : "textfield",
 				  fieldLabel : "ID",
-				  itemId:"tf_pointId",
-				  name : "tf_pointId",
+				  itemId:"tf_noticeId",
+				  name : "tf_noticeId",
 				  hidden:true
                    }]},
 				{
@@ -78,97 +79,54 @@ Ext.define('core.prop.point.view.PointForm', {
                     layout: "hbox",
                     items:[{
 				   xtype : "basecombobox",
-				  fieldLabel : "终点工类型",
-				  itemId:"tf_type",
-				  name : "tf_type",
-				  ddCode:"POINTTYPE",
+				  fieldLabel : "公告等级",
+				  itemId:"tf_levf",
+				  name : "tf_levf",
+				  ddCode:"NOTLEVF",
 				  beforeLabelTextTpl : comm.get('required'),
 			       allowBlank : false,
 			         flex:5,
 				}]},
+									{
+					xtype: "fieldcontainer",
+                    layout: "hbox",
+                   items:[{
+				  fieldLabel : "发布单位",
+				  xtype : "textfield",
+				  itemId:"tf_souce",
+				  name : "tf_souce",
+				    flex:5,
+				    beforeLabelTextTpl : comm.get('required'),
+				     allowBlank : false,
+						}]},
+				
+				
+				
 					{
 					 xtype: "fieldcontainer",
                     layout: "hbox",
                    items:[{
 					xtype : "textfield",
-				  fieldLabel : "姓名",
-				  itemId:"tf_name;",
-				  name : "tf_name",
+				  fieldLabel : "标题",
+				  itemId:"tf_title;",
+				  name : "tf_title",
 				  beforeLabelTextTpl : comm.get('required'),
 			       allowBlank : false,
 			         flex:5,
 				}]},
-					{
-					xtype: "fieldcontainer",
-                    layout: "hbox",
-                   items:[{
-					xtype : "basecombobox",
-				  fieldLabel : "性别",
-				  itemId:"tf_sex",
-				  name : "tf_sex",
-				  ddCode:"SEX",
-				    flex:5,
-				    beforeLabelTextTpl : comm.get('required'),
-				     allowBlank : false,
-						}]},
-				{
-					xtype: "fieldcontainer",
-                    layout: "hbox",
-                   items:[{
-					xtype : "numberfield",
-				   fieldLabel : "年龄",
-				     flex:5,
-				   name : "tf_age",
-				    beforeLabelTextTpl : comm.get('required'),
-				     allowBlank : false,
-				}]},
-					{
-							xtype: "fieldcontainer",
-                    layout: "hbox",
-                   items:[{
-					xtype : "numberfield",
-				   fieldLabel : "薪资",
-				     flex:5,
-				   name : "tf_price",
-				   beforeLabelTextTpl : comm.get('required'),
-				     allowBlank : false,
-			}]},
-					{
-							xtype: "fieldcontainer",
-                    layout: "hbox",
-                   items:[{
-					xtype : "basecombobox",
-					 ddCode:"NIANXIAN",
-				   fieldLabel : "工作年限",
-				     flex:5,
-				   name : "tf_taex",
-				   beforeLabelTextTpl : comm.get('required'),
-				     allowBlank : false,
-			}]},
-			{
-				         
-					xtype: "fieldcontainer",
-                    layout: "hbox",
-                   items:[{
-                      flex:5,
-                      itemId:"tf_topUrl",
-					  xtype:"filefield",
-				      fieldLabel : "头像",
-				      name : "tf_topUrl",
-				      
-				      
-			}]
-			},
-			
+
 			
 					{
-							xtype: "fieldcontainer",
+					xtype: "fieldcontainer",
                     layout: "hbox",
-                   items:[{
+                    autoHeight:true,  
+                    growMax : 2000,
+                    items:[{
 					xtype : "textareafield",
-				    fieldLabel : "简历",
-				    name : "tf_rmark",
-				      flex:5,
+				    fieldLabel : "内容",
+				      grow: true,  
+				     name : "tf_content",
+				     flex:5,
 				    preventScrollbars : true,   //设置多行文本框没有滚动条显示
                     columnWidth:1
 			}]}

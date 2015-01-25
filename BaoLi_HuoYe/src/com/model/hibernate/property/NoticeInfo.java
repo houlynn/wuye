@@ -16,6 +16,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import com.ufo.framework.annotation.FieldInfo;
+import com.ufo.framework.common.core.ext.ExtFieldType;
 import com.ufo.framework.common.model.BaseEntity;
 @DynamicInsert(true)
 @DynamicUpdate(true)
@@ -26,7 +27,7 @@ public class NoticeInfo extends BaseEntity {
 	@Id
 	@GeneratedValue(generator = "increment")
 	@GenericGenerator(name = "increment", strategy = "increment")
-	@FieldInfo(title = "ID号", number = 10, hidden = true)
+	@FieldInfo(title = "ID号", number = 10, hidden = true,type=ExtFieldType.ID)
 	private int tf_noticeId;
 	@FieldInfo(title = "发布单位", number =50)
 	private String tf_souce;
@@ -41,8 +42,13 @@ public class NoticeInfo extends BaseEntity {
 	private String tf_title;
 	@Type(type="text")  
 	@Column(length=50,nullable=false)
-	@FieldInfo(title = "内容那", number =50)
+	@FieldInfo(title = "内容", number =50)
 	private String tf_content;
+	@Column(length=10,nullable=false)
+	private String tf_state;
+	
+	@Column(length=20,nullable=false)
+	private String tf_createtime;
 	
 	
     @JsonIgnore
@@ -122,6 +128,26 @@ public class NoticeInfo extends BaseEntity {
 
 	public void setTf_Village(Village tf_Village) {
 		this.tf_Village = tf_Village;
+	}
+
+
+	public String getTf_state() {
+		return tf_state;
+	}
+
+
+	public void setTf_state(String tf_state) {
+		this.tf_state = tf_state;
+	}
+
+
+	public String getTf_createtime() {
+		return tf_createtime;
+	}
+
+
+	public void setTf_createtime(String tf_createtime) {
+		this.tf_createtime = tf_createtime;
 	}
 	
 }

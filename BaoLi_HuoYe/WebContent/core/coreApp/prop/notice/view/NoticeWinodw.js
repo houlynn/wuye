@@ -1,6 +1,6 @@
-Ext.define('core.prop.point.view.PointWinodw', {
+Ext.define('core.prop.notice.view.PointWinodw', {
 		  extend : 'Ext.window.Window',
-			alias : 'widget.point.window',
+			alias : 'widget.notice.window',
 			maximizable : true,
 			closeAction : 'hide',
 			bodyStyle : 'padding : 2px 2px 0',
@@ -9,7 +9,7 @@ Ext.define('core.prop.point.view.PointWinodw', {
 			layout : 'fit',
 			width:600,
 			items:[{
-			 xtype:"point.form"
+			 xtype:"notice.form"
 			}],
 			 listeners: {
 		            hide: function (win, eOpts) {
@@ -19,7 +19,6 @@ Ext.define('core.prop.point.view.PointWinodw', {
 			initComponent : function() {
 				this.maxHeight = document.body.clientHeight * 0.98;
 				var me = this;
-				this.maximized =false;
 				this.tools = [{
 							type : 'collapse'
 						}];

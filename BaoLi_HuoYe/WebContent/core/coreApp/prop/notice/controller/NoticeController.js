@@ -28,7 +28,7 @@ init:function(){
 				                vid:vid
 			                 });
 			                    window.down('form[xtype=notice.form]').getForm().loadRecord(model);
-			                    var title=selection[0].get("text")+" 添加终点工信息";
+			                    var title=selection[0].get("text")+" 添加公告信息";
 			                    window.setTitle(title);
 	                            window.show();
 								}, 
@@ -50,7 +50,7 @@ init:function(){
 			                 });
 			var selection= modulegrid.getSelectionModel().getSelection()                 
 	         window.down('form[xtype=notice.form]').getForm().loadRecord(selection[0]);
-			                    var title=selection[0].get("tf_name")+" 修改终点工信息";
+			                    var title=selection[0].get("tf_title")+" 修改公告信息";
 			                    window.setTitle(title);
 	                            window.show();
 				}
@@ -60,11 +60,11 @@ init:function(){
 					var modulegrid=btn.up("grid[xtype=notice.grid]");
 			        var selection=modulegrid.getSelectionModel().getSelection();
 			        if(selection.length>0){
-			        Ext.MessageBox.confirm('确定删除', '确定要发布 '+selection[0].get("tf_name"),
+			        Ext.MessageBox.confirm('确定要审核', '你确定要审核'+selection[0].get("tf_title"),
 					function(btn) {
 						if (btn == 'yes') {
-					 var resObj=self.ajax({url:"vi/audit.action",params:{id:selection[0].get("tf_noticeId")}});
-				     modulegrid.getStore().reload();
+					 var resObj=self.ajax({url:"vi/auditNotice.action",params:{id:selection[0].get("tf_noticeId")}});
+				     modulegrid.getStore().load();
 						}});
 			        }
 				}
@@ -83,9 +83,9 @@ init:function(){
 			};
 			var flag=true;
 		    if (formObj.isValid()) {
-		    var url="vi/updatenotice.action";	
+		    var url="vi/updateNotice.action";	
 			if(poinid==null|| poinid==0){
-			    url="vi/createnotice.action";
+			    url="vi/createNotice.action";
 			    flag=false;
 			}
 				formObj.submit({
@@ -121,12 +121,12 @@ init:function(){
 			var message='';
 			var infoMessage='';
 			if (selection.length == 1) { 
-				message = ' 『' + selection[0].get("tf_name") + '』 吗?';
-				infoMessage = '『' + selection[0].get("tf_name") + '』';
+				message = ' 『' + selection[0].get("tf_title") + '』 吗?';
+				infoMessage = '『' + selection[0].get("tf_title") + '』';
 			} else { 
 				message = '<ol>';
 				Ext.Array.each(selection, function(record) {
-							message += '<li>' + record.get("tf_name") + '</li>';
+							message += '<li>' + record.get("tf_title") + '</li>';
 						});
 				message += '</ol>';
 				infoMessage = message;
@@ -144,12 +144,12 @@ init:function(){
 								ids.push(pkValue);
 							  });
 							  console.log(ids);
-							 var resObj=self.ajax({url:"vi/removerecords.action",params:{ids:ids,moduleName:"MeterInfo"}});
+							 var resObj=self.ajax({url:"vi/removeNotice.action",params:{ids:ids,moduleName:"NoticeInfo"}});
 							 modulegrid.getStore().reload();
-							 modulegrid.setTitle("终点工");
+							 modulegrid.setTitle("小区公告");
 							 return;
 							 }
-							 modulegrid.setTitle("终点工");
+							 modulegrid.setTitle("小区公告");
 							 Ext.toast({
 										title : '删除成功',
 										html : moduletitle + infoMessage + '已成功删除！',
@@ -207,21 +207,7 @@ init:function(){
 					store.load();	  
 				}
 			},
-			"form[xtype=notice.form] #tf_topUrl":{	
-			 render:function(f){
-				var form= f.up("form[xtype=notice.form]")
-				var grid=form.up("window[xtype=notice.window]").grid;
-				var formRecord=form.getForm().getRecord();
-				 var tf_noticeId= formRecord.get("tf_noticeId");
-				 if(tf_noticeId){
-				var record=grid.getSelectionModel().getSelection()[0];
-				var topUrl=record.get("tf_topUrl");
-				 f.inputEl.dom.value=topUrl;
-				 }
-				
-				
-			}
-			},
+
 			
 			
 		});
@@ -229,13 +215,13 @@ init:function(){
 	views:[
   "core.prop.notice.view.MainLayout",
   "core.prop.notice.view.LevelTree",
-  "core.prop.notice.view.noticeGrid",
-  "core.prop.notice.view.noticeWinodw",
-  "core.prop.notice.view.noticeForm"
+  "core.prop.notice.view.NoticeGrid",
+  "core.prop.notice.view.NoticeWinodw",
+  "core.prop.notice.view.NoticeForm"
 	],
 	stores:[
-	'core.prop.notice.store.LevelStore',
-	"core.prop.notice.store.noticeStore"
+	'core.prop.point.store.LevelStore',
+	"core.prop.notice.store.NoticeStore"
 	],
     models : []
 });

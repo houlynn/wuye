@@ -331,7 +331,7 @@ public interface ICommonRepertory  extends LogerManager{
 	
 	public  float sum(String sql);
 	
-	public void update(Map<String,Object> values, Class<? extends Model> calzz, Serializable pk ) throws Exception;
+	public Object update(Map<String,Object> values, Class<? extends Model> calzz, Serializable pk ) throws Exception;
 
-	public void update(Map<String,Object> values,Model obj, Serializable pk ) throws Exception;
+	public Object update(Map<String,Object> values,Model obj, Serializable pk ) throws Exception;
 }
