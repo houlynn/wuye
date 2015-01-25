@@ -49,6 +49,8 @@
 		    <mapping class="com.model.hibernate.property.PayKey"/>
 		    <mapping class="com.model.hibernate.property.InnstallBill"/>
 		     <mapping class="com.model.hibernate.property.PoollGtinfo"/>
+		      <mapping class="com.model.hibernate.property.NoticeInfo"/>
+		     
 		    
 		    
 		    

@@ -1,14 +1,14 @@
-Ext.define("core.prop.expre.view.MainLayout",{
-	alias : 'widget.expre.panel',
+Ext.define("core.prop.repair.view.MainLayout",{
+	alias : 'widget.repair.panel',
 	extend : 'Ext.container.Container',
 	layout : 'border',
 	items : [{
-		xtype:"expre.levelTree",
+		xtype:"repair.levelTree",
 		region:"west",
 		width:comm.get("clientWidth")*0.18
 	},{
-		xtype:"expre.grid",
-		title:'快递收发信息',
+		xtype:"repair.grid",
+		title:'报装报修信息',
 		code:106,
 		region:"center"
 	}]

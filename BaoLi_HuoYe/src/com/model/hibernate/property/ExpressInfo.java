@@ -61,6 +61,14 @@ public class ExpressInfo extends BaseEntity {
 	@JoinColumn(name="tf_viid",nullable=false)
 	@FieldInfo(title = "小区", number = 70)
 	private Village tf_village;
+	@Column(length=10)
+	@FieldInfo(title = "处理状态", number =10)
+	private String tf_state;
+	
+	
+	@Transient
+	private String tf_vname;
+	
 	@Transient
 	private int tf_vid;
 
@@ -143,6 +151,23 @@ public class ExpressInfo extends BaseEntity {
 	public void setTf_village(Village tf_village) {
 		this.tf_village = tf_village;
 	}
+
+	public String getTf_state() {
+		return tf_state;
+	}
+
+	public void setTf_state(String tf_state) {
+		this.tf_state = tf_state;
+	}
+	@Transient
+	public String getTf_vname() {
+		return tf_vname;
+	}
+
+	public void setTf_vname(String tf_vname) {
+		this.tf_vname = tf_vname;
+	}
+
 
 	
 	

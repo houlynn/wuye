@@ -9,9 +9,19 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -24,9 +34,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.model.hibernate.property.ExpressInfo;
 import com.model.hibernate.property.LevelInfo;
+import com.model.hibernate.property.NoticeInfo;
 import com.model.hibernate.property.PointFrientInfo;
+import com.model.hibernate.property.RepairInfo;
+import com.model.hibernate.property.ResidentInfo;
 import com.model.hibernate.property.Village;
+import com.ufo.framework.annotation.FieldInfo;
 import com.ufo.framework.common.core.ext.model.JSONTreeNode;
 import com.ufo.framework.common.core.properties.PropUtil;
 import com.ufo.framework.common.core.utils.AppUtils;
@@ -63,6 +78,8 @@ public class VillageController extends BaseController {
 		}
 		return result;
 	}
+	
+
 	
 	@RequestMapping(value = "/removePoint/{id}", method = RequestMethod.DELETE)
 	public @ResponseBody
@@ -236,6 +253,156 @@ public class VillageController extends BaseController {
 		
 	}
 	
+	@RequestMapping("/loadexpre")
+	public @ResponseBody Map<String, Object> loadExpre(Integer start, Integer limit,
+			@RequestParam(value="whereSql",required=false,defaultValue="") String whereSql,
+	    	@RequestParam(value="parentSql",required=false,defaultValue="") String parentSql,
+	    	@RequestParam(value="querySql",required=false,defaultValue="") String querySql,
+	    	@RequestParam(value="orderSql",required=false,defaultValue="") String orderSql,
+	    	@RequestParam(value="vid",required=true) int vid,
+			HttpServletRequest request) throws Exception {;
+		whereSql+=" and tf_village="+vid;
+		return super.load(start, limit, whereSql, parentSql, querySql, orderSql, "ExpressInfo", request, (dataList)->{
+			List<ExpressInfo> list=(List<ExpressInfo>)dataList;
+			list=list.stream().map(item->{
+		    item.setTf_vname(item.getTf_village().getTf_name());
+			return item;
+			}).collect(Collectors.toList());
+			return  list;
+		});
+	}
 	
+	@RequestMapping("/auditExpre")
+	  public @ResponseBody DataUpdateResponseInfo auditExpre(
+			  @RequestParam(value="id",required=true) int id
+			  ) throws Exception{
+		  DataUpdateResponseInfo result=new DataUpdateResponseInfo();
+		  ExpressInfo info=ebi.findById(ExpressInfo.class, id);
+		  info.setTf_state("1");
+		  ebi.update(info);
+		  return result;
+	  }
+		
+	@RequestMapping(value = "/removeExpre.action")
+	public @ResponseBody
+	DataDeleteResponseInfo removeExpre(String moduleName, String[] titles,
+			@RequestParam(value="ids",required=false) int[] ids,
+			HttpServletRequest request) throws Exception {
+		DataDeleteResponseInfo 	result = new DataDeleteResponseInfo();
+		for(int id : ids){
+			ExpressInfo info=ebi.findById(ExpressInfo.class, id);
+			ebi.delete(info);
+		}
+		return result;
+	}
+	
+	@RequestMapping("/loadRepair")
+	public @ResponseBody Map<String, Object> loadRepair(Integer start, Integer limit,
+			@RequestParam(value="whereSql",required=false,defaultValue="") String whereSql,
+	    	@RequestParam(value="parentSql",required=false,defaultValue="") String parentSql,
+	    	@RequestParam(value="querySql",required=false,defaultValue="") String querySql,
+	    	@RequestParam(value="orderSql",required=false,defaultValue="") String orderSql,
+	    	@RequestParam(value="vid",required=true) int vid,
+			HttpServletRequest request) throws Exception {
+		whereSql+=" and tf_ResidentInfo.tf_levelInfo.tf_parent.tf_village.tf_viid="+vid;
+		
+		return super.load(start, limit, whereSql, parentSql, querySql, orderSql, "RepairInfo", request, (dataList)->{
+			List<RepairInfo> list=(List<RepairInfo>)dataList;
+			  List<Map<String,Object>> datas=new ArrayList<>();
+			  for(RepairInfo r:list ){
+					Map<String,Object> view=new HashMap<String, Object>();
+					view.put("tf_repairId", r.getTf_repairId());
+					view.put("tf_ResidentInfo",r.getTf_ResidentInfo().getTf_levelInfo().getTf_parent().getTf_village().getTf_name()+"-"
+							+r.getTf_ResidentInfo().getTf_levelInfo().getTf_parent().getTf_leveName()+"--"
+							+r.getTf_ResidentInfo().getTf_levelInfo().getTf_leveName()+"--"
+							+r.getTf_ResidentInfo().getTf_number()+"--"+r.getTf_ResidentInfo().getTf_residentName());
+					view.put("tf_repairItem", r);
+					view.put("tf_repairTime", r);
+					view.put("tf_state", r);
+					view.put("tf_dowithDate", r);
+					view.put("tf_repairMan", r);
+					view.put("tf_levf", r);
+					view.put("tf_remark", r);
+					datas.add(view);
+					view=null;
+			  }
+			  return datas;
+			
+	});
+	}
+			  
+	
+	
+	
+	
+    
+	@RequestMapping("/loadNotice")
+	public @ResponseBody Map<String, Object> loadNotice(Integer start, Integer limit,
+			@RequestParam(value="whereSql",required=false,defaultValue="") String whereSql,
+	    	@RequestParam(value="parentSql",required=false,defaultValue="") String parentSql,
+	    	@RequestParam(value="querySql",required=false,defaultValue="") String querySql,
+	    	@RequestParam(value="orderSql",required=false,defaultValue="") String orderSql,
+	    	@RequestParam(value="vid",required=true) int vid,
+			HttpServletRequest request) throws Exception {
+		whereSql+=" and tf_Village="+vid;
+		return super.load(start, limit, whereSql, parentSql, querySql, orderSql, "NoticeInfo", request, (dataList)->{
+			List<NoticeInfo> list=(List<NoticeInfo>)dataList;
+			  List<Map<String,Object>> datas=new ArrayList<>();
+			  for(NoticeInfo n:list ){
+					Map<String,Object> view=new HashMap<String, Object>();
+					view.put("tf_noticeId", n.getTf_noticeId());
+					view.put("tf_souce", n.getTf_souce());
+					view.put("tf_time", n.getTf_time());
+					view.put("tf_levf", n.getTf_levf());
+					view.put("tf_title", n.getTf_title());
+					view.put("tf_content", n.getTf_content());
+					view.put("tf_Village", n.getTf_Village().getTf_name());
+					datas.add(view);
+					view=null;
+			  }
+			  return datas;
+			
+	});
+	}
+    
+	
+		@RequestMapping(value = "/updateNotice", method = RequestMethod.POST,produces = "application/json;text/plain;charset=UTF-8")
+		public  @ResponseBody String updateNotice(@Validated NoticeInfo model,
+				@RequestParam(value="vid",required=true) int vid,	
+				HttpServletRequest request) throws Exception {
+			Village village=new Village();
+			village.setTf_viid(vid);
+			model.setTf_Village(village);
+			ebi.update(model);
+			 String  reslut=jsonBuilder.returnSuccessJson(jsonBuilder.toJson(model));
+			 return reslut;
+		}
+		
+	
+	@RequestMapping(value = "/createNotice", method = RequestMethod.POST ,produces = "application/json;text/plain;charset=UTF-8")
+	public @ResponseBody
+	String add(@Validated NoticeInfo model,
+			@RequestParam(value="vid",required=true) int vid,	
+			HttpServletRequest request) throws Exception {
+		Village village=new Village();
+		village.setTf_viid(vid);
+		model.setTf_Village(village);
+		ebi.save(model);
+    	String	reslut=jsonBuilder.returnSuccessJson(jsonBuilder.toJson(model));
+		return reslut;
+	}
+		
+	@RequestMapping(value = "/removeNotice.action")
+	public @ResponseBody
+	DataDeleteResponseInfo removeNotice(String moduleName, String[] titles,
+			@RequestParam(value="ids",required=false) int[] ids,
+			HttpServletRequest request) throws Exception {
+		DataDeleteResponseInfo 	result = new DataDeleteResponseInfo();
+		for(int id : ids){
+			NoticeInfo info=ebi.findById(NoticeInfo.class, id);
+			ebi.delete(info);
+		}
+		return result;
+	}
 	
 }

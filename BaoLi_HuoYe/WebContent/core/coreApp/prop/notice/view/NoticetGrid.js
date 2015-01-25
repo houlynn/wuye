@@ -1,6 +1,6 @@
-Ext.define("core.prop.expre.view.ExpreGrid", {
+Ext.define("core.prop.point.view.NoticetGrid", {
 	extend : 'Ext.grid.Panel',
-	alias : 'widget.expre.grid',
+	alias : 'widget.point.grid',
 	autoHeight : true,
 	style : 'border-width:0 0 0 0;',
 	columnLines : true, // 加上表格线
@@ -23,7 +23,7 @@ Ext.define("core.prop.expre.view.ExpreGrid", {
 							: 'disable']();		
 							
 					// 下面将组织选中的记录的name显示在title上，有二种方案可供选择，一种是用下面的MVVM特性，第二种是调用refreshTitle()
-					var selectedNames ='快递收发'
+					var selectedNames ='终点工信息'
 					if (selected.length > 0) {
 						if (!!selected[0].get("tf_name")) {
 							selectedNames = selectedNames
@@ -42,39 +42,54 @@ Ext.define("core.prop.expre.view.ExpreGrid", {
 			}],
 		columns:[
 		  {text : "Id",
-		     dataIndex : "tf_exprid",
+		     dataIndex : "tf_pointId",
 		     width : 2,
 		    columnType : "textfield",
 		     hidden:true
 		},
-	  {text : "房号",
-		     dataIndex : "tf_roomNub",
-		     width : 180,
+	  {text : "终点工类型",
+		     dataIndex : "tf_type",
+		     width : 80,
+		    columnType : "basecombobox",
+		    ddCode:"POINTTYPE"
 		},
-		{text : "收件人",
-		dataIndex : "tf_poponame",
-		width : 120,
+		{text : "名字",
+		dataIndex : "tf_name",
+		width : 80,
 		columnType : "textfield"
 		},
-	   {text : "手机号",
-		dataIndex : "tf_phoneNuber",
-		width : 180,
-		},		
-		{text : "物品数量",
-		dataIndex : "tf_woucount",
+	   {text : "性别",
+		dataIndex : "tf_sex",
+		width : 80,
+		ddCode : "SEX",
+		columnType : "basecombobox"
+		},		{text : "年龄",
+		dataIndex : "tf_age",
 		width : 80,
 		columnType : "numberfield"
 		},
-			{text : "提交时间",
-		dataIndex : "tf_postTime",
-		width : 160,
+			{text : "薪资",
+		dataIndex : "tf_price",
+		width : 80,
 		columnType : "numberfield"
 		},
-			{text : "APP用户",
-		  dataIndex : "tf_appUser",
-		  width : 150,
+			{text : "工作年限",
+		  dataIndex : "tf_taex",
+		  width : 80,
+			ddCode : "NIANXIAN",
+		   columnType : "basecombobox"
 		},
-			{text : "物品描述",
+			{text : "头像",
+		  dataIndex : "tf_topUrl",
+		  width : 80,
+		  renderer:function(value,data,record){
+				var width=16;
+				var height=16;
+			 	return "<img src='"+value+"' width="+width+" height="+height+" />";
+		 }
+		}
+		,
+			{text : "简历",
 		dataIndex : "tf_rmark",
 		width : 320,
 		columnType : "textfield"
@@ -86,31 +101,29 @@ Ext.define("core.prop.expre.view.ExpreGrid", {
 		columnType : "textfield"
 		}
 		,
-		{text : "处理状态",
+		{text : "发布状态",
 		dataIndex : "tf_state",
 		width : 120,
 		renderer : function(value, data, record) {
 				if ("1" == value) {
-					value = "<span style='color:red;font-weight:bold'>已处理</span>";
+					value = "<span style='color:red;font-weight:bold'>已发布</span>";
 			} else {
-				value = "<span style='color:green;font-weight:bold'>未处理</span>";
+				value = "<span style='color:green;font-weight:bold'>未发布</span>";
 			}
 			  return value;
 		}}
 			],		
-  initComponent : function() {
+	initComponent : function() {
 		var self = this;
 		var thar = [{
 					text : '新增',
 					ref : 'addButton',
-					glyph : 0xf016,
-					 hidden:true
+					glyph : 0xf016
 				}, {
 					text : '修改',
 					glyph : 0xf044,
 					disabled : true,
 					itemId:"edit",
-					 hidden:true,
 					ref : "editButton"
 				}, {
 					text : '删除',
@@ -118,13 +131,15 @@ Ext.define("core.prop.expre.view.ExpreGrid", {
 					glyph : 0xf014,
 					itemId : 'delete',
 					ref : "removeButton"
+					,
 				},
 				 {
-					text : '审核',
+					text : '发布',
 					disabled : true,
 					glyph : 0xf014,
 					itemId : 'audit',
 					ref : "audit"
+					,
 				}
 				
 				, '-', '-', '筛选', {
@@ -189,10 +204,10 @@ Ext.define("core.prop.expre.view.ExpreGrid", {
 		this.callParent(arguments);
 
 	},
- store:"core.prop.expre.store.ExpreStore",
+ store:"core.prop.point.store.PointStore",
 	bbar:{
 		xtype:'pagingtoolbar',
-		store:"core.prop.expre.store.ExpreStore",
+		store:"core.prop.point.store.PointStore",
 		dock:'bottom',
 		displayInfo:true
 	}

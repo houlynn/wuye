@@ -1,14 +1,14 @@
-Ext.define("core.prop.expre.view.MainLayout",{
-	alias : 'widget.expre.panel',
+Ext.define("core.prop.point.view.MainLayout",{
+	alias : 'widget.point.panel',
 	extend : 'Ext.container.Container',
 	layout : 'border',
 	items : [{
-		xtype:"expre.levelTree",
+		xtype:"point.levelTree",
 		region:"west",
 		width:comm.get("clientWidth")*0.18
 	},{
-		xtype:"expre.grid",
-		title:'快递收发信息',
+		xtype:"point.grid",
+		title:'终点工',
 		code:106,
 		region:"center"
 	}]
