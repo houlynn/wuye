@@ -325,7 +325,7 @@ public class ResidentController    implements LogerManager,CommonException {
 	            	info.setTf_levelInfo(levelInfo);
 	            	String ranme=String.valueOf(rowData.get(4));//业主姓名
 	             	System.out.println("业主姓名:"+ranme);
-	            	info.setTf_residentName(ranme);
+	            	info.setTf_residentName(ranme.replace(" ", ""));
 	            	
 	            	String appPhone=String.valueOf(rowData.get(5));//APP
 	            	  if(appPhone.contains(".")){
@@ -354,25 +354,38 @@ public class ResidentController    implements LogerManager,CommonException {
 	            	
 		            	String shouDate=String.valueOf(rowData.get(9));//收楼日期
 			            if(StringUtil.isEmpty(shouDate)){
+			            	  try{
 			            		shouDate=format.format(shouDate);
+			            	  }catch(Exception e){
+			            		  e.printStackTrace();
+			            		  debug("转换日期失败!");
+			            	  }
 			            	}
 			        	info.setTf_sdate(shouDate);
 			        	  System.out.println("收楼日期:"+shouDate);
 			        	String souAdvDate=String.valueOf(rowData.get(10));//收楼通知书日期
 		            	if(StringUtil.isEmpty(shouDate)){
+		            		try{
 		            		shouDate=format.format(shouDate);
+		            		}catch(Exception e){
+		            			e.printStackTrace();
+		            		}
 		            	}
 		                 info.setTf_adate(souAdvDate);
 		                 System.out.println("收楼通知书日期:"+souAdvDate);
 		                 
 		                 
-		                 
+		                 try{
 		              	float arear=Float.valueOf(rowData.get(11)+"");//建筑面积
 		            	   info.setTf_builArea(arear);
 		            	   System.out.println("建筑面积:"+arear);
 		             	float resarea=Float.valueOf(rowData.get(12)+"");//实测面积
 		            	info.setTf_userArea(resarea);
 		            	 System.out.println("实测面积:"+resarea);
+		                 }catch(Exception e){
+		                	 e.printStackTrace();
+		                	 debug("装换数字失败!");
+		                 }
 		            	 
 		            		String doWithMane=String.valueOf(rowData.get(13));//经办人
 			            	info.setTf_doman(doWithMane);

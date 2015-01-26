@@ -46,7 +46,7 @@ public class ResidentInfo  extends BaseEntity{
 	@Column(length = 50, nullable = false)
 	private String tf_number;
 	 @FieldInfo(title = "业主名称", number = 30)
-	 @Column(length=25)
+	 @Column(length=250)
 	private String tf_residentName;
 		@FieldInfo(title = "业主电话（1)APP账户", number = 40)
 		@Column(length = 25)

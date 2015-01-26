@@ -74,7 +74,7 @@ public class BillItem extends BaseEntity {
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JoinColumn(name = "tf_residentId",nullable=false)
 	@FieldInfo(title = "业主", number =20)
-	private RepairInfo tf_RepairInfo;
+	private ResidentInfo tf_ResidentInfo;
 	
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
 	@JoinColumn(name = "tf_billid")
@@ -172,11 +172,11 @@ public class BillItem extends BaseEntity {
 	public void setTf_BillContext(BillContext tf_BillContext) {
 		this.tf_BillContext = tf_BillContext;
 	}
-	public RepairInfo getTf_RepairInfo() {
-		return tf_RepairInfo;
+	public ResidentInfo getTf_ResidentInfo() {
+		return tf_ResidentInfo;
 	}
-	public void setTf_RepairInfo(RepairInfo tf_RepairInfo) {
-		this.tf_RepairInfo = tf_RepairInfo;
+	public void setTf_ResidentInfo(ResidentInfo tf_ResidentInfo) {
+		this.tf_ResidentInfo = tf_ResidentInfo;
 	}
 
 }

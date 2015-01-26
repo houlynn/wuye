@@ -24,6 +24,7 @@ import com.model.hibernate.property.FeesInfo;
 import com.model.hibernate.property.FeesTypeItem;
 import com.model.hibernate.property.InnstallBill;
 import com.model.hibernate.property.MeterInfo;
+import com.model.hibernate.property.PoollGtinfo;
 import com.model.hibernate.property.ResidentInfo;
 import com.model.hibernate.system.shared.EndUser;
 import com.property.base.ebi.UnitFeesEbi;
@@ -136,11 +137,12 @@ public 	DataFetchResponseInfo addUniteFees(int rid,int rtype
 	List<String> months=AppUtils.getMonthList(startDate, endDate);
 	for(String m : months){
 		//已收项目
-		String nchql=" select count(*) from BillItem where 1=1 and tf_state='1' and tf_FeesInfo="+feesid+" and tf_feesDate='"+m+"' and tf_RepairInfo="+rid;
+		String nchql=" select count(*) from BillItem where 1=1 and tf_state='1' and tf_FeesInfo="+feesid+" and tf_feesDate='"+m+"' and tf_ResidentInfo="+rid;
 		//未收项目
-		String ochql=" select count(*) from BillItem where 1=1 and tf_state='0'  and tf_FeesInfo="+feesid+" and tf_feesDate='"+m+"' and tf_feesDate='"+m+"' and tf_RepairInfo="+rid;
-		String ohql="from BillItem where 1=1 and tf_state='0' and tf_FeesInfo="+feesid+"  and tf_feesDate='"+m+"' order by tf_feesDate desc,tf_FeesInfo and tf_feesDate='"+m+"' and tf_RepairInfo="+rid;
+		String ochql=" select count(*) from BillItem where 1=1 and tf_state='0'  and tf_FeesInfo="+feesid+" and tf_feesDate='"+m+"' and tf_feesDate='"+m+"' and tf_ResidentInfo="+rid;
+		String ohql="from BillItem where 1=1 and tf_state='0' and tf_FeesInfo="+feesid+"  and tf_feesDate='"+m+"' order by tf_feesDate desc,tf_FeesInfo and tf_feesDate='"+m+"' and tf_ResidentInfo="+rid;
 		Integer count=0;
+		ResidentInfo residentInfo= ebi.findById(ResidentInfo.class, rid);
 		try {
 		 count=ebi.getCount(nchql);
 		 debug("查询是否已经交费的BillItem： "+nchql);
@@ -161,6 +163,7 @@ public 	DataFetchResponseInfo addUniteFees(int rid,int rtype
 		    	bill.setTf_feesDate(m);//收费周期
 		    	bill.setTf_FeesInfo(item.getTf_FeesInfo());//收费标准
 		    	bill.setTf_state("0");//收费状态
+		    	bill.setTf_ResidentInfo(residentInfo);
 		    	if(rtype==1){
 		    	bill.addXcode();//物业标示
 		    	}
@@ -203,7 +206,6 @@ public 	DataFetchResponseInfo addUniteFees(int rid,int rtype
 			    			MeterInfo	newmeterInfo=new MeterInfo();
 			    			newmeterInfo.setTf_mtermane(item.getTf_FeesInfo().getTf_freesName());//项目名称
 			    			newmeterInfo.setTf_FeesInfo(item.getTf_FeesInfo());//收费标准
-			    			ResidentInfo residentInfo= ebi.findById(ResidentInfo.class, rid);
 			    			newmeterInfo.setTf_ResidentInfo(residentInfo);
 			    			newmeterInfo.setTf_acount(residentInfo.getTf_builArea());//建筑面积
 			    			newmeterInfo.setTf_mtype(MeterInfo.FEES_TYPE_UNITE);
@@ -238,7 +240,6 @@ public 	DataFetchResponseInfo addUniteFees(int rid,int rtype
 			    			meterInfo.setTf_mtermane(item.getTf_FeesInfo().getTf_freesName());//项目名称
 			    			meterInfo.setTf_FeesInfo(item.getTf_FeesInfo());//收费标准
 			    			meterInfo.setTf_mtype(MeterInfo.FEES_TYPE_NOUNITE);
-			    			ResidentInfo residentInfo= ebi.findById(ResidentInfo.class, rid);
 			    			meterInfo.setTf_ResidentInfo(residentInfo);
 			    			meterInfo.setTf_rendDate(m);//收费周期
 			    			if(rtype==1){
@@ -261,31 +262,57 @@ public 	DataFetchResponseInfo addUniteFees(int rid,int rtype
 		        	}
 		        	InnstallBill bil= listBills.get(0);
 		        	debug("根据收费项目找到 公表："+bil.getTf_name());
-		        	String rhqt=" from ResidentInfo wwhere 1=1 and tf_levelInfo.tf_parent.tf_InnstallBill.tf_insid="+bil.getTf_insid()+" tf_residentId="+rid;
+		        	
+		        	
+		         	String rhqt=" from ResidentInfo where 1=1  and tf_levelInfo.tf_parent.tf_InnstallBill.tf_insid="+bil.getTf_insid()+" and tf_residentId="+rid;
 		        	List<ResidentInfo> resindents=(List<ResidentInfo>) ebi.queryByHql(rhqt);
 		        	if(resindents==null||resindents.size()==0){
 		        		continue;
 		        	}
-		        	ResidentInfo residentInfo=resindents.get(0);
-		        	debug("判断这个住户是在这个表的区域中："+residentInfo.getTf_residentName());
+		        	ResidentInfo residentInfocheck=resindents.get(0);
+		        	debug("判断这个住户是在这个表的区域中："+residentInfocheck.getTf_residentName());
 		        	
 		        	String billConten=" from  PoollGtinfo where 1=1 and tf_InnstallBill="+bil.getTf_insid()+" and tf_rendMonth='"+m+"' and tf_state='1' ";
-		        	
-		        	
-		        	
-		        	
-		        	
-		        	
-		        	
-		        	
-		        	
-		        	///拿到这个住户的建筑面积计算缴费金额
-		        	
-		        	
-		        	
-		        	
-		        	
-		        	
+		            List<PoollGtinfo> prools= (List<PoollGtinfo>) ebi.queryByHql(billConten);
+		            if(prools==null||prools.size()==0){
+		            	continue;
+		            }
+		            PoollGtinfo poo=prools.get(0);
+		            double veryCount=poo.getTf_Acount();
+		            double buildarea=residentInfo.getTf_builArea();
+		            double acount=veryCount*buildarea;
+		         	String hqlpool=" from MeterInfo where 1=1 and tf_rendDate='"+m+"'and tf_FeesInfo="+item.getTf_FeesInfo().getTf_feesid() +" and tf_ResidentInfo="+rid;
+		            if("003".equals(bil.getTf_billType())){ //电表
+		            	hqlpool+=" and tf_mtype='"+MeterInfo.FEES_TYPE_GTPOWER+"' " ;
+		            }else if("006".equals(bil.getTf_billType())){//水表
+		            	hqlpool+=" and tf_mtype='"+MeterInfo.FEES_TYPE_GTWATER+"' " ;
+		            }
+		           List<MeterInfo> meterInfos=(List<MeterInfo>) ebi.queryByHql(hqlpool);
+		           MeterInfo meterInfo=null;
+		           if(meterInfos==null||meterInfos.size()==0){
+		        	   meterInfo=new MeterInfo();
+		    			meterInfo.setTf_mtermane(item.getTf_FeesInfo().getTf_freesName());//项目名称
+		    			meterInfo.setTf_FeesInfo(item.getTf_FeesInfo());//收费标准
+		    			meterInfo.setTf_mtype(bil.getTf_billType());
+		    			meterInfo.setTf_ResidentInfo(residentInfo);
+		    			meterInfo.setTf_rendDate(m);//收费周期
+		    			meterInfo.setTf_acount(buildarea);//建筑面积
+		    			if(rtype==1){
+		    			meterInfo.addXcode();
+		    			}
+		    			meterInfo.setTf_meterdate(AppUtils.getCurDate());
+		    			ebi.save(meterInfo);
+		    			debug("插入一条分摊费的记录:"+meterInfo.getTf_mtermane());	
+		    			bill.setTf_count(buildarea);
+		    			bill.setTf_price(veryCount);//设置单价
+		    			bill.setTf_acount(acount);//设置
+		           }else{
+		        	   meterInfo= meterInfos.get(0);
+		    			bill.setTf_count(buildarea);//建筑面积
+		    			bill.setTf_price(veryCount);//设置单价
+		    			bill.setTf_acount(acount);//设置
+		           }
+		       	bill.setTf_MeterInfo(meterInfo);
 		        	break;	
 		        }
 				////////////////////////////////////////////////////////////////	
