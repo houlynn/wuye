@@ -16,6 +16,10 @@ init:function(){
 	         	     	var tree= btn.ownerCt.ownerCt.ownerCt.down("container[xtype=resident.levelTree]");
    		     	      	var commbox=tree.down("combobox[ref=vicombobox]");
    		     	      	var vid=commbox.getValue();
+   		     	      	if(!vid){
+   		     	      	 system.errorInfo("请选择一个小区再进行操作!","错误提示");
+   		     	      	 return ;
+   		     	      	}
 	         	     	    var window= Ext.create("Ext.window.Window",{
                		    	items:[{xtype:"base.fileUpload",vid:vid}]
                		    });   
@@ -59,7 +63,7 @@ init:function(){
 			                 }
 			                 
 			                 
-							 var viewModel=system.getViewModel(modulegrid.code);
+							 var viewModel=system.getViewModel(104);
                 	         if(!store.navigates||store.navigates.length==0){
                 	         	system.errorInfo("请选择小区再进行添加操作","错误提示");
                 	         	return;
@@ -67,7 +71,7 @@ init:function(){
 							 
 						     var model = Ext.create(modulegrid.getStore().model);
 			                 model.set(model.idProperty, null); // 设置主键为null,可自动
-			                 var viewModel=system.getViewModel(modulegrid.code)
+			                 var viewModel=system.getViewModel(104)
 			                 var window = Ext.create('core.app.view.region.BaseWindow', {
 				                          viewModel:viewModel,
 				                            grid:modulegrid
@@ -101,7 +105,7 @@ init:function(){
 			"container[xtype=resident.gridModue]  button[ref=editButton] ":{
 		   click:function(btn){
 			var modulegrid = btn.up("grid[xtype=resident.gridModue]");	
-			var viewModel=modulegrid.viewModel;
+			 var viewModel=system.getViewModel(104)
 			var window = Ext.create('core.app.view.region.BaseWindow', {
 				viewModel:viewModel,
 				grid:modulegrid
@@ -393,6 +397,8 @@ init:function(){
                      var ids=form.tag.ids;
                      var params={dataStr:dataStr,ids:ids};
                      var resObj=self.ajax({url:"/102/setting.action",params:params});
+                     grid.getStore().load();
+                     
 				}
 			},
 		    /**

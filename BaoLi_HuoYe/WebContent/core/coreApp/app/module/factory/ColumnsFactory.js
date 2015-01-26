@@ -114,39 +114,20 @@ Ext.define('core.app.module.factory.ColumnsFactory', {
 							break;
 
 						case 'Boolean' :
-							Ext.apply(field, {
-										align : 'right',
-										xtype : 'checkcolumn',
-										stopSelection:false,
-										processEvent:function(type) { // 加入这一句，可以防止点中修改
-								         if (type == 'click')
-									     return false;
-							             },
-							             editor:{
-									           xtype : "basecombobox",
-					                           ddCode : "BOLEAN",
-					                           allowBlank : false,
-					                           hideTrigger : false
-							             }
-									});
+				      	field.xtype = 'checkcolumn';
+							field.stopSelection = false;
+							field.processEvent = function(type) { // 加入这一句，可以防止点中修改
+								if (type == 'click')
+									return false;
+							};
 							break;
 						    case 'boolean' :
-							Ext.apply(field, {
-										align : 'right',
-										xtype : 'checkcolumn',
-										stopSelection:false,
-										processEvent:function(type) { // 加入这一句，可以防止点中修改
-								         if (type == 'click')
-									     return false;
-							             },
-							             
-							             editor:{
-									           xtype : "basecombobox",
-					                           ddCode : "BOLEAN",
-					                           allowBlank : false,
-					                           hideTrigger : false
-							             }
-									});
+				           field.xtype = 'checkcolumn';
+							field.stopSelection = false;
+							field.processEvent = function(type) { // 加入这一句，可以防止点中修改
+								if (type == 'click')
+									return false;
+							};
 							break;
 						case 'basecombobox' :
 							Ext.apply(field, {
@@ -203,7 +184,7 @@ Ext.define('core.app.module.factory.ColumnsFactory', {
 										renderer : Ext.util.Format.monetaryRenderer,
 										editor : {
 											xtype : 'numberfield',
-											decimalPrecision:3
+											decimalPrecision:1
 										}
 									});
 							break;
@@ -215,7 +196,7 @@ Ext.define('core.app.module.factory.ColumnsFactory', {
 								width : 110,
 								editor : {
 											xtype : 'numberfield',
-		                                    decimalPrecision:3
+		                                    decimalPrecision:4
 										},
 								renderer : Ext.util.Format.floatRenderer
 									// formatter : 'floatRenderer' // 这种方法不可以
@@ -229,7 +210,7 @@ Ext.define('core.app.module.factory.ColumnsFactory', {
 								width : 110,
 								editor : {
 											xtype : 'numberfield',
-		                                    decimalPrecision:3
+		                                    decimalPrecision:4
 										},
 								renderer : Ext.util.Format.floatRenderer
 									// formatter : 'floatRenderer' // 这种方法不可以

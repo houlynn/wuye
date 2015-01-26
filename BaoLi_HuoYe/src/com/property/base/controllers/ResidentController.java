@@ -275,9 +275,13 @@ public class ResidentController    implements LogerManager,CommonException {
 	            		continue;
 	            	}
 	            	String index=String.valueOf(rowData.get(0));//序号
+	            	System.out.println("序号:"+index);
 	            	String lev0=String.valueOf(rowData.get(1));//栋
+	            	System.out.println("栋: "+lev0);
 	            	String lev1=String.valueOf(rowData.get(2));//楼层
+	            	System.out.println("楼层："+lev1);
 	            	String reNuber=String.valueOf(rowData.get(3));//房号
+	            	System.out.println("新单员:"+reNuber);
 	            	if(StringUtil.isEmpty(lev0)||StringUtil.isEmpty(lev1)){
 	            		continue;
 	            	}
@@ -319,62 +323,101 @@ public class ResidentController    implements LogerManager,CommonException {
 	            	}
 	            	debug(levelInfo.getTf_parent().getTf_leveName()+"-----"+levelInfo.getTf_leveName());
 	            	info.setTf_levelInfo(levelInfo);
-	            	String loutype=String.valueOf(rowData.get(4));//交楼类型
-	            	info.setTf_jfloorType(loutype);
-	            	String souQcare=String.valueOf(rowData.get(5));//收楼情况
-	            	info.setTf_sffloorType(souQcare);
-	            	if(StringUtil.isEmpty(souQcare)){
-	            		info.setTf_repossession(false);
-	            	}else{
-	            		info.setTf_repossession(true);
-	            	}
-	            	String reName=String.valueOf(rowData.get(6));//业主姓名
-	            	info.setTf_residentName(reName);
-	            	String remark=String.valueOf(rowData.get(7));//备注性质
-	            	info.setTf_remark1(remark);
-	            	String shouDate=String.valueOf(rowData.get(8));//收楼日期
-	            	if(StringUtil.isEmpty(shouDate)){
-	            		shouDate=format.format(shouDate);
-	            	}
-	            	info.setTf_sdate(shouDate);
-	            	String souAdvDate=String.valueOf(rowData.get(9));//收楼通知书日期
-	            	if(StringUtil.isEmpty(shouDate)){
-	            		shouDate=format.format(shouDate);
-	            	}
-	                 info.setTf_adate(souAdvDate);
-	            	String soutFuce=String.valueOf(rowData.get(10));//是否已经收房产信息通知书
-	            	if(StringUtil.isNotEmpty(soutFuce)){
-	            		info.setTf_isposttip(true);
-	            	}
-	            	String doWithMane=String.valueOf(rowData.get(11));//经办人
-	            	info.setTf_doman(doWithMane);
-	            	String remrak1=String.valueOf(rowData.get(12));//备注住户联系信息
-	            	info.setTf_remark2(remrak1);
-	            	String appPhone=String.valueOf(rowData.get(13));//APP
+	            	String ranme=String.valueOf(rowData.get(4));//业主姓名
+	             	System.out.println("业主姓名:"+ranme);
+	            	info.setTf_residentName(ranme);
+	            	
+	            	String appPhone=String.valueOf(rowData.get(5));//APP
 	            	  if(appPhone.contains(".")){
 	            		  appPhone=appPhone.substring(0,appPhone.lastIndexOf("."));
 	          	    }
+	            	  info.setTf_appPhone(appPhone);
+	            	  System.out.println("电话1:"+ranme);
+	            	  
+	            	  String tf_appPhone1=String.valueOf(rowData.get(6));//APP
+	            	  System.out.println("电话2:"+tf_appPhone1);
+	            	  info.setTf_appPhone1(tf_appPhone1);
+	            	  
+	            	  String tf_appPhone2=String.valueOf(rowData.get(7));//APP
+	            	  System.out.println("电话3:"+tf_appPhone2);
+	            	 info.setTf_appPhone2(tf_appPhone2);
+	            	  
+	            	 
+	            	 	String souQcare=String.valueOf(rowData.get(8));//收楼情况
+		            	info.setTf_sffloorType(souQcare);
+		            	if(StringUtil.isEmpty(souQcare)){
+		            		info.setTf_repossession(false);
+		            	}else{
+		            		info.setTf_repossession(true);
+		            	}
+		            	  System.out.println("收楼情况:"+souQcare);
 	            	
-	            	info.setTf_appPhone(appPhone);
-	            	String cardRemark=String.valueOf(rowData.get(14));//备注身份证号
-	            	info.setTf_remark3(cardRemark);
-	            	String  manreark=String.valueOf(rowData.get(15));//备注家庭成员
-	            	info.setTf_remark4(manreark);
-	            	String careNub=String.valueOf(rowData.get(16));//车牌号
-	            	info.setTf_license(careNub);
-	            	float arear=Float.valueOf(rowData.get(17)+"");//建筑面积
-	            	  BigDecimal bg = new BigDecimal(arear);
-	            	   arear = bg.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
-	            	   info.setTf_builArea(arear);
-	            	
-	             	float resarea=Float.valueOf(rowData.get(18)+"");//实测面积
-	            	info.setTf_userArea(resarea);
-	            	String fddoc=String.valueOf(rowData.get(19));//是否装了防盗门
-	            	if(StringUtil.isEmpty(fddoc)){
-	            		info.setTf_isburglar(false);
-	            	}else{
-	            		info.setTf_isburglar(true);
-	            	}
+		            	String shouDate=String.valueOf(rowData.get(9));//收楼日期
+			            if(StringUtil.isEmpty(shouDate)){
+			            		shouDate=format.format(shouDate);
+			            	}
+			        	info.setTf_sdate(shouDate);
+			        	  System.out.println("收楼日期:"+shouDate);
+			        	String souAdvDate=String.valueOf(rowData.get(10));//收楼通知书日期
+		            	if(StringUtil.isEmpty(shouDate)){
+		            		shouDate=format.format(shouDate);
+		            	}
+		                 info.setTf_adate(souAdvDate);
+		                 System.out.println("收楼通知书日期:"+souAdvDate);
+		                 
+		                 
+		                 
+		              	float arear=Float.valueOf(rowData.get(11)+"");//建筑面积
+		            	   info.setTf_builArea(arear);
+		            	   System.out.println("建筑面积:"+arear);
+		             	float resarea=Float.valueOf(rowData.get(12)+"");//实测面积
+		            	info.setTf_userArea(resarea);
+		            	 System.out.println("实测面积:"+resarea);
+		            	 
+		            		String doWithMane=String.valueOf(rowData.get(13));//经办人
+			            	info.setTf_doman(doWithMane);
+			            	 System.out.println("经办人:"+doWithMane);
+			            	
+			            	 
+			              String	 loutype=String.valueOf(rowData.get(14));//交楼类型
+			              info.setTf_jfloorType(loutype);
+			              System.out.println("交楼类型:"+loutype);
+	            	String tf_nature=String.valueOf(rowData.get(15));//性质
+	            	info.setTf_nature(tf_nature);
+	            	  System.out.println("性质:"+tf_nature);
+	            	  
+	            	   	
+		            	String soutFuce=String.valueOf(rowData.get(16));//是否已经收房产信息通知书
+		            	if(StringUtil.isNotEmpty(soutFuce)){
+		            		info.setTf_isposttip(true);
+		            	}
+		            	 System.out.println("已经收房产信息通知书:"+soutFuce);
+		            	 
+		            	  	String careNub=String.valueOf(rowData.get(17));//车牌号
+			            	info.setTf_license(careNub);
+			            	 System.out.println("车牌号:"+careNub.replace(" ", ""));
+		            	
+			            		String fddoc=String.valueOf(rowData.get(18));//是否装了防盗门
+				            	if(StringUtil.isEmpty(fddoc)){
+				            		info.setTf_isburglar(false);
+				            	}else{
+				            		info.setTf_isburglar(true);
+				            	}
+				            	    System.out.println("是否装了防盗门:"+fddoc);
+					            	String remrak1=String.valueOf(rowData.get(19));//备注1家庭成员名单
+					            	info.setTf_remark1(remrak1.replace(" ", ""));
+					            	System.out.println("备注1家庭成员名单:"+remrak1);
+					            	String remark2=String.valueOf(rowData.get(20));//备注2业主、住户联系电话
+					            	info.setTf_remark2(remark2.replace(" ", ""));
+					            	System.out.println("备注2业主、住户联系电话:"+remark2);
+					            	String remark3=String.valueOf(rowData.get(21));//备注3业主身份证号码
+					            	System.out.println("备注3业主身份证号码:"+remark3);
+					            	info.setTf_remark3(remark3.replace(" ", ""));
+					            	String remark4=String.valueOf(rowData.get(22));
+					            	info.setTf_remark4(remark4.replace(" ", ""));
+					            	String remark5=String.valueOf(rowData.get(23));
+					            	info.setTf_remark5(remark5.replace(" ", ""));
+	            
 	             if(add){
 	            	 ebi.save(info);
 	            	 

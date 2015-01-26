@@ -84,13 +84,18 @@ public class ResidentInfo  extends BaseEntity{
 		private boolean tf_isburglar;
 		//////////////////////////备注信息//////////////////////////////////////
 		@FieldInfo(title = "备注1家庭成员名单", number = 180)
+		@Column(length=3000)
 		private String tf_remark1;
 		@FieldInfo(title = "备注2业主、住户联系电话", number = 190)
+		@Column(length=3000)
 		private String tf_remark2;
 		@FieldInfo(title = "备注3业主身份证号码", number = 200)
+		@Column(length=3000)
 		private String tf_remark3;
 		@FieldInfo(title = "备注4", number = 210)
+		@Column(length=3000)
 		private String tf_remark4;
+		@Column(length=3000)
 		@FieldInfo(title = "备注5", number = 220)
 		private String tf_remark5;
 		
@@ -219,15 +224,19 @@ public class ResidentInfo  extends BaseEntity{
 	private String tf_sffloorType;
 
 	@FieldInfo(title = "备注2", number = 530)
+	@Column(length=3000)
 	private String tf_remark6;
 	
 	@FieldInfo(title = "备注3", number = 540)
+	@Column(length=3000)
 	private String tf_remark7;
 	
 	@FieldInfo(title = "备注4", number = 550)
+	@Column(length=3000)
 	private String tf_remark8;
 	
 	@FieldInfo(title = "备注5", number = 560)
+	@Column(length=3000)
 	private String tf_remark9;
 	
 	@Transient

@@ -1169,17 +1169,15 @@ public class AppUtils {
 						continue;
 					}
 					DecimalFormat df = new DecimalFormat("0");// 格式化 number String
-					DecimalFormat dd = new DecimalFormat("#.0000");// 格式化 number String								// 字符
+					DecimalFormat dd = new DecimalFormat("0.0000");// 格式化 number String								// 字符
 					SimpleDateFormat sdf = new SimpleDateFormat(
 							"yyyy-MM-dd");// 格式化日期字符串
-					DecimalFormat nf = new DecimalFormat("0.00");// 格式化数字
 					switch (cell.getCellType()) {
 					case XSSFCell.CELL_TYPE_STRING:
 						System.out.println(i + "行" + j + " 列 is String type");
 						value = cell.getStringCellValue();
 						break;
 					case XSSFCell.CELL_TYPE_NUMERIC:
-						System.out.println(i + "行" + j+ " 列 is Number type ; DateFormt:"+ cell.getCellStyle().getDataFormatString());
 						if ("@".equals(cell.getCellStyle().getDataFormatString())) {
 							value = df.format(cell.getNumericCellValue());
 						} else if ("General".equals(cell.getCellStyle()
@@ -1247,15 +1245,13 @@ public class AppUtils {
 																// 字符
 					SimpleDateFormat sdf = new SimpleDateFormat(
 							"yyyy-MM-dd");// 格式化日期字符串
-					DecimalFormat nf = new DecimalFormat("0.00");// 格式化数字
-					DecimalFormat dd = new DecimalFormat("#.0000");// 格式化 number String		
+					DecimalFormat dd = new DecimalFormat("0.0000");// 格式化 number String		
 					switch (cell.getCellType()) {
 					case XSSFCell.CELL_TYPE_STRING:
 						//System.out.println(i + "行" + j + " 列 is String type");
 						value = cell.getStringCellValue();
 						break;
 					case XSSFCell.CELL_TYPE_NUMERIC:
-						System.out.println(i + "行" + j+ " 列 is Number type ; DateFormt:"+ cell.getCellStyle().getDataFormatString());
 						if ("@".equals(cell.getCellStyle().getDataFormatString())) {
 							value = df.format(cell.getNumericCellValue());
 						} else if ("General".equals(cell.getCellStyle()

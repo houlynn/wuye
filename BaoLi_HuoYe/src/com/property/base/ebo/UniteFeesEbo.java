@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.model.hibernate.property.BillContext;
 import com.model.hibernate.property.FeesInfo;
 import com.model.hibernate.property.FeesTypeItem;
+import com.model.hibernate.property.InnstallBill;
 import com.model.hibernate.property.MeterInfo;
 import com.model.hibernate.property.ResidentInfo;
 import com.model.hibernate.system.shared.EndUser;
@@ -135,10 +136,10 @@ public 	DataFetchResponseInfo addUniteFees(int rid,int rtype
 	List<String> months=AppUtils.getMonthList(startDate, endDate);
 	for(String m : months){
 		//已收项目
-		String nchql=" select count(*) from BillItem where 1=1 and tf_state='1' and tf_FeesInfo="+feesid+" and tf_feesDate='"+m+"'";
+		String nchql=" select count(*) from BillItem where 1=1 and tf_state='1' and tf_FeesInfo="+feesid+" and tf_feesDate='"+m+"' and tf_RepairInfo="+rid;
 		//未收项目
-		String ochql=" select count(*) from BillItem where 1=1 and tf_state='0'  and tf_FeesInfo="+feesid+" and tf_feesDate='"+m+"'";
-		String ohql="from BillItem where 1=1 and tf_state='0' and tf_FeesInfo="+feesid+"  and tf_feesDate='"+m+"' order by tf_feesDate desc,tf_FeesInfo";
+		String ochql=" select count(*) from BillItem where 1=1 and tf_state='0'  and tf_FeesInfo="+feesid+" and tf_feesDate='"+m+"' and tf_feesDate='"+m+"' and tf_RepairInfo="+rid;
+		String ohql="from BillItem where 1=1 and tf_state='0' and tf_FeesInfo="+feesid+"  and tf_feesDate='"+m+"' order by tf_feesDate desc,tf_FeesInfo and tf_feesDate='"+m+"' and tf_RepairInfo="+rid;
 		Integer count=0;
 		try {
 		 count=ebi.getCount(nchql);
@@ -189,7 +190,7 @@ public 	DataFetchResponseInfo addUniteFees(int rid,int rtype
 				//单价*建筑面积类型	
 		        case FeesInfo.FC:{
 		    		//非抄表类型只算单价作为收费金额
-		    		String hql=" from MeterInfo where 1=1 and tf_mtype='"+MeterInfo.FEES_TYPE_UNITE+"' and tf_rendDate='"+m+"'and tf_FeesInfo="+item.getTf_FeesInfo().getTf_feesid();
+		    		String hql=" from MeterInfo where 1=1 and tf_mtype='"+MeterInfo.FEES_TYPE_UNITE+"' and tf_rendDate='"+m+"'and tf_FeesInfo="+item.getTf_FeesInfo().getTf_feesid()+" and tf_ResidentInfo="+rid;
 		    		List<MeterInfo> mlist= (List<MeterInfo>) ebi.queryByHql(hql);
 		    		if(mlist!=null&&mlist.size()>0){
 			    		MeterInfo meterInfo=mlist.get(0);
@@ -226,7 +227,7 @@ public 	DataFetchResponseInfo addUniteFees(int rid,int rtype
 				/////////////////////////////////////////////////////////////
 				//直收金额类型	
 		        case FeesInfo.FM:{
-		        	String hql=" from MeterInfo where 1=1 and tf_mtype='"+MeterInfo.FEES_TYPE_NOUNITE+"' and tf_rendDate='"+m+"'and tf_FeesInfo="+item.getTf_FeesInfo().getTf_feesid();
+		        	String hql=" from MeterInfo where 1=1 and tf_mtype='"+MeterInfo.FEES_TYPE_NOUNITE+"' and tf_rendDate='"+m+"'and tf_FeesInfo="+item.getTf_FeesInfo().getTf_feesid() +" and tf_ResidentInfo="+rid;
 		        	List<MeterInfo> mlist= (List<MeterInfo>) ebi.queryByHql(hql);
 		    		if(mlist!=null&&mlist.size()>0){
 			    		MeterInfo meterInfo=mlist.get(0);
@@ -250,7 +251,43 @@ public 	DataFetchResponseInfo addUniteFees(int rid,int rtype
 			    			bill.setTf_acount(item.getTf_FeesInfo().getTf_price());//设置
 			    		}
 		    				}
-		    	break;		
+		    	break;	
+		    	//直收金额类型	
+		        case FeesInfo.GT:{
+		        	String hql=" from InnstallBill where 1=1 and tf_FeesInfo="+item.getTf_FeesInfo().getTf_feesid();
+		        	List<InnstallBill>  listBills= (List<InnstallBill>) ebi.queryByHql(hql);
+		        	if(listBills==null||listBills.size()==0){
+		        		continue;
+		        	}
+		        	InnstallBill bil= listBills.get(0);
+		        	debug("根据收费项目找到 公表："+bil.getTf_name());
+		        	String rhqt=" from ResidentInfo wwhere 1=1 and tf_levelInfo.tf_parent.tf_InnstallBill.tf_insid="+bil.getTf_insid()+" tf_residentId="+rid;
+		        	List<ResidentInfo> resindents=(List<ResidentInfo>) ebi.queryByHql(rhqt);
+		        	if(resindents==null||resindents.size()==0){
+		        		continue;
+		        	}
+		        	ResidentInfo residentInfo=resindents.get(0);
+		        	debug("判断这个住户是在这个表的区域中："+residentInfo.getTf_residentName());
+		        	
+		        	String billConten=" from  PoollGtinfo where 1=1 and tf_InnstallBill="+bil.getTf_insid()+" and tf_rendMonth='"+m+"' and tf_state='1' ";
+		        	
+		        	
+		        	
+		        	
+		        	
+		        	
+		        	
+		        	
+		        	
+		        	///拿到这个住户的建筑面积计算缴费金额
+		        	
+		        	
+		        	
+		        	
+		        	
+		        	
+		        	break;	
+		        }
 				////////////////////////////////////////////////////////////////	
 				}
 		    	  ebi.save(bill);
