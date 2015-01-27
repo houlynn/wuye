@@ -154,6 +154,21 @@ public class HibernateRepertory implements ICommonRepertory {
 		}
 		return c;
 	}
+	
+	
+	@Override
+	public float getSumByHql(String hql) throws Exception {
+		float c = 0;
+		Query query = sf.getCurrentSession().createQuery(hql);
+		Object count = query.uniqueResult();
+		if(null != count ) {
+			c = Float.parseFloat(count.toString());
+		}else{
+			c=0;
+		}
+		return c;
+	}
+	
 	@Override
 	public <T> List<T> doWork(String sql, Work work, List<T> list)
 			throws Exception {

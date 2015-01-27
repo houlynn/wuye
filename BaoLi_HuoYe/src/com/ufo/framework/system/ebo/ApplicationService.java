@@ -104,18 +104,19 @@ public class ApplicationService extends Ebo  implements  ApplicationEbi,CommonEx
 	}
 
 	// 根据模块 name 号取得模块定义
-	public static _Module getModuleWithName(String name) {
+	public static _Module getModuleWithName(String name) throws TimeoutException {
 		try{
 		for (_Module module : getModules())
 			if (module.getTf_moduleName().equals(name))
 				return module;
 		}catch(NullPointerException e){
-			
 			TimeoutException exception=	 new TimeoutException(); 
 			 ResponseErrorInfo errorInfo= new ResponseErrorInfo();
 			 errorInfo.getErrorMessage().put("error", "用户未登陆，或回话过期!");
 			 errorInfo.setResultCode(ResponseErrorInfo.STATUS_TIME_OUT);
 			 exception.setErrorInfo(errorInfo);
+		throw exception; 
+			 
 		}
 		return null;
 	}

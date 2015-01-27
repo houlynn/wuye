@@ -2,8 +2,8 @@ Ext.define('core.base.resident.store.FeesStore', {
 			extend : 'Ext.data.Store',
 			modulePanel : null,
 			remoteSort : true,
-			autoLoad : true,
-			autoSync : true,
+			autoLoad : false,
+			autoSync : false,
 			leadingBufferZone : 100,
 			buffered : false, // buffered=true可以无限下拉，但是删除和新增，reload都有问题，暂时不用
 			config : {

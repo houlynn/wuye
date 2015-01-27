@@ -5,10 +5,15 @@ import java.util.List;
 
 
 
+
+
+
+
 import org.hibernate.SQLQuery;
 
 import com.model.hibernate.system._Module;
 import com.model.hibernate.system._ModuleField;
+import com.ufo.framework.common.core.exception.TimeoutException;
 import com.ufo.framework.common.core.utils.StringUtil;
 import com.ufo.framework.common.core.web.SortParameter;
 import com.ufo.framework.system.ebo.ApplicationService;
@@ -40,11 +45,11 @@ public class SqlGenerator {
 
 	private boolean distinct;
 
-	public SqlGenerator(String moduleName) {
+	public SqlGenerator(String moduleName) throws Exception {
 		this(ApplicationService.getModuleWithName(moduleName));
 	}
 
-	public SqlGenerator(_Module module) {
+	public SqlGenerator(_Module module) throws Exception {
 
 		// 是否有不隐藏的字段不允许查看的
 		// userSession =
@@ -93,7 +98,7 @@ public class SqlGenerator {
 	}
 
 	public static SqlLeftJoin getSQLManyToOneLeftJoin(String moduleName,
-			String childModuleName) {
+			String childModuleName) throws Exception {
 		return new SqlLeftJoin(moduleName, childModuleName);
 
 	}

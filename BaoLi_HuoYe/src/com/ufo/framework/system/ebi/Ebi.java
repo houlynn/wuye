@@ -344,4 +344,6 @@ public interface Ebi extends LogerManager,XcodeInterface {
 	
 	
 	public Object update(Map<String,Object> values,Model obj, Serializable pk ) throws Exception;
+	
+	public float getSumByHql(String hql) throws Exception ;
 }

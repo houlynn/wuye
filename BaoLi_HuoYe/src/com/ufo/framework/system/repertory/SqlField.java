@@ -63,8 +63,9 @@ public class SqlField {
 	 *          子模块
 	 * @param module
 	 *          当前模块
+	 * @throws Exception 
 	 */
-	public SqlField(_Module module, _Module childModule, HttpServletRequest request) {
+	public SqlField(_Module module, _Module childModule, HttpServletRequest request) throws Exception {
 		super();
 		this.moduleName = childModule.getTf_moduleName();
 		SqlGenerator sqlGenerator = new SqlGenerator(childModule);
@@ -97,9 +98,10 @@ public class SqlField {
 	 *          当前模块
 	 * @param moduleField
 	 *          字段
+	 * @throws Exception 
 	 */
 	public SqlField(_Module module, _Module childModule, _ModuleField moduleField,
-			HttpServletRequest request) {
+			HttpServletRequest request) throws Exception {
 		super();
 		this.moduleName = childModule.getTf_moduleName();
 		SqlGenerator sqlGenerator = new SqlGenerator(childModule);

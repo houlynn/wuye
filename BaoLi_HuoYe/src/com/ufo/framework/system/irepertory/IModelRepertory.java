@@ -21,7 +21,7 @@ public interface IModelRepertory extends ICommonRepertory {
 	 * @param name
 	 * @return
 	 */
-	public abstract Object getModuleDataWithName(String moduleName, String name);
+	public abstract Object getModuleDataWithName(String moduleName, String name) throws Exception;
 
 	/**
 	 * 根据module 和一个传进来的值，找到相应的记录,返回主键
@@ -73,7 +73,7 @@ public interface IModelRepertory extends ICommonRepertory {
 	 * @return JSONObject
 	 */
 	public abstract JSONObject getModuleRecord(String moduleName,
-			String keyValue, HttpServletRequest request);
+			String keyValue, HttpServletRequest request) throws Exception;
 
 	/**
 	 * 取得记录的个数
@@ -89,11 +89,11 @@ public interface IModelRepertory extends ICommonRepertory {
 	public abstract String getRecordNameValue(_Module module, Object record);
 	
 	
-	public DataUpdateResponseInfo changeRecordId(String moduleName, String id, String oldid) ;
+	public DataUpdateResponseInfo changeRecordId(String moduleName, String id, String oldid) throws Exception ;
 	
 	
 	
 	public DataUpdateResponseInfo update(String moduleName, String id, String operType,
-			String updated, HttpServletRequest request);
+			String updated, HttpServletRequest request) throws Exception;
 
 }

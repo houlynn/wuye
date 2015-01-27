@@ -44,8 +44,8 @@ public class NoticeMessge extends BaseEntity {
     private String tf_title;
 	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
-	@JoinColumn(name = "tf_residentId",nullable=false)
-	@FieldInfo(title = "业主", number =20)
+	@JoinColumn(name = "tf_viid",nullable=false)
+	@FieldInfo(title = "小区", number =20)
     private  Village tf_Village;
 	@Column(length=25,nullable=false)
     private String tf_postTime;

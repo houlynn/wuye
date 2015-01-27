@@ -67,14 +67,14 @@ public interface ModelEbi extends Ebi{
 	public DataInsertResponseInfo add(String moduleName, String inserted, String parentFilter, String navigates, HttpServletRequest request) throws Exception;
 
 	public abstract DataUpdateResponseInfo changeRecordId(String moduleName,
-			String id, String oldid);
+			String id, String oldid) throws Exception;
 
 	// @Override
 	public abstract DataUpdateResponseInfo update(String moduleName, String id,
-			String operType, String updated,HttpServletRequest request);
+			String operType, String updated,HttpServletRequest request) throws Exception;
 
 	// @Override
 	public abstract DataDeleteResponseInfo remove(String moduleName, Serializable id,
-			HttpServletRequest request);
+			HttpServletRequest request) throws Exception;
 
 }

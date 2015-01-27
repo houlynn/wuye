@@ -264,5 +264,10 @@ public class Ebo implements Ebi {
 		return  repertory.update(values, obj, pk);
 		
 	}
+	@Override
+	public float getSumByHql(String hql) throws Exception {
+		// TODO Auto-generated method stub
+		return repertory.getSumByHql(hql);
+	}
 
 }

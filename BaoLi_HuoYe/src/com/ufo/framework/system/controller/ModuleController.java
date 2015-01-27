@@ -114,7 +114,7 @@ public class ModuleController implements LogerManager,CommonException {
 
 	@RequestMapping(value = "/fetchdata.do/{id}", method = RequestMethod.GET)
 	public @ResponseBody
-	Object getRecordById(String moduleName, @PathVariable("id") String id, HttpServletRequest request) {
+	Object getRecordById(String moduleName, @PathVariable("id") String id, HttpServletRequest request) throws Exception {
 		
 		
 /*		List<Object> records = new ArrayList<Object>();
@@ -128,11 +128,7 @@ public class ModuleController implements LogerManager,CommonException {
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("totalCount", 1);
 		List<Object> records = new ArrayList<Object>();
-		try {
 			records.add(moduleDAO.getModuleRecord(moduleName, id, request).toString());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		result.put("records", records);
 		log.debug("getRecordById返回值：" + result.toString());
 		return result;
@@ -268,7 +264,7 @@ public class ModuleController implements LogerManager,CommonException {
 	public @ResponseBody
 	DataDeleteResponseInfo removeRecords(String moduleName, String[] titles,
 			@RequestParam(value="ids",required=true) int[] ids,
-			HttpServletRequest request) {
+			HttpServletRequest request) throws Exception {
 		DataDeleteResponseInfo 	result = new DataDeleteResponseInfo();
 		for(int id : ids){
 			DataDeleteResponseInfo recordDeleteResult = moduleService.remove(moduleName, id,

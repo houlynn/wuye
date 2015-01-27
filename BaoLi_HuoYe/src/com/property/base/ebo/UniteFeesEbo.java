@@ -102,7 +102,7 @@ public class UniteFeesEbo implements UnitFeesEbi {
 	 * 产生用欠费信息 如果收费标准有调整可以MeterInfo来调整单价也金额
 	 * @throws Exception 
 	 */
-public 	DataFetchResponseInfo addUniteFees(int rid,int rtype
+public synchronized 	DataFetchResponseInfo  addUniteFees(int rid,int rtype
 		) throws Exception{
 	DataFetchResponseInfo reuslt=new DataFetchResponseInfo();
 	//查询业主的收费项目
@@ -140,10 +140,9 @@ public 	DataFetchResponseInfo addUniteFees(int rid,int rtype
 		String nchql=" select count(*) from BillItem where 1=1 and tf_state='1' and tf_FeesInfo="+feesid+" and tf_feesDate='"+m+"' and tf_ResidentInfo="+rid;
 		//未收项目
 		String ochql=" select count(*) from BillItem where 1=1 and tf_state='0'  and tf_FeesInfo="+feesid+" and tf_feesDate='"+m+"' and tf_feesDate='"+m+"' and tf_ResidentInfo="+rid;
-		String ohql="from BillItem where 1=1 and tf_state='0' and tf_FeesInfo="+feesid+"  and tf_feesDate='"+m+"' order by tf_feesDate desc,tf_FeesInfo and tf_feesDate='"+m+"' and tf_ResidentInfo="+rid;
+		String ohql="from BillItem where 1=1 and tf_state='0' and tf_FeesInfo="+feesid+"  and tf_feesDate='"+m+"' and tf_ResidentInfo="+rid+" order by tf_feesDate desc,tf_FeesInfo ";
 		Integer count=0;
 		ResidentInfo residentInfo= ebi.findById(ResidentInfo.class, rid);
-		try {
 		 count=ebi.getCount(nchql);
 		 debug("查询是否已经交费的BillItem： "+nchql);
 		 if(count>0){
@@ -322,9 +321,7 @@ public 	DataFetchResponseInfo addUniteFees(int rid,int rtype
 		    	  bills.add(bill);
 		    }
 		 }
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		 
 	}
 	}
 	reuslt.setTotalRows(bills.size());
@@ -377,7 +374,7 @@ public  DataUpdateResponseInfo adduniteFees(
  * 获取业主欠费总金额
  * @return
  */
-public double getUniteFeesAcount(int rid){
+public synchronized double   getUniteFeesAcount(int rid){
 	double sumAcount=0;
 	String ohql="select sum(b.tf_acount) from BillItem b "+
  "inner join MeterInfo m on m.tf_MeterId=b.tf_MeterId "+
@@ -426,8 +423,8 @@ public List<Map<String,Object>> loadFees(int rid) throws Exception{
 			if(date.equals( billDate)){
 				AppItemInfo appItemInfo=new AppItemInfo();
 				appItemInfo.setBillId(bill.getTf_billitemid());
-				appItemInfo.setCount(bill.getTf_count());
-				appItemInfo.setAcount(bill.getTf_acount());
+				appItemInfo.setCount(AppUtils.formatNuber(bill.getTf_count(),4));
+				appItemInfo.setAcount(AppUtils.formatNuber( bill.getTf_acount(),2));
 				appItemInfo.setFeesName(bill.getTf_FeesInfo().getTf_freesName());
 				appItemInfos.add(appItemInfo);
 			}

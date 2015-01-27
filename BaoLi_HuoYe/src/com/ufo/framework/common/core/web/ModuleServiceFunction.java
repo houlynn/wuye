@@ -19,6 +19,7 @@ import org.springframework.dao.DataAccessException;
 
 import com.aspect.ModuleAspect;
 import com.model.hibernate.system._Module;
+import com.ufo.framework.common.core.exception.TimeoutException;
 import com.ufo.framework.common.core.utils.ClassUtil;
 import com.ufo.framework.common.core.utils.StringUtil;
 import com.ufo.framework.system.ebo.ApplicationService;
@@ -149,7 +150,7 @@ public class ModuleServiceFunction {
 	}
 
 	// 删除记录时，判断是不是被外键约束阻止了
-	public static String addPK_ConstraintMessage(DataAccessException e, String moduleName) {
+	public static String addPK_ConstraintMessage(DataAccessException e, String moduleName) throws Exception {
 		Pattern pattern = Pattern.compile("FK_" + "[A-z|_|0-9]*_" + moduleName);
 		Matcher matcher = pattern.matcher(e.getRootCause().getMessage());
 		String finder = null;

@@ -1288,6 +1288,12 @@ public class AppUtils {
 		}
 		
 		
+	public static double formatNuber(double f, int count){
+		
+		  BigDecimal bg = new BigDecimal(f);
+	      double f1 = bg.setScale(count, BigDecimal.ROUND_HALF_UP).doubleValue();
+		return f1;
+	}
 		
 	    
 

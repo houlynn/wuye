@@ -1,19 +1,15 @@
 package com.property.base.controllers;
-
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 import javax.annotation.Resource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.model.hibernate.property.BillItem;
 import com.model.hibernate.property.FeesInfo;
 import com.model.hibernate.property.MeterInfo;
@@ -88,6 +84,7 @@ public class UnitFeesController  implements LogerManager{
 	}
 
 	private Map<String, Object> loadFees(int rid) throws Exception {
+	
 		DataFetchResponseInfo response= uebi.addUniteFees(rid,1);
 		SimpleDateFormat sdd=new SimpleDateFormat("yyyy-MM-dd");
 		List<BillItem> listData=(List<BillItem>) response.getMatchingObjects();
@@ -98,17 +95,21 @@ public class UnitFeesController  implements LogerManager{
 		  if(meterInfo.getTf_mtype().equals(MeterInfo.FEES_TYPE_LL)){
 			  item.setTf_feesType("临时性收费");
 		  }
-          try {
+		  
+		  try{
 			String startDate= sdd.format( AppUtils.getMonthStart(sdd.parse(item.getTf_feesDate()+"-01")));
 			String endDate= sdd.format( AppUtils.getMonthEnd(sdd.parse(item.getTf_feesDate()+"-01")));
 			item.setTf_startDate(startDate);
 			item.setTf_endDate(endDate);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		  }catch(Exception e){
+		  }
+	
           item.setTf_feesName(feesInfo.getTf_freesName());
            item.setTf_startNuber(String.valueOf(meterInfo.getTf_startnumber()));
            item.setTf_endNuber(String.valueOf(meterInfo.getTf_endnumber()));
+			item.setTf_count(AppUtils.formatNuber(item.getTf_count(),4));
+			item.setTf_acount(AppUtils.formatNuber(item.getTf_acount(),2));
+			item.setTf_price(AppUtils.formatNuber(item.getTf_price(),2));
        /*    item.setTf_price(String.valueOf(feesInfo.getTf_price()));
            double sumAcount=feesInfo.getTf_price()*meterInfo.getTf_acount();
            item.setTf_aacount(String.valueOf(sumAcount));*/
@@ -185,6 +186,9 @@ public class UnitFeesController  implements LogerManager{
 					String endDate= sdd.format( AppUtils.getMonthEnd(sdd.parse(item.getTf_feesDate()+"-01")));
 					item.setTf_startDate(startDate);
 					item.setTf_endDate(endDate);
+					item.setTf_count(AppUtils.formatNuber(item.getTf_count(),4));
+					item.setTf_acount(AppUtils.formatNuber(item.getTf_acount(),2));
+					item.setTf_price(AppUtils.formatNuber(item.getTf_price(),2));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

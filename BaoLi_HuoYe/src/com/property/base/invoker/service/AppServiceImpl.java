@@ -8,16 +8,20 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
+import javax.persistence.Column;
 
 import net._139130.www.WebServiceStub.PostResponse;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.hibernate.annotations.Type;
 import org.springframework.stereotype.Service;
 
 import com.model.app.common.AppContract;
 import com.model.hibernate.property.BillContext;
 import com.model.hibernate.property.BillItem;
 import com.model.hibernate.property.ExpressInfo;
+import com.model.hibernate.property.LevelInfo;
+import com.model.hibernate.property.NoticeInfo;
 import com.model.hibernate.property.PayKey;
 import com.model.hibernate.property.PointFrientInfo;
 import com.model.hibernate.property.RepairInfo;
@@ -34,6 +38,7 @@ import com.property.base.invoker.model.AppPointInfo;
 import com.property.base.invoker.model.AppResident;
 import com.property.base.invoker.model.AppVillage;
 import com.property.base.invoker.serviceinterface.AppService;
+import com.ufo.framework.annotation.FieldInfo;
 import com.ufo.framework.common.core.utils.AppUtils;
 import com.ufo.framework.common.core.utils.StringUtil;
 import com.ufo.framework.common.log.LogerManager;
@@ -43,7 +48,7 @@ import com.ufo.framework.system.shared.module.DataUpdateResponseInfo;
 import com.ufo.framework.system.web.SecurityUserHolder;
 
 @Service
-public class AppServiceImpl implements AppService ,LogerManager{
+public class AppServiceImpl implements AppService, LogerManager {
 
 	private final static String POINTTYPE = "POINTTYPE";// 终点工
 	private final static String BAOMU = "BAOMU";// 保姆
@@ -51,9 +56,9 @@ public class AppServiceImpl implements AppService ,LogerManager{
 
 	@Resource(name = "ebo")
 	private Ebi ebi;
-	
+
 	@Resource
-	private UnitFeesEbi  unitFeesEbi;
+	private UnitFeesEbi unitFeesEbi;
 
 	@Override
 	public List<AppVillage> loadVis(String tf_locationxy, String city)
@@ -159,9 +164,10 @@ public class AppServiceImpl implements AppService ,LogerManager{
 		map.put("items", rows);
 		return map;
 	}
-/**
- * 快递收发
- */
+
+	/**
+	 * 快递收发
+	 */
 	public Map<String, String> addAppExpressInfo(AppExpressInfo model) {
 		Map<String, String> resultMap = new HashMap<String, String>();
 		boolean flag = false;
@@ -195,23 +201,29 @@ public class AppServiceImpl implements AppService ,LogerManager{
 	 */
 	@Override
 	public Map<String, String> addRepairInfo(String repairTitle,
-			String repairContent, int rid) {
+			String repairContent, int rid, String appPhone) {
 		boolean flag = false;
 		RepairInfo repairInfo = new RepairInfo();
 		repairInfo.setTf_repairItem(repairTitle);
 		repairInfo.setTf_remark(repairContent);
 		repairInfo.setTf_repairTime(AppUtils.getCurrentTime());
 		repairInfo.setTf_state("000");
-		
-		
+		repairInfo.setTf_appPhone(appPhone);
+		repairInfo.setTf_isPhonePost(true);
 		Map<String, String> result = new HashMap<String, String>();
 		ResidentInfo resInfo;
 		try {
 			resInfo = ebi.findById(ResidentInfo.class, rid);
+
 			if (resInfo == null) {
 				result.put("msg", "无效的业主信息,请使用业主账户登录!");
 				flag = false;
 			} else {
+				LevelInfo levf = resInfo.getTf_levelInfo();
+				String roomNub = levf.getTf_parent().getTf_leveName() + "-"
+						+ levf.getTf_leveName() + "-" + resInfo.getTf_number()
+						+ "-" + resInfo.getTf_residentName();
+				repairInfo.setTf_roomNub(roomNub);
 				repairInfo.setTf_ResidentInfo(resInfo);
 				ebi.save(repairInfo);
 				flag = true;
@@ -228,8 +240,8 @@ public class AppServiceImpl implements AppService ,LogerManager{
 	@Override
 	public AppResident getAppResident(int id) throws Exception {
 		// TODO Auto-generated method stub
-		ResidentInfo info=ebi.findById(ResidentInfo.class, id);
-		AppResident appResident=new AppResident();
+		ResidentInfo info = ebi.findById(ResidentInfo.class, id);
+		AppResident appResident = new AppResident();
 		BeanUtils.copyProperties(appResident, info);
 		return appResident;
 	}
@@ -237,23 +249,25 @@ public class AppServiceImpl implements AppService ,LogerManager{
 	@Override
 	public AppVillage getAppVillage(int id) throws Exception {
 		// TODO Auto-generated method stub
-		Village info=ebi.findById(Village.class, id);
-		AppVillage  appVillage=new AppVillage();
+		Village info = ebi.findById(Village.class, id);
+		AppVillage appVillage = new AppVillage();
 		BeanUtils.copyProperties(appVillage, info);
 		return appVillage;
 	}
 
 	@Override
-	  public List<Map<String,Object>>  loadFeesItem(int rid) throws Exception {
+	public List<Map<String, Object>> loadFeesItem(int rid) throws Exception {
 		return unitFeesEbi.loadFees(rid);
 	}
 
 	@Override
-	public Map<String, String> pay(int vid, int rid, String appUser,  int[] billids)
-			throws Exception {
+	public Map<String, String> pay(int vid, int rid, String appUser,
+			int[] billids) throws Exception {
 		// TODO Auto-generated method stub
-		debug("appp业主缴费： 小区ID"+vid+" 业主ID "+rid+"app用户: "+appUser+" billids: "+billids);
-		Map<String,String> map= unitFeesEbi.addpayByApp(vid, rid, appUser, billids);
+		debug("appp业主缴费： 小区ID" + vid + " 业主ID " + rid + "app用户: " + appUser
+				+ " billids: " + billids);
+		Map<String, String> map = unitFeesEbi.addpayByApp(vid, rid, appUser,
+				billids);
 		return map;
 	}
 
@@ -263,22 +277,31 @@ public class AppServiceImpl implements AppService ,LogerManager{
 	@Override
 	public List<AppResident> loadAppResident(String loginCode) throws Exception {
 		// TODO Auto-generated method stub
-		String hql=" from ResidentInfo where 1=1 and tf_appPhone='"+loginCode+"' ";
-		List<ResidentInfo> list= (List<ResidentInfo>) ebi.queryByHql(hql);
-		List<AppResident> result=new ArrayList<AppResident>();
-		result=list.stream().map(item->{
-			AppResident appResident=new AppResident();
-			try {
-				BeanUtils.copyProperties(appResident, item);
-				appResident.setTf_vid(item.getTf_levelInfo().getTf_village().getTf_viid());
-				appResident.setTf_lefStr(item.getTf_levelInfo().getTf_parent().getTf_leveName()+" "+item.getTf_levelInfo().getTf_leveName());
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return appResident;
-			
-		}).collect(Collectors.toList());
+		String hql = " from ResidentInfo where 1=1 and tf_appPhone='"
+				+ loginCode + "' ";
+		List<ResidentInfo> list = (List<ResidentInfo>) ebi.queryByHql(hql);
+		List<AppResident> result = new ArrayList<AppResident>();
+		result = list
+				.stream()
+				.map(item -> {
+					AppResident appResident = new AppResident();
+					try {
+						BeanUtils.copyProperties(appResident, item);
+						appResident.setTf_vid(item.getTf_levelInfo()
+								.getTf_village().getTf_viid());
+						appResident
+								.setTf_lefStr(item.getTf_levelInfo()
+										.getTf_parent().getTf_leveName()
+										+ " "
+										+ item.getTf_levelInfo()
+												.getTf_leveName());
+
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					return appResident;
+
+				}).collect(Collectors.toList());
 		return result;
 	}
 
@@ -288,21 +311,22 @@ public class AppServiceImpl implements AppService ,LogerManager{
 	@Override
 	public Map<String, String> getPayKey(int vid) throws Exception {
 		// TODO Auto-generated method stub
-		Village village=ebi.findById(Village.class, vid);
-		String xcode=village.getXcode();
-		String codeId=xcode.substring(0,xcode.length()-1);
-		XCodeInfo codeInfo=ebi.findById(XCodeInfo.class, codeId);
-		String hql=" from PayKey where 1=1 and proid="+codeInfo.getTf_propertyCompany().getTf_proid();
-		 List<PayKey> list= (List<PayKey>) ebi.queryByHql(hql);
-	    Map<String,String> result=new HashMap<>();
-		 if(list!=null&&list.size()>0){
-				      PayKey key=(PayKey)list.get(0);
-					 	String keyWorrd= key.getKeyword();
-						 String code= key.getPayCode();
-						result.put("key", code);
-						result.put("pwd", keyWorrd);
-						result.put("payType", key.getPayType());
-		 }
+		Village village = ebi.findById(Village.class, vid);
+		String xcode = village.getXcode();
+		String codeId = xcode.substring(0, xcode.length() - 1);
+		XCodeInfo codeInfo = ebi.findById(XCodeInfo.class, codeId);
+		String hql = " from PayKey where 1=1 and proid="
+				+ codeInfo.getTf_propertyCompany().getTf_proid();
+		List<PayKey> list = (List<PayKey>) ebi.queryByHql(hql);
+		Map<String, String> result = new HashMap<>();
+		if (list != null && list.size() > 0) {
+			PayKey key = (PayKey) list.get(0);
+			String keyWorrd = key.getKeyword();
+			String code = key.getPayCode();
+			result.put("key", code);
+			result.put("pwd", keyWorrd);
+			result.put("payType", key.getPayType());
+		}
 		return result;
 	}
 
@@ -310,20 +334,23 @@ public class AppServiceImpl implements AppService ,LogerManager{
 	 * 发送验证码
 	 */
 	@Override
-	public synchronized Map<String, String> postSMS(String phoneNuber) throws Exception {
+	public synchronized Map<String, String> postSMS(String phoneNuber)
+			throws Exception {
 		// TODO Auto-generated method stub
-		  Map<String,String> map=new HashMap<>();
-		  Random rd = new Random();
-		  String vode="";
-		  int getNum;
-		  do {
-		   getNum = Math.abs(rd.nextInt())%10 + 48;//产生数字0-9的随机数
-		   char num1 = (char)getNum;
-		   String dn = Character.toString(num1);
-		   vode += dn;
-		  } while (vode.length()<6);
-		PostResponse postResponse=  MsgPostService.postSms(AppContract.SMS_CONTENT+vode, phoneNuber, AppContract.SMS_ACCOUNT, AppContract.SMS_PWD);
-		int ruslt= postResponse.getPostResult().getResult();
+		Map<String, String> map = new HashMap<>();
+		Random rd = new Random();
+		String vode = "";
+		int getNum;
+		do {
+			getNum = Math.abs(rd.nextInt()) % 10 + 48;// 产生数字0-9的随机数
+			char num1 = (char) getNum;
+			String dn = Character.toString(num1);
+			vode += dn;
+		} while (vode.length() < 6);
+		PostResponse postResponse = MsgPostService.postSms(
+				AppContract.SMS_CONTENT + vode, phoneNuber,
+				AppContract.SMS_ACCOUNT, AppContract.SMS_PWD);
+		int ruslt = postResponse.getPostResult().getResult();
 		map.put("code", String.valueOf(ruslt));
 		map.put("vcode", vode);
 		return map;
@@ -333,7 +360,31 @@ public class AppServiceImpl implements AppService ,LogerManager{
 	public Map<String, String> updateBill(int billConteId, String billCode,
 			int vid, int rid, int[] billids, float acount) throws Exception {
 		// TODO Auto-generated method stub
-		return unitFeesEbi.updateBill(billConteId, billCode, vid, rid, billids, acount);
+		return unitFeesEbi.updateBill(billConteId, billCode, vid, rid, billids,
+				acount);
+	}
+
+	public Map<String, Object> loadNoticeMessge(int start, int limit,
+			String whereSql, String parentSql, String querySql,
+			String orderSql, int vid) throws Exception {
+		whereSql = " and tf_Village=" + vid;
+		Map<String, Object> map = this.load(start, limit, whereSql, parentSql,
+				querySql, orderSql, "NoticeInfo");
+		map.put("totalCount", map.get("totalCount"));
+		List<NoticeInfo> list = (List<NoticeInfo>) map.get("items");
+		List<Map<String, Object>> items = list.stream().map(item -> {
+			Map<String, Object> view = new HashMap<>();
+			view.put("tf_noticeId", item.getTf_noticeId());
+			view.put("tf_souce", item.getTf_souce());
+			view.put("tf_time", item.getTf_time());
+			view.put("tf_levf", item.getTf_levf());
+			view.put("tf_title", item.getTf_title());
+			view.put("tf_content", item.getTf_content());
+			view.put("tf_createtime", item.getTf_createtime());
+			return view;
+		}).collect(Collectors.toList());
+		map.put("items", items);
+		return map;
 	}
 
 }

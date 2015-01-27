@@ -334,4 +334,10 @@ public interface ICommonRepertory  extends LogerManager{
 	public Object update(Map<String,Object> values, Class<? extends Model> calzz, Serializable pk ) throws Exception;
 
 	public Object update(Map<String,Object> values,Model obj, Serializable pk ) throws Exception;
+	
+	public float getSumByHql(String hql) throws Exception ;
+	
+	
+	
+	
 }

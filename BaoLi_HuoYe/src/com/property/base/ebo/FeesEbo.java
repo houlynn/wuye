@@ -1,5 +1,6 @@
 package com.property.base.ebo;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -49,6 +50,9 @@ public class FeesEbo implements FeesEbi, CommonException {
 	public DataFetchResponseInfo fetchData(String moduleName, Integer start,
 			Integer limit, String sort, String query, String navigates,
 			String nodeInfoType) throws Exception {
+		
+		
+		  DecimalFormat df = new DecimalFormat("#.00");
 		DataFetchResponseInfo responseInfo = new DataFetchResponseInfo();
 		SortParameter sorts[] = SortParameter.changeToSortParameters(sort);
 		List<SqlModuleFilter> navigateFilters = changeToNavigateFilters(navigates);
@@ -89,7 +93,7 @@ public class FeesEbo implements FeesEbi, CommonException {
 											.getTf_residentName());
 						}
 						itemView.put("tf_state", item.getTf_state());
-						itemView.put("tf_acount", item.getTf_acount());
+						itemView.put("tf_acount", df.format(item.getTf_acount()));
 						itemView.put("tf_remark", item.getTf_remark());
 						itemView.put("tf_mtype", MeterInfo.FEES_TYPE_WATER);
 						return itemView;

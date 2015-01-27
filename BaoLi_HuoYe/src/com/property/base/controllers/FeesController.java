@@ -461,7 +461,7 @@ public class FeesController extends BaseAppController implements  CommonExceptio
 			model.setTf_coefficient(1);
 		}
 		String hql=" select sum(o.tf_builArea) from  ResidentInfo o where 1=1 and o.tf_levelInfo.tf_parent.tf_InnstallBill="+tf_InnstallBill.getTf_insid();
-		double area=ebi.getCount(hql);
+		double area=ebi.getSumByHql(hql);
 		if(model.getTf_areaCount()==0){
 		model.setTf_areaCount(area);//已收楼面积
 		}
@@ -501,7 +501,7 @@ public class FeesController extends BaseAppController implements  CommonExceptio
 		String month= sdm.format(sdm.parse(date));
 		model.setTf_rendMonth(month);
 		String hql=" select sum(o.tf_builArea) from  ResidentInfo o where 1=1 and o.tf_levelInfo.tf_parent.tf_InnstallBill="+tf_InnstallBill.getTf_insid();
-		double area=ebi.getCount(hql);
+		double area=ebi.getSumByHql(hql);
 		if(model.getTf_areaCount()==0){
 			model.setTf_areaCount(area);//已收楼面积
 			}
@@ -536,7 +536,7 @@ public class FeesController extends BaseAppController implements  CommonExceptio
 			boolean flag=false;
 			flag= proll.isTf_state();
 			proll.setTf_state(true);
-			double tf_Acount=proll.getTf_totaleAcount()/12; //proll.getTf_areaCount();
+			double tf_Acount=proll.getTf_totaleAcount()/ proll.getTf_areaCount();
 			proll.setTf_Acount(tf_Acount);
 			ebi.update(proll);
 			result.setDefaultMsg("审核成功!");

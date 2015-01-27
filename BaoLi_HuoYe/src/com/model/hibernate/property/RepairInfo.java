@@ -55,6 +55,15 @@ public class RepairInfo extends BaseEntity {
 	@FieldInfo(title = "附加说明", number =90)
 	private String tf_remark;
 	
+	@FieldInfo(title = "保修账号", number =100)
+	private String tf_appPhone;
+	@FieldInfo(title = "是否App提交", number =110)
+	private boolean tf_isPhonePost;
+	@FieldInfo(title = "房号", number =120)
+	private String  tf_roomNub;
+	
+	
+	
 	
 	public int getTf_repairId() {
 		return tf_repairId;
@@ -103,6 +112,30 @@ public class RepairInfo extends BaseEntity {
 	}
 	public void setTf_remark(String tf_remark) {
 		this.tf_remark = tf_remark;
+	}
+	public String getTf_appPhone() {
+		return tf_appPhone;
+	}
+	public void setTf_appPhone(String tf_appPhone) {
+		this.tf_appPhone = tf_appPhone;
+	}
+	public boolean isTf_isPhonePost() {
+		return tf_isPhonePost;
+	}
+	public void setTf_isPhonePost(boolean tf_isPhonePost) {
+		this.tf_isPhonePost = tf_isPhonePost;
+	}
+	public int getTf_levf() {
+		return tf_levf;
+	}
+	public void setTf_levf(int tf_levf) {
+		this.tf_levf = tf_levf;
+	}
+	public String getTf_roomNub() {
+		return tf_roomNub;
+	}
+	public void setTf_roomNub(String tf_roomNub) {
+		this.tf_roomNub = tf_roomNub;
 	}
 
 }

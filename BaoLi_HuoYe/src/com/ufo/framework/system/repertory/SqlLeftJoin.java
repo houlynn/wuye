@@ -1,6 +1,7 @@
 package com.ufo.framework.system.repertory;
 
 import com.model.hibernate.system._Module;
+import com.ufo.framework.common.core.exception.TimeoutException;
 import com.ufo.framework.system.ebo.ApplicationService;
 
 /**
@@ -31,7 +32,7 @@ public class SqlLeftJoin {
 		this.childTableAsName = childModule.getTableAsName();
 	}
 	
-	public SqlLeftJoin(String moduleName,String childModuleName) {
+	public SqlLeftJoin(String moduleName,String childModuleName) throws Exception {
 		
 		this(ApplicationService.getModuleWithName(moduleName),ApplicationService.getModuleWithName(childModuleName));
 	}

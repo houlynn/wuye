@@ -45,7 +45,7 @@ public interface AppService {
 	   * 报装报修
 	   */
 	  
-	  public Map<String,String> addRepairInfo(String  repairTitle,String repairContent,int rid );
+	  public Map<String, String> addRepairInfo(String repairTitle,String repairContent, int rid, String appPhone);
 	  
 	  
 	  /**
@@ -101,7 +101,8 @@ public interface AppService {
 	  
 	  
 	  
-	  
+	  public Map<String,Object> loadNoticeMessge(int start, int limit, String whereSql,
+				String parentSql, String querySql, String orderSql,int vid) throws Exception;
 	  
 	  
 	  

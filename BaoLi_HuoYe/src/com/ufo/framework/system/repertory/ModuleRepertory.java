@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.aspect.ModuleAspect;
 import com.model.hibernate.addition._Addition;
 import com.model.hibernate.system._Module;
+import com.ufo.framework.common.core.exception.TimeoutException;
 import com.ufo.framework.common.core.json.JsonDateProcessor;
 import com.ufo.framework.common.core.web.ModuleServiceFunction;
 import com.ufo.framework.common.core.web.TypeChange;
@@ -46,7 +47,7 @@ public class ModuleRepertory extends HibernateRepertory implements IModelReperto
 	 */
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	public Object getModuleDataWithName(String moduleName, String name) {
+	public Object getModuleDataWithName(String moduleName, String name) throws Exception {
 		_Module module = ApplicationService.getModuleWithName(moduleName);
 		if (module == null)
 			return null;
@@ -220,7 +221,7 @@ public class ModuleRepertory extends HibernateRepertory implements IModelReperto
 	 */
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-	public JSONObject getModuleRecord(String moduleName, String keyValue, HttpServletRequest request) {
+	public JSONObject getModuleRecord(String moduleName, String keyValue, HttpServletRequest request) throws Exception {
 		_Module module = ApplicationService.getModuleWithName(moduleName);
 		SqlGenerator generator = new SqlGenerator(module);
 		generator.setKeyValue(keyValue);
@@ -305,7 +306,7 @@ public class ModuleRepertory extends HibernateRepertory implements IModelReperto
 
 	@Override
 	public DataUpdateResponseInfo changeRecordId(String moduleName, String id,
-			String oldid) {
+			String oldid) throws Exception {
 		DataUpdateResponseInfo result = new DataUpdateResponseInfo();
 		_Module module = ApplicationService.getModuleWithName(moduleName);
 
@@ -323,7 +324,7 @@ public class ModuleRepertory extends HibernateRepertory implements IModelReperto
 
 	@Override
 	public DataUpdateResponseInfo update(String moduleName, String id,
-			String operType, String updated, HttpServletRequest request) {
+			String operType, String updated, HttpServletRequest request) throws Exception {
 		debug("数据update:" + moduleName + "," + id + "," + updated);
 		JSONObject updateJsonObject = JSONObject.fromObject(updated);
 		request.setAttribute(UPDATEJSONOBJECT, updateJsonObject);
