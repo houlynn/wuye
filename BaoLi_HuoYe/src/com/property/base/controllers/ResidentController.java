@@ -332,13 +332,19 @@ public class ResidentController    implements LogerManager,CommonException {
 	            		  appPhone=appPhone.substring(0,appPhone.lastIndexOf("."));
 	          	    }
 	            	  info.setTf_appPhone(appPhone);
-	            	  System.out.println("电话1:"+ranme);
+	            	  System.out.println("电话1:"+appPhone);
 	            	  
 	            	  String tf_appPhone1=String.valueOf(rowData.get(6));//APP
+	              	  if(tf_appPhone1.contains(".")){
+	              		tf_appPhone1=tf_appPhone1.substring(0,tf_appPhone1.lastIndexOf("."));
+	          	    }
 	            	  System.out.println("电话2:"+tf_appPhone1);
 	            	  info.setTf_appPhone1(tf_appPhone1);
 	            	  
 	            	  String tf_appPhone2=String.valueOf(rowData.get(7));//APP
+	            	  if(tf_appPhone2.contains(".")){
+	            		  tf_appPhone2=tf_appPhone2.substring(0,tf_appPhone2.lastIndexOf("."));
+		          	    }
 	            	  System.out.println("电话3:"+tf_appPhone2);
 	            	 info.setTf_appPhone2(tf_appPhone2);
 	            	  

@@ -9,7 +9,23 @@ extend:"Ext.grid.Panel",
  	selModel:{
 		selType:"checkboxmodel"
 	},
-    tbar:[{xtype:'button',text:'收费',itemId:'uniteFees',iconCls:'table_remove'},{xtype:'button',text:'添加临时收费',itemId:'uniteLFeesAdd',iconCls:'table_remove'}],
+		listeners : {
+		 selectionChange : function(model, selected, eOpts){
+		 	   this.down('toolbar button#uniteFees')[selected.length > 0
+					? 'enable'
+					: 'disable']();
+			var sum=0;		
+			for(var i in selected){
+				sum+=parseFloat(selected[i].get("tf_acount"));
+			}		
+		var unitefeesfrom=	this.up("form[xtype=unite.unitefeesfrom]");
+		var realACount=unitefeesfrom.down("#tf_realACount");
+		realACount.setValue(sum);
+			
+		 	
+		}
+	},
+    tbar:[{xtype:'button',text:'收费',itemId:'uniteFees',glyph : 0xf016},{xtype:'button', hidden:true, text:'添加临时收费',itemId:'uniteLFeesAdd',iconCls:'table_remove'}],
       initComponent : function() {
 			   var viewModel=system.getViewModel(301);
 			    this.moduleName = viewModel.get("tf_moduleName");
@@ -18,6 +34,7 @@ extend:"Ext.grid.Panel",
 				this.store = Ext.create('core.base.resident.store.FeesStore', {
 							module : viewModel.data,
 							model : this.model,
+							grid:this,
 							autoLoad: !1,
 						});
 			   this.columns = core.app.module.factory.ColumnsFactory.getColumns(viewModel);	

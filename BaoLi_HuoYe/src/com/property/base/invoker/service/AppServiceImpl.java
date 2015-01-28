@@ -367,7 +367,8 @@ public class AppServiceImpl implements AppService, LogerManager {
 	public Map<String, Object> loadNoticeMessge(int start, int limit,
 			String whereSql, String parentSql, String querySql,
 			String orderSql, int vid) throws Exception {
-		whereSql = " and tf_Village=" + vid;
+		whereSql = " and tf_Village=" + vid +" and tf_state='1' ";
+		orderSql="  order by tf_time desc ";
 		Map<String, Object> map = this.load(start, limit, whereSql, parentSql,
 				querySql, orderSql, "NoticeInfo");
 		map.put("totalCount", map.get("totalCount"));

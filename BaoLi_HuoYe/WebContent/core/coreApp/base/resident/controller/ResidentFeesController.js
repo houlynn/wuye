@@ -78,7 +78,7 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 						var grid=btn.up("grid[xtype=unite.unitefeesgrid]");
 						var sm= grid.getSelectionModel().getSelection();
 						 if(sm.length==0){
-	   		     	      		system.warnInfo("请选择至少一条业主信息进行操作!")
+	   		     	      		system.warnInfo("请选择至少一条收费项目进行操作!")
 	   		     	      	 return;
 	   		     	     }
 	   		     	      var form=grid.ownerCt.ownerCt.ownerCt;
@@ -95,9 +95,16 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 	   		     	   	     return;
 	   		     	   	   }
 	   		     	  var bids=[];
+	   		     	  var sum=0;
+	   		     	  var feeitem="";
+	   		     		feeitem = '<ol>';
 	   		     	  for(var i=0;i<sm.length;i++){
 	   		     	  bids.push(sm[i].get("tf_billitemid"));
+	   		     	  sum+=parseFloat(sm[i].get("tf_acount"));
+	   		           feeitem += '<li>' + sm[i].get("tf_feesDate") +":"+ sm[i].get("tf_feesName") + '</li>';
 	   		     	  }
+	   		     	  feeitem+="<li>实收金额：<span style='color:green;font-weight:bold'>"+sum+'</span>元</li>'
+	   		     	   feeitem += '</ol>';
 	   		     	   	   
    		     	   	   var params={
    		     	   	   tf_shouldCount:tf_shouldCount,
@@ -106,16 +113,27 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
    		     	   	   bids:bids,
    		     	   	   rid:form.rid
    		     	   	   };
-   		     	  var resObj=self.ajax({url:"/unite/fees.action",params:params});  
-   		     	  grid.getStore().load(function(){
-   		          var sum=store.sum;
-	             tf_shouldCountF.setValue(sum);
-	             tf_shouldCount.setDisabled(true);
-   		     	  	
-   		     	  });
-					
+   		     	   	   
+		          var unitefeesfrom=grid.up("form[xtype=unite.unitefeesfrom]");
+		          var realACount=unitefeesfrom.down("#tf_realACount");
+		           var title= unitefeesfrom.up("window").title;
+		            realACount.setValue(sum);
+		          	Ext.MessageBox.confirm("确定收款", "确定要对业主 <span style='color:red;font-weight:bold'>"+  title + "</span> 进行缴费么?"+feeitem,
+					function(btn) {
+						if (btn == 'yes') {
+				         var resObj=self.ajax({url:"/unite/fees.action",params:params});  
+   		     	          grid.getStore().load();
+   		     	         var feesGrid=  unitefeesfrom.feesGrid;
+   		     	         feesGrid.getStore().load();
+   		     	  
+				}
+			});
+		          
+		          
+   	
 					}
 		   },
+		   
 		"dataview[xtype=nuit.dataview]" : {
 		    render: function() {
                                   Ext.getBody().on("contextmenu", Ext.emptyFn,null, {preventDefault: true});
@@ -159,7 +177,7 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 										iconCls : 'table_save',
 										itemId : 'fees',
 										handler:function( item, e, eOpts ){
-												var dataView= Ext.getCmp("phones");
+											var dataView= Ext.getCmp("phones");
 											var records=dataView. getSelectionModel().getSelection();
 											if(records.length==0){
 											   system.warnInfo("请选中房号进行收费");
@@ -216,7 +234,7 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
 											proxy.extraParams.rtype="001";
 											store.load();	
 					  /**
-					   * 加载保修数据
+					   * 加载报修数据
 						*/
 					var modue=system.getModuleDefine("ResidentInfo");						
 					var  repairgrepairgrid=	unitePanel.down("grid[xtype=unite.repairgrid]");
@@ -424,6 +442,8 @@ Ext.define("core.base.resident.controller.ResidentFeesController", {
  * @param {} record
  */
 function uniteFees(record,view){
+	    var unitePanel=view.ownerCt;
+		var  feesGrid=	unitePanel.down("grid[xtype=unite.unitefeesgrid]");
 	  var win= Ext.createWidget("window",{
 	  	title:"客户收费",
 	   	width:1000,
@@ -439,6 +459,7 @@ function uniteFees(record,view){
 	    autoScroll : false,
 	  	items:[{
 	  	 xtype:"unite.unitefeesfrom",
+	  	  feesGrid:feesGrid,
 	  	 rid:record.get("rid"),
 	  	}],
 	  });
@@ -451,10 +472,8 @@ function uniteFees(record,view){
 	  var form=win.down("form[xtype=unite.unitefeesfrom]");
       var tf_shouldCount=form.down("#tf_shouldCount");
 	  store.load(function(){
-	        var sum=store.sum;
+	        var sum= store.sum;
 	         tf_shouldCount.setValue(sum);
-	         tf_shouldCount.setDisabled(true);
-	  
 	  });
 	  win.setTitle( record.get("number")+"--"+record.get("rname"));
  

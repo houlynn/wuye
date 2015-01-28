@@ -3,7 +3,7 @@ Ext.define('core.base.resident.store.FeesStore', {
 			modulePanel : null,
 			remoteSort : true,
 			autoLoad : false,
-			autoSync : false,
+			autoSync : true,
 			leadingBufferZone : 100,
 			buffered : false, // buffered=true可以无限下拉，但是删除和新增，reload都有问题，暂时不用
 			config : {
@@ -62,8 +62,11 @@ Ext.define('core.base.resident.store.FeesStore', {
 					    store.sum=sum;
 					}
 				});
-					//console.log(this.modulePanel.down('modulegrid'));
-					//this.modulePanel.down('gridModue').columnAutoSize();
+				 var unitefeesfrom=store.grid.up("form[xtype=unite.unitefeesfrom]");
+				 if(unitefeesfrom){
+		          var tf_shouldCount=unitefeesfrom.down("#tf_shouldCount");
+		          tf_shouldCount.setValue(sum);
+				 }
 					for (var i in store.extraParams){
 						 delete store.proxy.extraParams[i];
 						

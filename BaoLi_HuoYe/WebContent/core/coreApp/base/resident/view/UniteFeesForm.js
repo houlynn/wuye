@@ -37,8 +37,9 @@ Ext.define('core.base.resident.view.UniteFeesForm', {
 												    fieldLabel : "应收金额",
 												    itemId:"tf_shouldCount",
 													name : "tf_shouldCount",
-													 decimalPrecision:2,
+													decimalPrecision:2,
 													behindText : '元',
+													readOnly :true,
 													 allowBlank : false,
 												}, {
 													xtype : "numberfield",
@@ -48,6 +49,7 @@ Ext.define('core.base.resident.view.UniteFeesForm', {
 													name : "tf_realACount",
 													itemId:"tf_realACount",
 													behindText : '元',
+													readOnly :true,
 													allowBlank : false,
 												}]
 												},{

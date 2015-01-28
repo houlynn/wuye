@@ -233,6 +233,7 @@ public synchronized 	DataFetchResponseInfo  addUniteFees(int rid,int rtype
 		    		if(mlist!=null&&mlist.size()>0){
 			    		MeterInfo meterInfo=mlist.get(0);
 			    		bill.setTf_MeterInfo(meterInfo);
+		    			bill.setTf_acount(item.getTf_FeesInfo().getTf_price());//计算金额
 			    		debug(m+"查询到一条直收金额类型类型费用");	
 			    		}else{
 			    			MeterInfo meterInfo=new MeterInfo();
@@ -241,6 +242,7 @@ public synchronized 	DataFetchResponseInfo  addUniteFees(int rid,int rtype
 			    			meterInfo.setTf_mtype(MeterInfo.FEES_TYPE_NOUNITE);
 			    			meterInfo.setTf_ResidentInfo(residentInfo);
 			    			meterInfo.setTf_rendDate(m);//收费周期
+			    			meterInfo.setTf_acount(item.getTf_FeesInfo().getTf_price());
 			    			if(rtype==1){
 			    			meterInfo.addXcode();
 			    			}

@@ -316,13 +316,14 @@ public class VillageController extends BaseController {
 							+r.getTf_ResidentInfo().getTf_levelInfo().getTf_parent().getTf_leveName()+"--"
 							+r.getTf_ResidentInfo().getTf_levelInfo().getTf_leveName()+"--"
 							+r.getTf_ResidentInfo().getTf_number()+"--"+r.getTf_ResidentInfo().getTf_residentName());
-					view.put("tf_repairItem", r);
-					view.put("tf_repairTime", r);
-					view.put("tf_state", r);
-					view.put("tf_dowithDate", r);
-					view.put("tf_repairMan", r);
-					view.put("tf_levf", r);
-					view.put("tf_remark", r);
+					view.put("tf_repairItem", r.getTf_repairItem());
+					view.put("tf_repairTime", r.getTf_repairTime());
+					view.put("tf_state", r.getTf_state());
+					view.put("tf_dowithDate", r.getTf_dowithDate());
+					view.put("tf_repairMan", r.getTf_repairMan());
+					view.put("tf_levf", r.getTf_levf());
+					view.put("tf_remark", r.getTf_remark());
+					view.put("tf_appPhone", r.getTf_appPhone());
 					datas.add(view);
 					view=null;
 			  }
