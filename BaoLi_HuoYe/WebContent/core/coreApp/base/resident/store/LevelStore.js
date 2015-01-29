@@ -2,13 +2,13 @@ Ext.define("core.base.resident.store.LevelStore",{
 	  extend: "Ext.data.TreeStore",
 	//defaultRootId:"ROOT",
 	 model:factory.ModelFactory.getModelByName("com.ufo.framework.system.model.ui.JSONTreeNode","checked").modelName,
-        autoLoad: !1,
+     autoLoad :false, 
         allowAppend: !0,
         constructor: function() {
           this.proxy = {
-                   	type:"ajax",
+                   	 type:"ajax",
 		             url:"/102/L001.action",
-                        extraParams: arguments[0]
+                     extraParams: arguments[0]
                 },
                 this.callParent(arguments)
         },

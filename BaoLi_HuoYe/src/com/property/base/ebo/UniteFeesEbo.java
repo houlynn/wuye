@@ -104,6 +104,8 @@ public class UniteFeesEbo implements UnitFeesEbi {
 	 */
 public synchronized 	DataFetchResponseInfo  addUniteFees(int rid,int rtype
 		) throws Exception{
+	
+	SecurityUserHolder.getCurrentUser();
 	DataFetchResponseInfo reuslt=new DataFetchResponseInfo();
 	//查询业主的收费项目
 	String hql_ft=" from FeesTypeItem where 1=1 and tf_ResidentInfo="+rid;
@@ -139,32 +141,32 @@ public synchronized 	DataFetchResponseInfo  addUniteFees(int rid,int rtype
 		//已收项目
 		String nchql=" select count(*) from BillItem where 1=1 and tf_state='1' and tf_FeesInfo="+feesid+" and tf_feesDate='"+m+"' and tf_ResidentInfo="+rid;
 		//未收项目
-		String ochql=" select count(*) from BillItem where 1=1 and tf_state='0'  and tf_FeesInfo="+feesid+" and tf_feesDate='"+m+"' and tf_feesDate='"+m+"' and tf_ResidentInfo="+rid;
-		String ohql="from BillItem where 1=1 and tf_state='0' and tf_FeesInfo="+feesid+"  and tf_feesDate='"+m+"' and tf_ResidentInfo="+rid+" order by tf_feesDate desc,tf_FeesInfo ";
+		String ochql=" select count(*) from BillItem where 1=1 and tf_state='0'  and tf_FeesInfo="+feesid+" and tf_feesDate='"+m+"'  and tf_ResidentInfo="+rid;
+		String ohql="from BillItem where 1=1 and tf_state='0' and tf_FeesInfo="+feesid+"  and tf_feesDate='"+m+"' and tf_ResidentInfo="+rid;
 		Integer count=0;
 		ResidentInfo residentInfo= ebi.findById(ResidentInfo.class, rid);
 		 count=ebi.getCount(nchql);
 		 debug("查询是否已经交费的BillItem： "+nchql);
 		 if(count>0){
-			 debug("已经BillItem 收费 跳出！！");
+			 debug(item.getTf_FeesInfo().getTf_freesName()+"已经BillItem 收费 跳出！！");
 			 continue;//如果已经收过了不添加
 		 }else{
 		  count=ebi.getCount(ochql);
 		     if(count>0){
 			    List<BillItem> listItem= (List<BillItem>) ebi.queryByHql(ohql);
 			    bills.add(listItem.get(0));//如何没收但是记录已经经存在则添加
-			    debug("已经存在BillItem的欠费记录跳出循环！！");
+			    debug("向欠费单中添加一条记录:"+item.getTf_FeesInfo().getTf_freesName());
 			    continue;
 		    }else{
 		    	//如何未收但是记录不存在产生一条收费记录
-		    	  debug("不存在欠费记录需要产生一条");
+		    	  debug(item.getTf_FeesInfo().getTf_freesName()+ "不存在欠费记录需要产生一条");
 		    	BillItem bill=new BillItem();
 		    	bill.setTf_feesDate(m);//收费周期
 		    	bill.setTf_FeesInfo(item.getTf_FeesInfo());//收费标准
 		    	bill.setTf_state("0");//收费状态
 		    	bill.setTf_ResidentInfo(residentInfo);
 		    	if(rtype==1){
-		    	bill.addXcode();//物业标示
+		    	  bill.addXcode();//物业标示
 		    	}
 		    	String feesType=item.getTf_FeesInfo().getTf_feesType();//收费项目类型
 		    	//费用为抄表类型
@@ -173,6 +175,8 @@ public synchronized 	DataFetchResponseInfo  addUniteFees(int rid,int rtype
 		    	//抄表 度数计量类型
 				case FeesInfo.FB:{
 					//////////////////////查找当月的 电表 水表 煤气表 //////////////////////////////
+					
+					
 			    	String mhql="from MeterInfo where 1=1 and  tf_rendDate='"+m+"' and tf_FeesInfo="+item.getTf_FeesInfo().getTf_feesid()+" and tf_ResidentInfo="+rid;
 			    	List<MeterInfo> mlist= (List<MeterInfo>) ebi.queryByHql(mhql);
 			    	if(mlist!=null&&mlist.size()>0){
@@ -200,7 +204,7 @@ public synchronized 	DataFetchResponseInfo  addUniteFees(int rid,int rtype
 		    			bill.setTf_count(meterInfo.getTf_acount());
 		    			bill.setTf_price(item.getTf_FeesInfo().getTf_price());//设置单价
 		    			bill.setTf_acount(item.getTf_FeesInfo().getTf_price()*meterInfo.getTf_acount());//计算金额
-			    		debug(m+"查询到 MeterInfo一条单价*建筑面积类型费用");	
+			    		debug(m+"查询到 MeterInfo一条单价*建筑面积类型费用"+item.getTf_FeesInfo().getTf_freesName());	
 			    		}else{
 			    			MeterInfo	newmeterInfo=new MeterInfo();
 			    			newmeterInfo.setTf_mtermane(item.getTf_FeesInfo().getTf_freesName());//项目名称
@@ -215,7 +219,7 @@ public synchronized 	DataFetchResponseInfo  addUniteFees(int rid,int rtype
 			    			newmeterInfo.setTf_meterdate(AppUtils.getCurDate());
 			    			ebi.save(newmeterInfo);
 			    			debug("向 MeterInfo 添加了一条新记录");
-			    			debug("插入MeterInfo 一条/单价*建筑面积类型收费信息");
+			    			debug("插入MeterInfo 一条/单价*建筑面积类型收费信息"+item.getTf_FeesInfo().getTf_freesName());
 				    		bill.setTf_MeterInfo(newmeterInfo);
 			    			bill.setTf_count(newmeterInfo.getTf_acount());
 			    			bill.setTf_price(item.getTf_FeesInfo().getTf_price());//设置单价
@@ -234,7 +238,7 @@ public synchronized 	DataFetchResponseInfo  addUniteFees(int rid,int rtype
 			    		MeterInfo meterInfo=mlist.get(0);
 			    		bill.setTf_MeterInfo(meterInfo);
 		    			bill.setTf_acount(item.getTf_FeesInfo().getTf_price());//计算金额
-			    		debug(m+"查询到一条直收金额类型类型费用");	
+			    		debug(m+"查询到一条直收金额类型类型费用:"+item.getTf_FeesInfo().getTf_freesName());	
 			    		}else{
 			    			MeterInfo meterInfo=new MeterInfo();
 			    			meterInfo.setTf_mtermane(item.getTf_FeesInfo().getTf_freesName());//项目名称
@@ -248,13 +252,13 @@ public synchronized 	DataFetchResponseInfo  addUniteFees(int rid,int rtype
 			    			}
 			    			meterInfo.setTf_meterdate(AppUtils.getCurDate());
 			    			ebi.save(meterInfo);
-			    			debug("插入一条直收金额类型收费信息");	
+			    			debug("插入一条直收金额类型收费信息: "+item.getTf_FeesInfo().getTf_freesName());	
 			    			bill.setTf_MeterInfo(meterInfo);
 			    			bill.setTf_acount(item.getTf_FeesInfo().getTf_price());//设置
 			    		}
 		    				}
 		    	break;	
-		    	//直收金额类型	
+		    	//公表类型
 		        case FeesInfo.GT:{
 		        	String hql=" from InnstallBill where 1=1 and tf_FeesInfo="+item.getTf_FeesInfo().getTf_feesid();
 		        	List<InnstallBill>  listBills= (List<InnstallBill>) ebi.queryByHql(hql);
@@ -291,7 +295,7 @@ public synchronized 	DataFetchResponseInfo  addUniteFees(int rid,int rtype
 		           List<MeterInfo> meterInfos=(List<MeterInfo>) ebi.queryByHql(hqlpool);
 		           MeterInfo meterInfo=null;
 		           if(meterInfos==null||meterInfos.size()==0){
-		        	   meterInfo=new MeterInfo();
+		        	    meterInfo=new MeterInfo();
 		    			meterInfo.setTf_mtermane(item.getTf_FeesInfo().getTf_freesName());//项目名称
 		    			meterInfo.setTf_FeesInfo(item.getTf_FeesInfo());//收费标准
 		    			meterInfo.setTf_mtype(bil.getTf_billType());

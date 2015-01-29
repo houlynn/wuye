@@ -11,9 +11,9 @@ extend:"Ext.grid.Panel",
 	},
 		listeners : {
 		 selectionChange : function(model, selected, eOpts){
-		 	   this.down('toolbar button#uniteFees')[selected.length > 0
+		 	/*   this.down('toolbar button#uniteFees')[selected.length > 0
 					? 'enable'
-					: 'disable']();
+					: 'disable']();*/
 			var sum=0;		
 			for(var i in selected){
 				sum+=parseFloat(selected[i].get("tf_acount"));

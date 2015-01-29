@@ -1,8 +1,8 @@
 Ext.define("core.base.resident.store.UniteLevelStore",{
 	  extend: "Ext.data.TreeStore",
 	//defaultRootId:"ROOT",
-	 model:factory.ModelFactory.getModelByName("com.ufo.framework.system.model.ui.JSONTreeNode","checked").modelName,
-        autoLoad: !1,
+	   model:factory.ModelFactory.getModelByName("com.ufo.framework.system.model.ui.JSONTreeNode","checked").modelName,
+    autoLoad :false, 
         allowAppend: !0,
         constructor: function() {
           this.proxy = {

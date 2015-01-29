@@ -3,6 +3,7 @@ Ext.define("core.base.resident.view.LevelTree",{
 	alias : "widget.resident.levelTree",
 	displayField : "text",
 	rootVisible : false,
+	expanded:false,
 	store : "core.base.resident.store.LevelStore",
 	title:"楼宇列表",
     dockedItems: [{
