@@ -36,7 +36,13 @@ public class AccessControllerFilter implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object arg2) throws Exception {
 		// TODO Auto-generated method stub
-		
+	
+		boolean flag = false;
+		String url = request.getRequestURI();
+		 flag = url.contains("Login")||url.contains("logout");
+		if (!flag) {
+			EndUser endUser = SecurityUserHolder.getCurrentUser();
+		}
 		
 		// TODO Auto-generated method stub
 /*		boolean flag = false;
