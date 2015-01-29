@@ -3,6 +3,8 @@ Ext.define("core.rbac.role.view.RoleTree",{
 	alias : "widget.role.roletree",
 	displayField : "text",
 	rootVisible : false,
+		border : false,
+			frame:true,
 	store : "core.rbac.role.store.RoleStore",
 	title:"角色管理",
 	border:0,

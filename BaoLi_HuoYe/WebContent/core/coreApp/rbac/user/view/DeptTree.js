@@ -3,6 +3,8 @@ Ext.define("core.rbac.user.view.DeptTree",{
 	alias : "widget.rbac.depttree",
 	displayField : "text",
 	rootVisible : false,
+		frame:true,
+		border:false,
 	store : "core.rbac.user.store.DeptStore",
 	title:"部门管理",
 	tools : [{

@@ -2,6 +2,7 @@ Ext.define("core.rbac.user.view.UserLayout",{
 	extend:"core.app.base.BasePanel",
 	alias : 'widget.rbac.userlayout',
 	funCode:"usermodule_main",
+		frame:true,
 	funData:{
 	        action:"/rbacUser", //请求Action
 	        whereSql:"",//表格查询条件

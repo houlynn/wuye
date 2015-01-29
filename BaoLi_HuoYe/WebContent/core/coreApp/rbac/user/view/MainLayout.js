@@ -2,6 +2,7 @@ Ext.define("core.rbac.user.view.MainLayout",{
 	extend:"Ext.panel.Panel",
 	alias : 'widget.rbac.mainlayout',
 	layout : 'border',
+		frame:true,
 	items : [{
 		xtype:"rbac.depttree",
 		region:"west",

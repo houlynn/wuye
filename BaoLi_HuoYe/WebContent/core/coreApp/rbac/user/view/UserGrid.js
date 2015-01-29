@@ -1,6 +1,7 @@
 Ext.define("core.rbac.user.view.UserGrid",{
 	extend:"core.app.base.BaseGrid",
 	alias:"widget.rbac.usergrid",
+		frame:true,
 	tbar:[
 		{xtype:'button',text:'添加',ref:'gridInsert',iconCls:'table_add'},
 		{xtype:'button',text:'删除',ref:'gridDelete',iconCls:'table_remove'},

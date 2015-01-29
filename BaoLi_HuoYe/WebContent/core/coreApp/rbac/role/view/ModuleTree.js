@@ -3,16 +3,20 @@ Ext.define("core.rbac.role.view.ModuleTree",{
 	alias : "widget.role.moduletree",
 	displayField : "text",
 	rootVisible : false,
+	border : false,
+	frame:true,
 	store : "core.rbac.role.store.ModuleStore",
 	title:"授权管理",
 	rbar:[{
 			xtype : 'button',
 			tooltip : '授权',
+				border : false,
 			iconCls : 'tree_set_perm',
 			ref : 'setPerm'
 		}, {
 			xtype : 'button',
 			tooltip : '查看权限',
+				border : false,
 			iconCls : 'tree_see_perm',
 			ref : 'seePerm'
 		}]

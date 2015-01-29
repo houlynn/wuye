@@ -8,13 +8,16 @@ Ext.define("core.rbac.role.view.MainLayout",{
 		region:"west",
 		items:[{
 			xtype:"role.roletree",
-			height:comm.get("resolutionHeight")*0.3
+				border : false,
+			height:comm.get("resolutionHeight")*0.3,
 		},{
 			xtype:"role.moduletree",
-			height:comm.get("resolutionHeight")*0.4
+				border : false,
+			height:comm.get("resolutionHeight")*0.4,
 		}]
 	},{
 		xtype:"role.centerlayout",
-		region:"center"
+			border : false,
+		region:"center",
 	}]
 })
