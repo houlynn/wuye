@@ -2,9 +2,9 @@ Ext.define("core.rbac.user.view.UserGrid",{
 	extend:"core.app.base.BaseGrid",
 	alias:"widget.rbac.usergrid",
 	tbar:[
-		{xtype:'button',text:'添加',ref:'gridInsert',iconCls:'table_add'},
+		{xtype:'button',text:'添加',ref:'gridInsertUser',iconCls:'table_add'},
 		{xtype:'button',text:'删除',ref:'gridDelete',iconCls:'table_remove'},
-		{xtype:'button',text:'保存',ref:'gridSave',iconCls:'table_save'}
+		{xtype:'button',text:'保存',ref:'gridSaveUser',iconCls:'table_save'}
 	],
 	columns:[{
 		xtype:"rownumberer",
@@ -22,12 +22,27 @@ Ext.define("core.rbac.user.view.UserGrid",{
 			xtype:"textfield"
 		}
 	},{
-		text:"编码",
+		text:"登陆账号",
 		dataIndex:"userCode",
 		field:{
-			xtype:"textfield"
+			xtype:"textfield",
+			 regex: /^((\d{3,4}-)*\d{7,8}(-\d{3,4})*|13\d{9})$/ ,
+			 	allowBlank : false,
+			 	emptyText :"请填入手机号"
 		}		
-	},{
+	},
+	{
+		text:"密码",
+		dataIndex:"password",
+		field:{
+			xtype:"textfield",
+			 	allowBlank : false,
+			 	emptyText :""
+		}		
+	}
+	
+	
+	,{
 		text:"性别",
 		dataIndex:"sex",
 		columnType:"basecombobox",

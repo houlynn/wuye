@@ -156,5 +156,18 @@ public class EndUserEbo extends SimpleEbo<EndUser> implements EndUserEbi{
 	}
 	
 	
+	public void  updateUser(String[] updateSqls ,String ids[]) throws Exception{
+		this.executeBatchHql(updateSqls);
+		for(String id : ids){
+			 EndUser endUser= (EndUser) this.findById(EndUser.class, id);
+			 String str=endUser.getUserCode();
+			 if(StringUtil.isEmpty(str)){
+				 getUpdateException("", "登陆账号不能为空!", ResponseErrorInfo.STATUS_FAILURE);
+			 }
+			
+		}
+		
+	}
+	
 
 }

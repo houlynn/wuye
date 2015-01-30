@@ -26,7 +26,9 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.util.WebUtils;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.context.annotation.Scope;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,10 +42,14 @@ import com.model.hibernate.system.shared.Department;
 import com.model.hibernate.system.shared.EndUser;
 import com.model.hibernate.system.shared.XCodeInfo;
 import com.property.base.vo.ProUserInfo;
+import com.ufo.framework.common.core.exception.InsertException;
+import com.ufo.framework.common.core.exception.ResponseErrorInfo;
 import com.ufo.framework.common.core.utils.AppUtils;
 import com.ufo.framework.common.core.utils.MD5Util;
 import com.ufo.framework.common.core.utils.StringUtil;
 import com.ufo.framework.common.core.web.VerifyCodeUtil;
+import com.ufo.framework.common.model.Model;
+import com.ufo.framework.system.ebi.CommonException;
 import com.ufo.framework.system.ebi.Ebi;
 import com.ufo.framework.system.ebi.EndUserEbi;
 import com.ufo.framework.system.repertory.SqlModuleFilter;
@@ -60,7 +66,7 @@ import com.ufo.framework.system.web.SecurityUserHolder;
 @Controller("userAction")
 @Scope("prototype")
 @RequestMapping("/rbacUser")
-public class UserController extends SimpleBaseController<EndUser> {
+public class UserController extends SimpleBaseController<EndUser> implements CommonException {
 	
 	@Resource(name="ebo")
 	private Ebi ebo;
@@ -68,12 +74,48 @@ public class UserController extends SimpleBaseController<EndUser> {
 	protected UserController() {
 		super(EndUser.class);
 	}
+	
+	
+	
+	
+	
+	@Override
+	public void doUpdateList(String strData, String[] ids,
+			HttpServletRequest request, HttpServletResponse response) throws Exception {
+		// TODO Auto-generated method stub
+		try {
+			String[] updateSqls = jsonBuilder.jsonSqlToString(strData);
+			EndUserEbi uebi=(EndUserEbi)ebi;
+			uebi.updateUser(updateSqls, ids);
+			toWrite(response,
+					jsonBuilder.returnSuccessJson("'" + updateSqls.length
+							+ "条记录被更新'"));
+		}catch (ConstraintViolationException e) {
+		      error("DataAccessException异常", e);
+		      toWrite(response,
+						jsonBuilder.returnFailureJson("'更新失败  :插入记录的值重复!'"));
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+			error("批量更新失败，错误信息:" + e.getMessage());
+			toWrite(response,
+					jsonBuilder.returnFailureJson("'批量更新失败，错误信息："
+							+ e.getMessage() + "'"));
+		}
+	}
+
+
+
+
+
 	public void doSave(EndUser model, HttpServletRequest request,
 			HttpServletResponse response) {
 		model.setPassword(MD5Util.md5(model.getPassword()));
 		model.setCreateTime(AppUtils.getCurrentTime());
 		String hql=" select max(u.orderIndex) from EndUser u ";
 		try {
+			
+			this.getModel(request, model);
 			int max= ebi.getCount(hql);
 			model.setOrderIndex(max);
 			model.setSex("1");
@@ -84,12 +126,67 @@ public class UserController extends SimpleBaseController<EndUser> {
 			}else{
 				model.setCodeId(SecurityUserHolder.getCurrentUser().getXcodeInfo().getTf_codeId());
 			}
+			ebi.save(model);
+			toWrite(response,
+					jsonBuilder.returnSuccessJson(jsonBuilder.toJson(model)));
+			
+		}catch (DataAccessException e) {
+		      error("DataAccessException异常", e);
+			if (e.getRootCause().getMessage().toLowerCase().indexOf("unique ke") != -1){
+				toWrite(response,
+						jsonBuilder.returnFailureJson("'插入记录的主键值与数据库中原有的值重复"
+								+ e.getRootCause().getMessage().toLowerCase() + "'"));
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			toWrite(response,
+					jsonBuilder.returnFailureJson("'保存方法出错，错误信息"
+							+ e.getMessage() + "'"));
+		}
+	
+		
+		
+		
+	
+	}
+	
+	
+	
+	public void doUpdate(EndUser model, HttpServletRequest request,
+			HttpServletResponse response) {
+		this.getModel(request, model);
+		try {
+			if (model instanceof Model) {
+				//buildModelModifyInfo(request, response, (BaseEntity) model);
+			} else {
+				error("实体信息获取错误");
+				toWrite(response, jsonBuilder.returnFailureJson("'传入的实体信息错误'"));
+				return;
+			}
+			EndUser endUser=(EndUser) ebi.findById(EndUser.class, model.getUserId());
+			
+			Map<String,Object> values=new HashMap<>();
+			values.put("userCode", model.getUserCode());
+			values.put("username", model.getUsername());
+			values.put("sex", model.getSex());
+			if(!endUser.getPassword().equals(model.getPassword())){
+			values.put("password", MD5Util.md5(model.getPassword()));
+			}
+			ebo.update(values, EndUser.class, model.getUserId());
+			toWrite(response,
+					jsonBuilder.returnSuccessJson(jsonBuilder.toJson(model)));
 		} catch (Exception e) {
 			e.printStackTrace();
+			error("更新方法出错，错误信息" + e.getMessage());
+			toWrite(response,
+					jsonBuilder.returnFailureJson("'更新方法出错，错误信息"
+							+ e.getMessage() + "'"));
+
 		}
-	//	model.setEnabled("1");
-		super.doSave(model, request, response);
 	}
+	
+	
 	@RequestMapping("/getCurrentUser")
 	public void getCurrentUser(HttpServletRequest request,
 			HttpServletResponse response) throws Exception {

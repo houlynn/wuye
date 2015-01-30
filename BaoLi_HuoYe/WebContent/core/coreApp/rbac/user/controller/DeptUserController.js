@@ -42,6 +42,10 @@ Ext.define("core.rbac.user.controller.DeptUserController",{
 					
 				}
 			},
+			
+			
+			
+			
 			"panel[xtype=rbac.depttree] button[ref=treeIns]":{
 				click:function(btn){
 					var tree=btn.up("panel[xtype=rbac.depttree]");
@@ -139,6 +143,7 @@ Ext.define("core.rbac.user.controller.DeptUserController",{
 							self.msgbox("保存成功!");
 						}else{
 							alert(resObj.obj);
+						 
 						}
 					}else{
 						alert("请选中节点");
@@ -146,10 +151,49 @@ Ext.define("core.rbac.user.controller.DeptUserController",{
 					
 				}
 			},
+			"form[xtype=rbac.userform] #save":{
+			 click:function(btn){
+			 	      var form=btn.up("form[xtype=rbac.userform]");
+					   var params=form.params;
+					   var userid=form.down("#userId").getValue();
+					   var flag=false;
+					  var 	url="rbacUser/doSave.action";
+					   if(userid){
+					     flag=true;
+					      	url="rbacUser/doUpdate.action";
+					   }
+					   
+					   var formObj=form.getForm();
+					  	formObj.submit({
+					    url:url,
+						params:params,
+						//可以提交空的字段值
+						submitEmptyText:true,
+						//成功回调函数
+						success:function(f,action){
+							var obj=action.result.obj;
+							 var store=form.store;
+							  var model = Ext.create(store.model);
+							  model.data=obj;
+							  formObj.loadRecord(model);
+							  store.load();
+							  if(!flag){
+							  system.smileInfo("添加成功!")
+							  }else{
+							  system.smileInfo("修改成功!")
+							  }
+						}});
+			 
+			 }
+				
+				
+			},
+			
+			
 			/**
 			 * 人员添加事件
 			 */
-			"panel[xtype=rbac.usergrid] button[ref=gridInsert]":{
+			"panel[xtype=rbac.usergrid] button[ref=gridInsertUser]":{
 				beforeclick:function(btn){
 					var grid=btn.up("panel[xtype=rbac.usergrid]");
 					var deptTree=grid.up("panel[xtype=rbac.mainlayout]").down("panel[xtype=rbac.depttree]");
@@ -172,22 +216,16 @@ Ext.define("core.rbac.user.controller.DeptUserController",{
 					insertObj=Ext.apply(insertObj,{
 						foreignKey:deptId
 					});
-					var resObj=self.ajax({url:funData.action+"/doSave.action",params:insertObj});
-					if(resObj.success){					
-							var obj=new Model(resObj.obj);
-							edit.cancelEdit(); //取消其他插件的编辑活动								
-							store.insert(0,obj);
-							obj.commit();
-							//设置第一行第二列编辑
-							edit.startEditByPosition({
-								row:0,
-								column:2
-							});					
-							self.msgbox("添加成功");	
-						
-					}else{
-						alert(resObj.obj);
-					}
+					
+					  var  window=  Ext.createWidget("window",{
+					  	 items:[{
+					  	      xtype:"rbac.userform",
+					  	      itemId:"userform",
+					  	      params:insertObj,
+					  	      store:store
+					  	 }]
+					  });
+					  window.show();
 					return false;
 				}
 			}
@@ -199,7 +237,8 @@ Ext.define("core.rbac.user.controller.DeptUserController",{
 		"core.rbac.user.view.CenterLayout",
 		"core.rbac.user.view.DeptForm",
 		"core.rbac.user.view.UserLayout",
-		"core.rbac.user.view.UserGrid"
+		"core.rbac.user.view.UserGrid",
+		"core.rbac.user.view.UserForm"
 	],
 	stores:[
 		"core.rbac.user.store.DeptStore",

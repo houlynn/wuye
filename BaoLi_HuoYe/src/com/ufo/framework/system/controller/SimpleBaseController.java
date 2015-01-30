@@ -220,7 +220,7 @@ public abstract class SimpleBaseController<M extends Model> implements LogerMana
 			@RequestParam(value="strData",required=false,defaultValue="") String strData,
 			@RequestParam(value="ids",required=false) String[] ids,
 			HttpServletRequest request,
-			HttpServletResponse response) {
+			HttpServletResponse response) throws Exception {
 		// [{sql:"update EndUser set name='zsp'"},{}]
 
 		try {

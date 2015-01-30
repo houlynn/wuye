@@ -55,6 +55,10 @@ Ext.define("core.rbac.role.controller.RolePermController",{
 		};
 		//事件注册
 		this.control({
+			
+
+			
+			
 			"container[xtype=role.roletree]":{
 				itemclick:function(tree,record,item,index,e,eOpts){
 					var mainLayout=tree.up("container[xtype=role.mainlayout]");
@@ -350,11 +354,12 @@ Ext.define("core.rbac.role.controller.RolePermController",{
 		"core.rbac.role.view.RoleForm",
 		"core.rbac.role.view.UserGrid",
 		"core.rbac.role.view.ModuleTree",
-		"core.app.view.query.MtssWindow"
+		"core.app.view.query.MtssWindow",
 	],
 	stores:[
 		"core.rbac.role.store.RoleStore",
 		"core.rbac.role.store.ModuleStore",
-		"core.rbac.role.store.UserStore"
+		"core.rbac.role.store.UserStore",
+		
 	]
 });
