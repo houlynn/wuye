@@ -59,6 +59,7 @@ Ext.define("core.rbac.user.view.UserForm", {
 									items : [{
 									xtype : "textfield",
 									fieldLabel : "登陆账号",
+								     regex: /^((\d{3,4}-)*\d{7,8}(-\d{3,4})*|13\d{9})$/ ,
 									 flex: 1,
 									name : "userCode",
 									allowBlank : false
@@ -70,7 +71,8 @@ Ext.define("core.rbac.user.view.UserForm", {
 									xtype : "textfield",
 									fieldLabel : "密码",
 									 flex: 1,
-									name : "password"
+									name : "password",
+									allowBlank : false
 										}]
 								}, {
 									xtype : "fieldcontainer",
@@ -78,9 +80,11 @@ Ext.define("core.rbac.user.view.UserForm", {
 									items : [{
 									fieldLabel : "性别",
 									name : " sex",
+									 itemId:"sex",
 									 flex: 1,
 									 xtype : "basecombobox",
-		                             ddCode : "SEX"
+		                             ddCode : "SEX",
+		                             allowBlank : false
 										}]
 								}
 

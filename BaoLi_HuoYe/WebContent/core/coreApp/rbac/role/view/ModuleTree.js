@@ -11,12 +11,14 @@ Ext.define("core.rbac.role.view.ModuleTree",{
 			xtype : 'button',
 			tooltip : '授权',
 				border : false,
+			glyph : 0xf1c3,
 			iconCls : 'tree_set_perm',
 			ref : 'setPerm'
 		}, {
 			xtype : 'button',
 			tooltip : '查看权限',
 				border : false,
+			glyph : 0xf019,
 			iconCls : 'tree_see_perm',
 			ref : 'seePerm'
 		}]

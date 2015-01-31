@@ -16,13 +16,15 @@ Ext.define("core.rbac.user.view.DeptForm", {
 						items : [{
 									xtype : "fieldcontainer",
 									layout : "hbox",
-									items : [{
+									items : [
+										{
 												xtype : "textfield",
 												fieldLabel : "主键",
 												name : "deptId",
 												 flex: 1,
 												hidden : true
-											}]
+											}
+											]
 								},
 
 								{

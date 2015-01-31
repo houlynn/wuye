@@ -9,7 +9,6 @@ Ext.define("core.rbac.user.controller.DeptUserController",{
 	},
 	init:function(){
 		var self=this
-		//事件注册
 		this.control({
 			"panel[xtype=rbac.depttree]":{
 				itemclick:function(tree,record,item,index,e,eOpts){
@@ -26,7 +25,6 @@ Ext.define("core.rbac.user.controller.DeptUserController",{
 					treechildIns.setDisabled(false);
 					var treeDel=deptTree.down("button[ref=treeDel]");
 					treeDel.setDisabled(false);
-					//加载人员信息
 					var userGrid=mainLayout.down("panel[xtype=rbac.usergrid]");
 					var ids=new Array();
 					var map=self.eachChildNode(record);
@@ -125,11 +123,9 @@ Ext.define("core.rbac.user.controller.DeptUserController",{
 				click:function(btn){
 					var deptForm=btn.up("panel[xtype=rbac.deptform]");
 					var formObj=deptForm.getForm();
-					
 					var params=self.getFormValue(formObj);
 					if(params.deptId!=null && params.deptId!=""){
 						var resObj=self.ajax({url:"/rbacDept/doUpdate.action",params:params});
-						
 						if(resObj.success){
 							var mainLayout=deptForm.up("panel[xtype=rbac.mainlayout]");
 							var deptTree=mainLayout.down("panel[xtype=rbac.depttree]");
@@ -162,14 +158,11 @@ Ext.define("core.rbac.user.controller.DeptUserController",{
 					     flag=true;
 					      	url="rbacUser/doUpdate.action";
 					   }
-					   
 					   var formObj=form.getForm();
 					  	formObj.submit({
 					    url:url,
 						params:params,
-						//可以提交空的字段值
 						submitEmptyText:true,
-						//成功回调函数
 						success:function(f,action){
 							var obj=action.result.obj;
 							 var store=form.store;
@@ -182,17 +175,69 @@ Ext.define("core.rbac.user.controller.DeptUserController",{
 							  }else{
 							  system.smileInfo("修改成功!")
 							  }
-						}});
+						},
+							failure:function(form, action){
+							var obj=action.result.obj;
+							if(action.failureType=="client"){
+								var errors=["前台验证失败，错误信息："];
+								formObj.getFields().each(function(f){
+									if(!f.isValid()){
+										errors.push("<font color=red>"+f.fieldLabel+"</font>:"+f.getErrors().join(","));
+									}
+								});
+								system. errorAlertInfo(errors.join("<br/>"));
+							}else{
+								system. errorAlertInfo(obj);
+							}
+							}
+						
+						});
 			 
 			 }
 				
 				
 			},
-			
-			
-			/**
-			 * 人员添加事件
-			 */
+			"panel[xtype=rbac.usergrid] button[ref=gridSaveUser]":{
+					beforeclick:function(btn){
+		            var grid=btn.up("panel[xtype=rbac.usergrid]");
+					var deptTree=grid.up("panel[xtype=rbac.mainlayout]").down("panel[xtype=rbac.depttree]");
+					var store=grid.getStore();
+					var Model=store.model;
+					 var model = Ext.create(store.model);
+					var funCode=grid.funCode;
+					var basePanel=grid.up("basepanel[funCode="+funCode+"]");
+					var funData=basePanel.funData;
+					var defaultObj=funData.defaultObj;
+					var insertObj=self.getDefaultValue(defaultObj);
+					var records=grid.getSelectionModel().getSelection();
+					if(records.length!=1){
+						system.warnInfo("请选择一条记录进行修改")
+						return false;
+					}
+					var deptObj=records[0];
+					var deptId=deptObj.get("id");
+					insertObj=Ext.apply(insertObj,{
+						foreignKey:deptId
+					});
+					var sm=records[0];
+					  model.data=sm.data;
+					  var  window=  Ext.createWidget("window",{
+					  	 items:[{
+					  	      xtype:"rbac.userform",
+					  	      itemId:"userform",
+					  	      params:insertObj,
+					  	      store:store
+					  	 }]
+					  });
+					var  formObj=window.down("#userform").getForm();
+					  formObj.loadRecord(model);
+					  window.down("#userform").down("#sex").setValue(model.data.sex);
+					  window.show();
+					  return false;
+						
+						
+					}
+			},
 			"panel[xtype=rbac.usergrid] button[ref=gridInsertUser]":{
 				beforeclick:function(btn){
 					var grid=btn.up("panel[xtype=rbac.usergrid]");
@@ -202,7 +247,6 @@ Ext.define("core.rbac.user.controller.DeptUserController",{
 					var Model=store.model;
 					var funCode=grid.funCode;
 					var basePanel=grid.up("basepanel[funCode="+funCode+"]");
-						//得到配置信息
 					var funData=basePanel.funData;
 					var defaultObj=funData.defaultObj;
 					var insertObj=self.getDefaultValue(defaultObj);
@@ -216,7 +260,6 @@ Ext.define("core.rbac.user.controller.DeptUserController",{
 					insertObj=Ext.apply(insertObj,{
 						foreignKey:deptId
 					});
-					
 					  var  window=  Ext.createWidget("window",{
 					  	 items:[{
 					  	      xtype:"rbac.userform",
