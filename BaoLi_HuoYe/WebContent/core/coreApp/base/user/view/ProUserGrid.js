@@ -16,6 +16,14 @@ Ext.define("core.base.user.view.ProUserGrid", {
 		   columnType : "textfield",
 		     hidden:true
 		},
+			  {text : "proid",
+		     dataIndex : "proid",
+		     width : 150,
+		   columnType : "textfield",
+		     hidden:true
+		},
+		
+		
 	  {text : "手机号",
 		     dataIndex : "loginCode",
 		     width : 150,
@@ -26,12 +34,19 @@ Ext.define("core.base.user.view.ProUserGrid", {
 		width : 150,
 		columnType : "textfield"
 		},
-				{text : "创建时间",
+		{
+		text : "性别",
+		dataIndex : "tf_sex",
+		width : 80,
+		ddCode : "SEX",
+		columnType : "basecombobox"
+		},
+		{text : "创建时间",
 		dataIndex : "createTime",
 		width : 320,
 		columnType : "textfield"
 		},		{text : "所属物业",
-		dataIndex : "proid",
+		dataIndex : "proname",
 		width : 320,
 		columnType : "textfield"
 		}

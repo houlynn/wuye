@@ -6,6 +6,8 @@ import javax.annotation.Resource;
 
 import net.sf.json.JSONObject;
 
+import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.model.hibernate.property.PropertyCompany;
@@ -48,6 +50,8 @@ public class EndUserEbo extends SimpleEbo<EndUser> implements EndUserEbi{
 	 * @throws Exception
 	 */
 	public void addUser(String inserted) throws Exception{
+		String msg="";
+		try{
 		JSONObject jo = JSONObject.fromObject(inserted);
 		ProUserInfo proUser = (ProUserInfo) JSONObject.toBean(jo, ProUserInfo.class);
 		String loginCode=proUser.getLoginCode();
@@ -59,7 +63,6 @@ public class EndUserEbo extends SimpleEbo<EndUser> implements EndUserEbi{
 		boolean flag=true;
 		EndUser endUser=new EndUser();
 		endUser.setSex(sex);
-		String msg="";
 		if(StringUtil.isEmpty(loginCode)){
 			msg="不能为空!";
 			flag=false;
@@ -81,7 +84,7 @@ public class EndUserEbo extends SimpleEbo<EndUser> implements EndUserEbi{
 			String hql="select count(*) from  EndUser where userCode='"+loginCode+"'";
 		    int count= getCount(hql);
 		    if(count>0){
-		    	msg="该用户已经存在添加失败!";
+		    	msg="该用户已经存在!";
 				flag=false;
 		    }
 		}
@@ -153,6 +156,9 @@ public class EndUserEbo extends SimpleEbo<EndUser> implements EndUserEbi{
 			repertory.executeSql(insertSql);
 		  }
 		  debug("授权成功!");
+		}catch (Exception e) {
+		  getInsertException("", "设置用户失败 "+msg, ResponseErrorInfo.STATUS_FAILURE);
+		}
 	}
 	
 	

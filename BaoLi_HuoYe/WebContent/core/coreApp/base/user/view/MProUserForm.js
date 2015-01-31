@@ -1,6 +1,6 @@
-Ext.define('core.base.user.view.ProUserForm', {
+Ext.define('core.base.user.view.MProUserForm', {
 	extend : "Ext.form.Panel",
-	alias : 'widget.user.prouserform',
+	alias : 'widget.user.mprouserform',
 	border : !1,
 	title : null,
 	autoHeight : true,
@@ -9,30 +9,6 @@ Ext.define('core.base.user.view.ProUserForm', {
 		text : '保存',
 		itemId : 'save',
 		glyph : 0xf0c7,
-		handler : function(button) {
-			var self = this;
-			var form = button.up('form');
-			console.log(button.up('form').getForm().getRecord());
-			button.up('form').updateRecord();
-			var store = self.up("window[xtype=user.prouserwindow]").grid
-					.getStore();
-			if (form.isValid()) {
-				var model = button.up('form').getForm().getRecord().save();
-				var task = new Ext.util.DelayedTask(function() {
-							if (model.getProxy().errorInfo) {
-								console.log(model.getProxy().errorInfo);
-								if (self.callback) {
-									self.callback(model.getProxy().errorInfo);
-								}
-								return;
-							}
-							delete model.getProxy().errorInfo;
-							store.reload();
-						});
-				task.delay(1);
-			}
-
-		}
 	}, {
 		text : '关闭',
 		itemId : 'close',
@@ -106,7 +82,7 @@ Ext.define('core.base.user.view.ProUserForm', {
 								beforeLabelTextTpl : comm.get('required'),
 								allowBlank : false
 							}]
-				},
+				}, 
 				{
 					xtype : "fieldcontainer",
 					layout : "hbox",
@@ -123,8 +99,8 @@ Ext.define('core.base.user.view.ProUserForm', {
 								allowBlank : false
 							}]
 				},
-					
-						{
+						
+							{
 					xtype : "fieldcontainer",
 					layout : "hbox",
 					flex : 2,
@@ -152,19 +128,14 @@ Ext.define('core.base.user.view.ProUserForm', {
 					layout : "hbox",
 					flex : 2,
 					items : [{
-								fieldLabel : "选择物业公司",
-								beforeLabelTextTpl : comm.get('required'),
-								xtype : "moduecombobox",
+								fieldLabel : "物业公司",
+								xtype : "textfield",
 								width : "100%",
-								name : "proid",
-								itemId : "proid",
+								name : "proname",
+								itemId : "proname",
 								allowBlank : false,
+							   readOnly : true,
 								flex : 2,
-								ddCode : {
-									modeuName : "PropertyCompany",
-									marking : '1',
-									identification : '1'
-								}
 							}
 
 					]

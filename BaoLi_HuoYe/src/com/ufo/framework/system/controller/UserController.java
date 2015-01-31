@@ -56,6 +56,7 @@ import com.ufo.framework.system.repertory.SqlModuleFilter;
 import com.ufo.framework.system.shared.module.DataDeleteResponseInfo;
 import com.ufo.framework.system.shared.module.DataFetchResponseInfo;
 import com.ufo.framework.system.shared.module.DataInsertResponseInfo;
+import com.ufo.framework.system.shared.module.DataUpdateResponseInfo;
 import com.ufo.framework.system.web.SecurityUserHolder;
 
 /**
@@ -366,13 +367,16 @@ public class UserController extends SimpleBaseController<EndUser> implements Com
 			pru.setCreateTime(item.getCreateTime());
 			pru.setId(item.getUserId());
 			pru.setLoginCode(item.getUserCode());
+			pru.setSex(item.getSex());
 			XCodeInfo xcode=new XCodeInfo();
 			try {
 				xcode = (XCodeInfo) ebi.findById(XCodeInfo.class, item.getCodeId());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			pru.setProid(xcode.getTf_propertyCompany().getTf_name());
+			
+			pru.setProid(xcode.getTf_propertyCompany().getTf_proid()+"");
+			pru.setProname(xcode.getTf_propertyCompany().getTf_name());
 			pru.setPwd(item.getPassword());
 			pru.setUserName(item.getUsername());
 			return pru;
@@ -393,7 +397,47 @@ public class UserController extends SimpleBaseController<EndUser> implements Com
 		    return null;
 	
 	}
+	@RequestMapping(value = "/updateuser", method = RequestMethod.POST)
+	public void updateuser( ProUserInfo prouser,
+			@RequestParam(value="id",required=true) String id,
+			@RequestParam(value="sex",required=true) String sex,
+			@RequestParam(value="userName",required=true) String username,
+			@RequestParam(value="loginCode",required=true) String userCode,
+			@RequestParam(value="pwd",required=true) String password,
+			HttpServletRequest request,
+			HttpServletResponse response
+			
+			) throws Exception {
+		String msg="";
+		try{
+		    EndUser endUser=(EndUser) ebi.findById(EndUser.class, id);
+		    Map<String,Object> values=new HashMap<String, Object>();
+	         if(!password.equals(endUser.getPassword())){
+	        	 values.put("password", MD5Util.md5(password));
+	         }
+	         values.put("username", username);   
+	     	String hql="select count(*) from  EndUser where userCode='"+userCode.trim()+"'";
+		    int count= ebo.getCount(hql);
+		    if(count>0){
+		        values.put("userCode", userCode.trim());   
+		    }else{
+		    	msg="账号已存在";
+		    	getUpdateException("", "账号已存在", ResponseErrorInfo.STATUS_FAILURE);
+		    }
+	         values.put("sex", sex);   
+	        ebo.update(values, EndUser.class, id);
+	     	toWrite(response,
+					jsonBuilder.returnSuccessJson("'更新成功!'"));
+	         
+		}catch(Exception e){
+			toWrite(response,
+					jsonBuilder.returnFailureJson("'更新失败! "+msg+"'"));
+		}
+	         
+	
+	}
 
+	
 	@RequestMapping(value = "/removerecords.do")
 	public @ResponseBody
 	DataDeleteResponseInfo removeRecords(String moduleName, String[] titles,

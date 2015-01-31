@@ -8,6 +8,8 @@ public class ProUserInfo {
 	private String proid;
 	private String pwd;
 	private String sex;
+	private String proname;
+	
 	public String getLoginCode() {
 		return loginCode;
 	}
@@ -49,6 +51,12 @@ public class ProUserInfo {
 	}
 	public void setSex(String sex) {
 		this.sex = sex;
+	}
+	public String getProname() {
+		return proname;
+	}
+	public void setProname(String proname) {
+		this.proname = proname;
 	}
 	
 }

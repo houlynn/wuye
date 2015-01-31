@@ -8,7 +8,7 @@ Ext.define("core.base.user.model.ProUserModel", {
 				    isSynchronous: true,
 					api : {
 					  read : 'rbacUser/fetchdata.action',
-						update : 'rest/module/update.do',
+						update : 'rbacUser/updateuser.action',
 						create : 'rbacUser/create.action',
 						destroy : 'rest/module/remove.do'
 					

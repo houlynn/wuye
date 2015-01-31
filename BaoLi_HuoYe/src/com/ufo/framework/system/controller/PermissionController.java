@@ -66,7 +66,8 @@ public class PermissionController extends SimpleBaseController<Permission> {
 		PermissionEbi permissionEbi=(PermissionEbi)this.ebi;
 		System.out.println(" node: "+node+"roleId :"+roleId+"isSee : "+isSee+" expanded:  "+expanded);
 		List<JSONTreeNode> lists=permissionEbi.getPermTree(node, roleId,AuthorType.ROLE, isSee,expanded);
-		if(isSee==false&&expanded==false&&SecurityUserHolder.getIdentification()!=EndUser.MARKING_XCODE){
+		//isSee==false&&expanded==false&&
+		if(SecurityUserHolder.getIdentification()!=EndUser.MARKING_XCODE){
 			List<JSONTreeNode> nodes=new ArrayList<JSONTreeNode>();
 			  Role proRoel=(Role) ebi.findById(Role.class, Role.PRO_ROLE);
 			  Set<Permission> pers=proRoel.getPermissions();

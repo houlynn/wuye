@@ -22,6 +22,8 @@ public class DataInsertResponseInfo implements Serializable {
 	
 	private String defaultMsg="添加成功!";
 	
+	private int totalCount=1;
+	
 	
 	private Map<String, String> errorMessage;
 
@@ -93,6 +95,14 @@ public class DataInsertResponseInfo implements Serializable {
 
 	public void setDefaultMsg(String defaultMsg) {
 		this.defaultMsg = defaultMsg;
+	}
+
+	public int getTotalCount() {
+		return totalCount;
+	}
+
+	public void setTotalCount(int totalCount) {
+		this.totalCount = totalCount;
 	}
 	
 	

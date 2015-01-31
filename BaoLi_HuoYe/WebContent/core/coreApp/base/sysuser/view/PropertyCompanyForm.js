@@ -1,5 +1,5 @@
 Ext.define("core.base.101.view.PropertyCompanyForm", {
-	extend : "core.app.base.BaseForm",
+	extend : "Ext.form.Panel",
 	alias : "widget.base.propertyCompanyForm",
 	items : [ {
 		fieldLabel : "主键",

@@ -22,13 +22,16 @@ Ext.define('core.app.view.region.BaseForm', {
 								var self=this;
 								var form = button.up('form');
 								//console.log(button.up('form').getForm().getRecord());
-								button.up('form').updateRecord();
+								//button.up('form').updateRecord();
+								//console.log(button.up('form').getForm().getRecord());
+								//
 							    var store= self.up("basewindow").grid.getStore();
 							      if (form.isValid()) {
+							      	    var aler= button.up('form').updateRecord();
 							    		var model= button.up('form').getForm().getRecord().save();
+							    		console.log(model);
 							    		var task = new Ext.util.DelayedTask(function() {
 							    			if(model.getProxy().errorInfo){
-							    			console.log("---------errror-----------------")	
 							    			console.log(model.getProxy().errorInfo);	
 							    			   if( self.callback){	
 							    			      self.callback(model.getProxy().errorInfo);
@@ -41,8 +44,10 @@ Ext.define('core.app.view.region.BaseForm', {
 								    		delete model.getProxy().errorInfo;
 								    		system.smileInfo("保存成功!")
 								    		store.reload();
+								    		var win= form.up("window");
+								    		win.close();
 							    	});
-							    	task.delay(500);
+							    	task.delay(5);
 							      }
 							}
 							
