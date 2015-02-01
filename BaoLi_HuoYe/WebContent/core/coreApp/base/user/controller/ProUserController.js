@@ -14,7 +14,7 @@ Ext.define("core.base.user.controller.ProUserController",{
 	  	 var model = Ext.create(modulegrid.getStore().model);
 	  	 model.set(model.idProperty, null); // 设置主键为null,可自动
 		 var window = Ext.create('core.base.user.view.ProUserWindow', {
-				       grid:modulegrid});
+				      items:[{xtype:"user.prouserform",  grid:modulegrid}]});
 			         var prouserform=  window.down('form[xtype=user.prouserform]');
 			         prouserform .getForm().loadRecord(model);
 			          window.setTitle('添加用户');
@@ -28,8 +28,8 @@ Ext.define("core.base.user.controller.ProUserController",{
 	  	 var selection=modulegrid.getSelectionModel().getSelection();
 	  	 var model = selection[0];
 		 var window = Ext.create('core.base.user.view.ProUserWindow', {
-				       grid:modulegrid,
-				       items:[{xtype:"user.mprouserform"}]
+				     
+				       items:[{xtype:"user.mprouserform",  grid:modulegrid}]
 				       });
 			          var prouserform=  window.down('form[xtype=user.mprouserform]');
 			           prouserform .getForm().loadRecord(model);
@@ -39,9 +39,9 @@ Ext.define("core.base.user.controller.ProUserController",{
 	  	 }
 	  	},
 	  	  "form[xtype=user.mprouserform] #save":{
-	  	 click:function(btn){
+	  	 beforeclick:function(btn){
 	  	 	var form=btn.up("form[xtype=user.mprouserform]");
-	  	 	var grid=form.up("window");
+	  	 	var grid=form.grid;
 	  	 	var formObj=form.getForm();
 					  	formObj.submit({
 					    url:"rbacUser/updateuser.action",
@@ -72,7 +72,7 @@ Ext.define("core.base.user.controller.ProUserController",{
 						
 						});
 	  	 	
-	  	 	
+	  	 	return false;
 	  	 }
 	  	},
 	  	

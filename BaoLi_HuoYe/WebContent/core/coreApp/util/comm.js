@@ -1,7 +1,7 @@
 		Ext.Ajax.on('requestcomplete',
 				function(conn, response, options) {
 						var  errorInfo = Ext.decode(response.responseText, true);
-						if(errorInfo.errorInfo){
+						if(errorInfo&&errorInfo.errorInfo){
 						  var resutlCode=errorInfo.errorInfo.resultCode;
 						  alert(rrorInfo.errorInfo);
 						  return;

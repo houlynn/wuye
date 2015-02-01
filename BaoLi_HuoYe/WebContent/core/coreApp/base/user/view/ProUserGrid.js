@@ -36,7 +36,7 @@ Ext.define("core.base.user.view.ProUserGrid", {
 		},
 		{
 		text : "性别",
-		dataIndex : "tf_sex",
+		dataIndex : "sex",
 		width : 80,
 		ddCode : "SEX",
 		columnType : "basecombobox"
@@ -99,6 +99,48 @@ Ext.define("core.base.user.view.ProUserGrid", {
 									}]
 						}];
 				this.selType = 'rowmodel';
+				
+					var columns = new Array();
+		Ext.each(this.columns, function(col) {
+			if (col.columnType == "basecombobox"
+					|| (col.field && col.field.xtype && col.field.xtype == "basecombobox")) {
+				col.renderer = function(value, data, record) {
+					var val = value;
+					// 如果该字段是可编辑的
+					var ddCode = null;
+					if (col.field) {
+						ddCode = col.field.ddCode;
+					} else {
+						ddCode = col.ddCode;
+					}
+					var ddItem = factory.DDCache.getItemByDDCode(ddCode);
+					for (var i = 0; i < ddItem.length; i++) {
+						var ddObj = ddItem[i];
+						var displayField = 'itemName';
+						var valueField = 'itemCode';
+						if (col.field && col.field.displayField) {
+							displayField = column.field.displayField;
+						} else if (col.displayField) {
+							displayField = col.displayField;
+						}
+						if (col.field && col.field.valueField) {
+							displayField = col.field.valueField;
+						} else if (col.displayField) {
+							displayField = col.displayField;
+						}
+						if (value == ddObj[valueField]) {
+							val = ddObj[displayField];
+							break;
+						}
+					}
+					return val;
+				}
+			}
+			columns.push(col);
+		});
+		this.columns = columns;
+				
+				
 				this.callParent(arguments);
 			}
 		})

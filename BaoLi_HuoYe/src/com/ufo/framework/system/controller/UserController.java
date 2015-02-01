@@ -418,11 +418,13 @@ public class UserController extends SimpleBaseController<EndUser> implements Com
 	         values.put("username", username);   
 	     	String hql="select count(*) from  EndUser where userCode='"+userCode.trim()+"'";
 		    int count= ebo.getCount(hql);
-		    if(count>0){
+		    if(count==0){
 		        values.put("userCode", userCode.trim());   
 		    }else{
+		    	if(!userCode.equals(endUser.getUserCode())){
 		    	msg="账号已存在";
 		    	getUpdateException("", "账号已存在", ResponseErrorInfo.STATUS_FAILURE);
+		    	}
 		    }
 	         values.put("sex", sex);   
 	        ebo.update(values, EndUser.class, id);
