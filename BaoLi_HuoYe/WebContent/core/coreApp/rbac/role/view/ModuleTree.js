@@ -4,7 +4,6 @@ Ext.define("core.rbac.role.view.ModuleTree",{
 	displayField : "text",
 	rootVisible : false,
 	border : false,
-	frame:true,
 	store : "core.rbac.role.store.ModuleStore",
 	title:"授权管理",
 	rbar:[{

@@ -45,7 +45,21 @@ public class ResidentEbo implements ResidentEbi,LogerManager{
 		residentInfos.forEach(item->{
 			for(FeeSettingInfo f : FeeSettingInfos ){
 				 try {
-					List<FeesTypeItem> list= (List<FeesTypeItem>) ebi.queryByHql(" from FeesTypeItem  where tf_ResidentInfo="+item.getTf_residentId()+" and  tf_FeesInfo= "+f.getItemId());
+					 List<FeesTypeItem> list= (List<FeesTypeItem>) ebi.queryByHql(" from FeesTypeItem  where tf_ResidentInfo="+item.getTf_residentId());
+					for(FeesTypeItem ft :list){
+						ebi.delete(ft);
+					}
+						FeesTypeItem fitem=new FeesTypeItem();
+						fitem.setTf_beginDate(f.getStartdate());
+						fitem.setTf_endDate(f.getEnddate());
+						fitem.setTf_hasEnd(f.getHasEndDate());
+						fitem.setTf_ResidentInfo(item);
+						fitem.setXcode(SecurityUserHolder.getIdentification());
+						FeesInfo feesInfo=new FeesInfo();
+						feesInfo.setTf_feesid(f.getItemId());
+						fitem.setTf_FeesInfo(feesInfo);
+						ebi.save(fitem);
+				/*	List<FeesTypeItem> list= (List<FeesTypeItem>) ebi.queryByHql(" from FeesTypeItem  where tf_ResidentInfo="+item.getTf_residentId()+" and  tf_FeesInfo= "+f.getItemId());
 					if(list.size()>0){
 						FeesTypeItem typeItem=list.get(0);
 						typeItem.setTf_beginDate(f.getStartdate());
@@ -63,7 +77,7 @@ public class ResidentEbo implements ResidentEbi,LogerManager{
 						feesInfo.setTf_feesid(f.getItemId());
 						fitem.setTf_FeesInfo(feesInfo);
 						ebi.save(fitem);
-					}
+					}*/
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

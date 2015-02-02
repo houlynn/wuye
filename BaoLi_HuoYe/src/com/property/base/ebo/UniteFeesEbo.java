@@ -105,7 +105,9 @@ public class UniteFeesEbo implements UnitFeesEbi {
 public synchronized 	DataFetchResponseInfo  addUniteFees(int rid,int rtype
 		) throws Exception{
 	
+	if(rtype==1){
 	SecurityUserHolder.getCurrentUser();
+	}
 	DataFetchResponseInfo reuslt=new DataFetchResponseInfo();
 	//查询业主的收费项目
 	String hql_ft=" from FeesTypeItem where 1=1 and tf_ResidentInfo="+rid;

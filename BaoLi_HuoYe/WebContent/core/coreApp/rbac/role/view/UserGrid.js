@@ -31,6 +31,8 @@ Ext.define("core.rbac.role.view.UserGrid",{
 	},{
 		text:"性别",
 		dataIndex:"sex",
+		columnType:"basecombobox",
+		ddCode:"SEX",
 		width:80
 	},{
 		text:"出生日期",

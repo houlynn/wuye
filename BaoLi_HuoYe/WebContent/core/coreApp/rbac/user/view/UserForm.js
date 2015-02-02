@@ -79,7 +79,7 @@ Ext.define("core.rbac.user.view.UserForm", {
 									layout : "hbox",
 									items : [{
 									fieldLabel : "性别",
-									name : " sex",
+									name : "sex",
 									 itemId:"sex",
 									 flex: 1,
 									 xtype : "basecombobox",

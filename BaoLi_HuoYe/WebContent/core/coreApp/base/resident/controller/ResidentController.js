@@ -212,7 +212,6 @@ init:function(){
                 		store.navigates.push(navigate);
                 	}
                   	var proxy=store.getProxy();
-                  	console.log(proxy.extraParams);
 					proxy.extraParams.navigates=Ext.encode(store.navigates);
 					store.load();	  
 				}
@@ -284,6 +283,7 @@ init:function(){
    		     	      	var commbox=tree.down("combobox[ref=vicombobox]");
    		     	      	var vid=commbox.getValue();
    		     	      	var grid= btn.ownerCt.ownerCt;
+   		     	      	var store=grid.store;
    		     	      	var sm= grid.getSelectionModel().getSelection();
    		     	      	if(sm.length==0){
    		     	      		system.warnInfo("请选择至少一条业主信息进行操作!")
@@ -298,7 +298,8 @@ init:function(){
 						 	return;
 						 }
                		    var window= Ext.create("Ext.window.Window",{
-               		    	items:[{xtype:"resident.feesettingfrom",tag:{vid:vid,ids:ids}}]
+               		    	modal:true,
+               		    	items:[{xtype:"resident.feesettingfrom",grid:grid,   tag:{vid:vid,ids:ids}}]
                		    });   
                		    window.show();
    		     
@@ -382,6 +383,10 @@ init:function(){
                        var store=grid.getStore();
                        var data=[];
                          var newRecords= grid.getStore().getNewRecords();
+                         if(newRecords.length==0){
+                          	system.errorInfo("请至少添加一个收费项目!","错误提示");
+                         	return;
+                         }
                            console.log(newRecords);
                             Ext.Array.each(newRecords,function(model){
                             	var obj={};
@@ -397,8 +402,8 @@ init:function(){
                      var ids=form.tag.ids;
                      var params={dataStr:dataStr,ids:ids};
                      var resObj=self.ajax({url:"/102/setting.action",params:params});
-                     grid.getStore().load();
-                     
+					form.grid.store.load();	 
+     
 				}
 			},
 		    /**

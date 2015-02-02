@@ -160,7 +160,7 @@ Ext.define("core.base.resident.view.ResidentGrid",{
 					clicksToEdit : 2
 				});
 		this.plugins = [this.rowEditing];
-		this.selType = 'rowmodel';
+		this.selType = 'checkboxmodel';
 		
 		
 		this.on('edit', function(editor, e) {
