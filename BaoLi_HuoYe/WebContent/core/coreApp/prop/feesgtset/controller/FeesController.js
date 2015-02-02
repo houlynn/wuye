@@ -37,6 +37,7 @@ Ext.define("core.prop.feesgtset.controller.FeesController", {
 									url : "/vi/loadVLevf.action",
 									params : {
 										vid : 1,
+										invid:installid,
 										expanded : true
 									}
 								},

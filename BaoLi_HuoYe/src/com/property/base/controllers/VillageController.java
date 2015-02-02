@@ -229,9 +229,12 @@ public class VillageController extends BaseController {
 	@RequestMapping("/loadVLevf")
 	public  @ResponseBody List<JSONTreeNode> getVill(
 			@RequestParam(value="vid",required=true) int vid,
+			@RequestParam(value="invid",required=true) int invid,
 			@RequestParam(value="orderSql",required=false,defaultValue=" order by tf_leveName ASC") String orderSql
 			) throws Exception{
+		
 		List<JSONTreeNode> lists=new ArrayList<JSONTreeNode>();
+	
 		List<LevelInfo> leves=(List<LevelInfo>) ebi.queryByHql(" from LevelInfo where 1=1   and  tf_parent=null  and tf_village="+vid+ orderSql);
 		for(LevelInfo l:leves){
 			JSONTreeNode node=new JSONTreeNode();
@@ -245,7 +248,12 @@ public class VillageController extends BaseController {
 			node.setExpanded(true);
 			node.setLeaf(false);
 			node.setNodeInfoType("0");
-			node.setChecked(false);
+			String countHql=" select count(*) from LevelInfo where 1=1   and  tf_parent=null  and tf_InnstallBill="+invid+"  and tf_leveId="+l.getTf_leveId()+" and tf_village="+vid;
+		 	Integer count= ebi.getCount(countHql);
+		 	if(count!=null&&0!=count){
+		 		node.setChecked(true);
+		 	}
+		
 			lists.add(node);
 		}
 		return lists;

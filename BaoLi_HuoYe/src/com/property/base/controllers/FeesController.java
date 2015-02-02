@@ -490,6 +490,10 @@ public class FeesController extends BaseAppController implements  CommonExceptio
 			@RequestParam(value = "type", required = true) String type
 			) {
 		try{
+			PoollGtinfo gtinfo=ebi.findById(PoollGtinfo.class, model.getTf_poolid());
+			if(gtinfo.isTf_state()){
+				toWrite(response, jsonBuilder.returnFailureJson("'"+gtinfo.getTf_rendMonth()+"记录已审核，无法进行修改操作!'"));
+			}else{
 	   Village tf_Village=new Village();
         tf_Village.setTf_viid(vid);
 		InnstallBill tf_InnstallBill=ebi.findById(InnstallBill.class, intsrid);
@@ -506,7 +510,6 @@ public class FeesController extends BaseAppController implements  CommonExceptio
 			model.setTf_areaCount(area);//已收楼面积
 			}
 		double price =tf_InnstallBill.getTf_FeesInfo().getTf_price();
-		
 		String hqlo=" from PoollGtinfo where 1=1 and tf_mtype='"+type+"' and tf_state='1' and  tf_InnstallBill="+intsrid+" and tf_Village="+vid+" order by tf_rendMonth desc";
 		List<PoollGtinfo>  pools= (List<PoollGtinfo>) ebi.queryByHql(hqlo);
 		if(pools!=null&&pools.size()>0&&model.getTf_startnumber()==0){
@@ -519,6 +522,7 @@ public class FeesController extends BaseAppController implements  CommonExceptio
 		model.setXcode(SecurityUserHolder.getIdentification());
 		ebi.update(model);
 		toWrite(response,jsonBuilder.returnSuccessJson(jsonBuilder.toJson(model)));
+			}
 		}catch(TimeoutException e){
 			toWrite(response, jsonBuilder.returnFailureJson("'用户未登陆或会话超时!'"));
 		}catch (Exception e) {
@@ -536,7 +540,13 @@ public class FeesController extends BaseAppController implements  CommonExceptio
 			boolean flag=false;
 			flag= proll.isTf_state();
 			proll.setTf_state(true);
-			double tf_Acount=proll.getTf_totaleAcount()/ proll.getTf_areaCount();
+			double area= proll.getTf_areaCount();
+			double tf_Acount=0;
+			if(area>0){
+				tf_Acount=proll.getTf_totaleAcount()/area;
+			}else{
+					getDeleteException("", proll.getTf_meterdate()+"收楼面积为0审核失败!", ResponseErrorInfo.STATUS_FAILURE);
+			}
 			proll.setTf_Acount(tf_Acount);
 			ebi.update(proll);
 			result.setDefaultMsg("审核成功!");
@@ -546,7 +556,21 @@ public class FeesController extends BaseAppController implements  CommonExceptio
 		return result;
 	}
 	
-
+	@RequestMapping(value = "/removerepol")
+	public @ResponseBody
+	DataDeleteResponseInfo removerepol(String moduleName, String[] titles,
+			@RequestParam(value="ids",required=true) int[] ids,
+			HttpServletRequest request) throws Exception {
+		DataDeleteResponseInfo deleteResponseInfo=new DataDeleteResponseInfo();
+		for(int id : ids){
+			PoollGtinfo pool= ebi.findById(PoollGtinfo.class, id);
+			if(pool.isTf_state()){
+				getDeleteException("", pool.getTf_meterdate()+"已审核，无法进行删除操作!", ResponseErrorInfo.STATUS_FAILURE);
+			}
+			ebi.removeById(id, PoollGtinfo.class);
+		}
+		return deleteResponseInfo;
+	}
 	
 	
 	

@@ -17,9 +17,8 @@ Ext.define("core.util.SuppleUtil",{
 			},
 			failure : function(response){
 				var  errorinfo = Ext.decode(Ext.value(response.responseText,'{}'));
-				 console.log(errorinfo);
 				 system.errorAlertInfo(errorinfo.errorInfo.errorMessage.error,"错误提示")
-		    	
+		    	data=errorinfo;
 		    	return; 
 		    }
 		};

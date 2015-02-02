@@ -16,7 +16,8 @@ init:function(){
 							 var store=modulegrid.getStore();
 			                 var tree=modulegrid.ownerCt.down("container[xtype=feesgt.levelTree]");
 			                 var selection=tree.getSelectionModel().getSelection();
-			                 if(!selection&&selection.length==0){
+			                 if(!selection||selection.length==0){
+			                 	   system.errorInfo("请选择一个小区!","错误提示");
 			                  return ;
 			                 }
 							 var viewModel=system.getViewModel(321);
@@ -93,16 +94,15 @@ init:function(){
 			Ext.MessageBox.confirm('确定删除', '确定要删除 ' + moduletitle + ' 中的' + message,
 					function(btn) {
 						if (btn == 'yes') {
-							 if(modulegrid.getSelectionModel().getSelection().length>1){
+								 if(modulegrid.getSelectionModel().getSelection().length>0){
 							 	var ids=new Array();
 							   Ext.each(modulegrid.getSelectionModel().getSelection(),function(rec){
 								var pkValue=rec.get(rec.idProperty);
 								ids.push(pkValue);
 							  });
-							  console.log(ids);
-							 var resObj=self.ajax({url:"rest/module/removerecords.do",params:{ids:ids,moduleName:"PoollGtinfo"}});
-							 modulegrid.getStore().reload();
-							 modulegrid.setTitle("抄表信息");
+							 var resObj=self.ajax({url:"/201/removerepol.action",params:{ids:ids,moduleName:"PoollGtinfo"}});
+							 modulegrid.getStore().load();
+							 modulegrid.setTitle("抄水表信息");
 							 return;
 							 }
 							modulegrid.getStore().remove(modulegrid.getSelectionModel().getSelection()[0]);
@@ -236,8 +236,11 @@ init:function(){
 			     	var tf_meterdate=selection[0].get("tf_meterdate");
 			 	Ext.MessageBox.confirm('确认审核', '你确认要审核： ' + tf_meterdate + ' 的抄表信息？',function(btn){
 			 		if (btn == 'yes') {
-			 		  	   var resObj=self.ajax({url:"/201/submit.action",params:{id:id}});    
+			 		  	   var resObj=self.ajax({url:"/201/submit.action",params:{id:id}});  
+			 		  	   if(!resObj.errorInfo){
 		                   modulegrid.getStore().load();
+		                   system.smileInfo("审核成功!");
+			 		  	   }
 			 			
 			 		}
 			 	});    

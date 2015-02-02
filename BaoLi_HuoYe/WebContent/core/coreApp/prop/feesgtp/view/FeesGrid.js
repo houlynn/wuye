@@ -179,15 +179,15 @@ Ext.define("core.prop.feesgtp.view.FeesGrid", {
 				var title = viewModel.get('tf_title');
 				this.setTitle(title);
 				// 可以在grid中进行行编辑的设置
-				this.rowEditing = new Ext.grid.plugin.RowEditing({
+			/*	this.rowEditing = new Ext.grid.plugin.RowEditing({
 							saveBtnText : '保存',
 							cancelBtnText : "取消",
 							clicksToEdit : 2
-						});
-				this.plugins = [this.rowEditing];
+						});*/
+			//	this.plugins = [this.rowEditing];
 				this.selType = 'rowmodel';
 
-				this.on('edit', function(editor, e) {
+			/*	this.on('edit', function(editor, e) {
 							// 每一行编辑完保存之后，都提交数据
 							// 每一行编辑完保存之后，都提交数据
 							e.grid.getStore().sync({
@@ -204,7 +204,7 @@ Ext.define("core.prop.feesgtp.view.FeesGrid", {
 								showMsg("添加信息", "添加成功!", 1);
 							}
 						});
-
+*/
 				this.viewConfig = {
 					stripeRows : true, // 奇偶行不同底色
 					enableTextSelection : false,
