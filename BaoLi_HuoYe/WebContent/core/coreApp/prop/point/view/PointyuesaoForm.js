@@ -78,10 +78,10 @@ Ext.define('core.prop.point.view.PointyuesaoForm', {
                     layout: "hbox",
                     items:[{
 				   xtype : "basecombobox",
-				  fieldLabel : "终点工类型",
+				  fieldLabel : "月嫂类型",
 				  itemId:"tf_type",
 				  name : "tf_type",
-				  ddCode:"POINTTYPE",
+				  ddCode:"YUESAO",
 				  beforeLabelTextTpl : comm.get('required'),
 			       allowBlank : false,
 			         flex:5,

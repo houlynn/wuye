@@ -17,7 +17,7 @@ style:'border-width:0 0 0 0;',
    	
    	  var self=this;
    	   var  thar = [
-   		{text : '新增',   ref:'addButton', xtype : 'splitbutton',itemId : 'new',glyph : 0xf016,menu : [{text : '复制新增', ref:'copyadd', tooltip : '新增时先将当前记录添入到新记录中',itemId : 'newwithcopy',glyph : 0xf0c5,
+   		{text : '新增', hidden:true,  ref:'addButton', xtype : 'splitbutton',itemId : 'new',glyph : 0xf016,menu : [{text : '复制新增',  hidden:true, ref:'copyadd', tooltip : '新增时先将当前记录添入到新记录中',itemId : 'newwithcopy',glyph : 0xf0c5,
 				  listeners : {
 								click:function(){
 								   var grid=self;
@@ -59,18 +59,20 @@ style:'border-width:0 0 0 0;',
 									}, '-']
 				
 						}, {
-							text : '修改',
+							text : '审核',
 							glyph : 0xf044,
-							itemId : 'edit',
+							itemId : 'summit',
 							ref:"editButton"
 						}, {
 							text : '删除',
 							disabled : true,
 							glyph : 0xf014,
+							hidden:true,
 							ref:"removeButton",
 							itemId : 'delete'
 						}
-						, '-',  '-', '筛选', {
+						, '-',  '-', '', {
+							hidden:true,
 							width : 60,
 							xtype : 'gridsearchfield',
 							// store : this.grid.getStore() // 现在用的local数据，不可以进行筛选

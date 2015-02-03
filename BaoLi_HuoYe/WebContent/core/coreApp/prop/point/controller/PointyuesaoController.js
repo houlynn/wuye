@@ -73,7 +73,6 @@ init:function(){
 			
 		"form[xtype=pointyuesao.form] #save":{
 		  click:function(btn){
-		  	
 			var formObj=btn.up('form').getForm();
 		    var win=btn.up('form').up("window");
 			var record=formObj.getRecord();
@@ -218,8 +217,6 @@ init:function(){
 				var topUrl=record.get("tf_topUrl");
 				 f.inputEl.dom.value=topUrl;
 				 }
-				
-				
 			}
 			},
 		});

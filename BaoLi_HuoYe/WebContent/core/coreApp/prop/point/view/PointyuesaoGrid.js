@@ -47,11 +47,11 @@ Ext.define("core.prop.point.view.PointyuesaoGrid", {
 		    columnType : "textfield",
 		     hidden:true
 		},
-	  {text : "终点工类型",
+	  {text : "月嫂类型",
 		     dataIndex : "tf_type",
 		     width : 80,
 		    columnType : "basecombobox",
-		    ddCode:"POINTTYPE"
+		    ddCode:"YUESAO"
 		},
 		{text : "名字",
 		dataIndex : "tf_name",

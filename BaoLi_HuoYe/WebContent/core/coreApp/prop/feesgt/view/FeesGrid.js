@@ -27,7 +27,7 @@ Ext.define("core.prop.feesgt.view.FeesGrid", {
 							? 'enable'
 							: 'disable']();
 					// 下面将组织选中的记录的name显示在title上，有二种方案可供选择，一种是用下面的MVVM特性，第二种是调用refreshTitle()
-					var selectedNames ='抄表信息'
+					var selectedNames ='抄水表信息'
 					if (selected.length > 0) {
 						if (!!selected[0].getNameValue()) {
 							selectedNames = selectedNames
@@ -179,15 +179,15 @@ Ext.define("core.prop.feesgt.view.FeesGrid", {
 				var title = viewModel.get('tf_title');
 				this.setTitle(title);
 				// 可以在grid中进行行编辑的设置
-				this.rowEditing = new Ext.grid.plugin.RowEditing({
+			/*	this.rowEditing = new Ext.grid.plugin.RowEditing({
 							saveBtnText : '保存',
 							cancelBtnText : "取消",
 							clicksToEdit : 2
-						});
-				this.plugins = [this.rowEditing];
+						});*/
+			//this.plugins = [this.rowEditing];
 				this.selType = 'rowmodel';
 
-				this.on('edit', function(editor, e) {
+	/*			this.on('edit', function(editor, e) {
 							// 每一行编辑完保存之后，都提交数据
 							// 每一行编辑完保存之后，都提交数据
 							e.grid.getStore().sync({
@@ -203,7 +203,7 @@ Ext.define("core.prop.feesgt.view.FeesGrid", {
 							} else {
 								showMsg("添加信息", "添加成功!", 1);
 							}
-						});
+						});*/
 
 				this.viewConfig = {
 					stripeRows : true, // 奇偶行不同底色

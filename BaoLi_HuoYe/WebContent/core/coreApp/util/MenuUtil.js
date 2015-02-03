@@ -9,7 +9,7 @@ Ext.define("core.util.MenuUtil",{
 	initMenu:function(){
 		var self=this;
 		var data=self.ajax({url:"/rbacPermission/getAuthorMenuTree.action",params:{excludes:"checked"}});
-		console.log(data);
+	//	console.log(data);
 		
 		var menuTreeStore=Ext.create("Ext.data.TreeStore",{
 			model:factory.ModelFactory.getModelByName("com.ufo.framework.system.model.ui.JSONTreeNode","checked").modelName,

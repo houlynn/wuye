@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.jdbc.Work;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.model.hibernate.property.BillContext;
 import com.model.hibernate.property.FeesInfo;
 import com.model.hibernate.property.FeesTypeItem;
+import com.model.hibernate.property.GtbillToLevf;
 import com.model.hibernate.property.InnstallBill;
 import com.model.hibernate.property.MeterInfo;
 import com.model.hibernate.property.PoollGtinfo;
@@ -271,13 +273,30 @@ public synchronized 	DataFetchResponseInfo  addUniteFees(int rid,int rtype
 		        	debug("根据收费项目找到 公表："+bil.getTf_name());
 		        	
 		        	
-		         	String rhqt=" from ResidentInfo where 1=1  and tf_levelInfo.tf_parent.tf_InnstallBill.tf_insid="+bil.getTf_insid()+" and tf_residentId="+rid;
-		        	List<ResidentInfo> resindents=(List<ResidentInfo>) ebi.queryByHql(rhqt);
-		        	if(resindents==null||resindents.size()==0){
+		         //	String rhqt=" from ResidentInfo where 1=1  and tf_levelInfo.tf_parent.tf_InnstallBill.tf_insid="+bil.getTf_insid()+" and tf_residentId="+rid;
+		        //	String rhqt=" from ResidentInfo where 1=1  and tf_levelInfo.tf_parent.tf_InnstallBill.tf_insid="+bil.getTf_insid()+" and tf_residentId="+rid; 	
+		        	String hqlgtLevf=" from GtbillToLevf where 1=1 and tf_insid="+bil.getTf_insid();
+		        	String ids="";
+		        	try {
+		    			List<GtbillToLevf> gtbs=(List<GtbillToLevf>) ebi.queryByHql(hqlgtLevf);
+		    			List<String> listStr=gtbs.stream().map(obj->{
+		    				return String.valueOf(obj.getTf_Leveid());
+		    			}).collect(Collectors.toList());
+		    			if(listStr!=null&listStr.size()>0){
+		    				ids= StringUtils.join(listStr, ",");   
+		    			}
+		    		} catch (Exception e) {
+		    			// TODO Auto-generated catch block
+		    			e.printStackTrace();
+		    		}
+		    		String rcountHql=" select count(*) from  ResidentInfo o where 1=1 and o.tf_levelInfo.tf_parent.tf_leveId in("+ids+") and tf_residentId="+rid;
+		    	  Integer rcount=	ebi.getCount(rcountHql);
+		        	//List<ResidentInfo> resindents=(List<ResidentInfo>) ebi.queryByHql(rhqt);
+		        	if(rcount==null||rcount==0){
 		        		continue;
 		        	}
-		        	ResidentInfo residentInfocheck=resindents.get(0);
-		        	debug("判断这个住户是在这个表的区域中："+residentInfocheck.getTf_residentName());
+		        //	ResidentInfo residentInfocheck=resindents.get(0);
+		        	debug("判断这个住户是在这个表的区域中："+residentInfo.getTf_residentName());
 		        	
 		        	String billConten=" from  PoollGtinfo where 1=1 and tf_InnstallBill="+bil.getTf_insid()+" and tf_rendMonth='"+m+"' and tf_state='1' ";
 		            List<PoollGtinfo> prools= (List<PoollGtinfo>) ebi.queryByHql(billConten);

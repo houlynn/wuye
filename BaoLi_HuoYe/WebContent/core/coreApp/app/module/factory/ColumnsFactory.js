@@ -286,7 +286,7 @@ Ext.define('core.app.module.factory.ColumnsFactory', {
 					if(fd.tf_isDisable&&fd.tf_isDisable==true){
 					field.editor=null;
 					}
-					console.log(field);
+					//console.log(field);
 					return field;
 				}
 			}

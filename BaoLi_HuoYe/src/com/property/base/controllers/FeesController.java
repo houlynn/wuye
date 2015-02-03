@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.model.hibernate.property.FeesInfo;
 import com.model.hibernate.property.FeesItemLink;
+import com.model.hibernate.property.GtbillToLevf;
 import com.model.hibernate.property.InnstallBill;
 import com.model.hibernate.property.LevelInfo;
 import com.model.hibernate.property.MeterInfo;
@@ -49,6 +50,7 @@ import com.ufo.framework.common.core.ext.model.JSONTreeNode;
 import com.ufo.framework.common.core.properties.PropUtil;
 import com.ufo.framework.common.core.utils.AppUtils;
 import com.ufo.framework.common.core.utils.JsonBuilder;
+import com.ufo.framework.common.core.utils.StringUtil;
 import com.ufo.framework.common.log.LogerManager;
 import com.ufo.framework.system.controller.BaseAppController;
 import com.ufo.framework.system.controller.SimpleBaseController;
@@ -352,14 +354,39 @@ public class FeesController extends BaseAppController implements  CommonExceptio
 		    	item.put("tf_FeesInfo", bill.getTf_FeesInfo().getTf_freesName());
 		    	item.put("tf_Village", bill.getTf_Village().getTf_name());
 		    	item.put("tf_billType", bill.getTf_billType());
-		    	List<LevelInfo> levfs=bill.getTf_LevelInfos();
-		    	String itemRemark="";
-		    	if(levfs!=null&&levfs.size()>0){
-		    		for(LevelInfo l :levfs ){
-		    			itemRemark+=l.getTf_leveName();
-		    		}
+		    	
+		    	String hql=" from GtbillToLevf where 1=1 and tf_insid="+bill.getTf_insid();
+		    	String ids="";
+		    	try {
+					List<GtbillToLevf> gtbs=(List<GtbillToLevf>) ebi.queryByHql(hql);
+					List<String> listStr=gtbs.stream().map(obj->{
+						return String.valueOf(obj.getTf_Leveid());
+					}).collect(Collectors.toList());
+					if(listStr!=null&listStr.size()>0){
+						ids= StringUtils.join(listStr, ",");   
+					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		    	if(StringUtil.isNotEmpty(ids)){
+		    		String queryLevf=" from LevelInfo where 1=1 and tf_leveId in("+ids+")";
+		    		List<LevelInfo> levfs=null;
+					try {
+						levfs = (List<LevelInfo>) ebi.queryByHql(queryLevf);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			    	String itemRemark="";
+			    	if(levfs!=null&&levfs.size()>0){
+			    		for(LevelInfo l :levfs ){
+			    			itemRemark+=l.getTf_leveName();
+			    		}
+			    	}
+			    	item.put("itemRemark", itemRemark);
 		    	}
-		    	item.put("itemRemark", itemRemark);
+		    	
 				return item ;
 			}).collect(Collectors.toList());
 			return views;
@@ -460,8 +487,8 @@ public class FeesController extends BaseAppController implements  CommonExceptio
 		if(model.getTf_coefficient()==0){
 			model.setTf_coefficient(1);
 		}
-		String hql=" select sum(o.tf_builArea) from  ResidentInfo o where 1=1 and o.tf_levelInfo.tf_parent.tf_InnstallBill="+tf_InnstallBill.getTf_insid();
-		double area=ebi.getSumByHql(hql);
+		
+    	double area = getAreaSum(intsrid);
 		if(model.getTf_areaCount()==0){
 		model.setTf_areaCount(area);//已收楼面积
 		}
@@ -475,11 +502,33 @@ public class FeesController extends BaseAppController implements  CommonExceptio
 			}
 		}catch(TimeoutException e){
 			toWrite(response, jsonBuilder.returnFailureJson("'用户未登陆或会话超时!'"));
-		}catch (Exception e) {
+		}catch(CustomException e){
+			toWrite(response, jsonBuilder.returnFailureJson("'"+e.getErrorInfo().getErrorMessage()+"'"));
+		}
+				
+		catch (Exception e) {
 			e.printStackTrace();
 			toWrite(response, jsonBuilder.returnFailureJson("'添加失败!'"));
 		}
 		
+	}
+
+	private double getAreaSum(int intsrid) throws Exception {
+		String hqlgtLevf=" from GtbillToLevf where 1=1 and tf_insid="+intsrid;
+    	String ids="";
+			List<GtbillToLevf> gtbs=(List<GtbillToLevf>) ebi.queryByHql(hqlgtLevf);
+			List<String> listStr=gtbs.stream().map(obj->{
+				return String.valueOf(obj.getTf_Leveid());
+			}).collect(Collectors.toList());
+			if(listStr!=null&listStr.size()>0){
+				ids= StringUtils.join(listStr, ",");   
+			}else{
+				getAppException("", "公表没有包含任何区域", ResponseErrorInfo.STATUS_FAILURE);
+			}
+		
+		String hql=" select sum(o.tf_builArea) from  ResidentInfo o where 1=1 and o.tf_levelInfo.tf_parent.tf_leveId in("+ids+")";
+		double area=ebi.getSumByHql(hql);
+		return area;
 	}
 	
 	
@@ -504,8 +553,9 @@ public class FeesController extends BaseAppController implements  CommonExceptio
 		SimpleDateFormat sdm=new SimpleDateFormat("yyyy-MM");
 		String month= sdm.format(sdm.parse(date));
 		model.setTf_rendMonth(month);
-		String hql=" select sum(o.tf_builArea) from  ResidentInfo o where 1=1 and o.tf_levelInfo.tf_parent.tf_InnstallBill="+tf_InnstallBill.getTf_insid();
-		double area=ebi.getSumByHql(hql);
+		//String hql=" select sum(o.tf_builArea) from  ResidentInfo o where 1=1 and o.tf_levelInfo.tf_parent.tf_InnstallBill="+tf_InnstallBill.getTf_insid();
+		//double area=ebi.getSumByHql(hql);
+		double area = getAreaSum(intsrid);
 		if(model.getTf_areaCount()==0){
 			model.setTf_areaCount(area);//已收楼面积
 			}
@@ -525,7 +575,10 @@ public class FeesController extends BaseAppController implements  CommonExceptio
 			}
 		}catch(TimeoutException e){
 			toWrite(response, jsonBuilder.returnFailureJson("'用户未登陆或会话超时!'"));
-		}catch (Exception e) {
+		}catch(CustomException e){
+			toWrite(response, jsonBuilder.returnFailureJson("'"+e.getErrorInfo().getErrorMessage()+"'"));
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 			toWrite(response, jsonBuilder.returnFailureJson("'更失败!'"));
 		}

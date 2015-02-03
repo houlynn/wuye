@@ -227,7 +227,8 @@ init:function(){
 	       	 click:function(btn){
 	       	 var modulegrid=btn.up("grid[xtype=feesgtp.gridModue]");
 			 var selection=modulegrid.getSelectionModel().getSelection();
-			  if(!selection&&selection.length==0){
+			  if(!selection||selection.length==0){
+			  	  system.errorInfo("请选择一条记录进行审核!","错误提示");
 			                  return ;
 			     }
 			     	var id=selection[0].get("tf_poolid");

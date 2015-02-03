@@ -23,7 +23,7 @@ Ext.define("core.prop.point.view.PointbonneGrid", {
 							: 'disable']();		
 							
 					// 下面将组织选中的记录的name显示在title上，有二种方案可供选择，一种是用下面的MVVM特性，第二种是调用refreshTitle()
-					var selectedNames ='终点工信息'
+					var selectedNames ="保姆类型"
 					if (selected.length > 0) {
 						if (!!selected[0].get("tf_name")) {
 							selectedNames = selectedNames
@@ -47,11 +47,11 @@ Ext.define("core.prop.point.view.PointbonneGrid", {
 		    columnType : "textfield",
 		     hidden:true
 		},
-	  {text : "终点工类型",
+	  {text : "保姆类型",
 		     dataIndex : "tf_type",
 		     width : 80,
 		    columnType : "basecombobox",
-		    ddCode:"POINTTYPE"
+		    ddCode:"BAOMU"
 		},
 		{text : "名字",
 		dataIndex : "tf_name",

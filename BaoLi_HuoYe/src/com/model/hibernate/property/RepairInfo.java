@@ -63,6 +63,9 @@ public class RepairInfo extends BaseEntity {
 	private String  tf_roomNub;
 	
 	
+	private boolean tf_submit;
+	
+	
 	
 	
 	public int getTf_repairId() {
@@ -136,6 +139,12 @@ public class RepairInfo extends BaseEntity {
 	}
 	public void setTf_roomNub(String tf_roomNub) {
 		this.tf_roomNub = tf_roomNub;
+	}
+	public boolean isTf_submit() {
+		return tf_submit;
+	}
+	public void setTf_submit(boolean tf_submit) {
+		this.tf_submit = tf_submit;
 	}
 
 }

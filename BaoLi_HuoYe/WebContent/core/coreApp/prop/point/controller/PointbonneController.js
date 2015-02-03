@@ -216,7 +216,6 @@ init:function(){
 				 if(tf_pointId){
 				var record=grid.getSelectionModel().getSelection()[0];
 				var topUrl=record.get("tf_topUrl");
-				alert(topUrl);
 				 f.inputEl.dom.value=topUrl;
 				 }
 				

@@ -73,7 +73,6 @@ init:function(){
 			
 		"form[xtype=point.form] #save":{
 		  click:function(btn){
-		  	
 			var formObj=btn.up('form').getForm();
 		    var win=btn.up('form').up("window");
 			var record=formObj.getRecord();

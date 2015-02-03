@@ -78,10 +78,10 @@ Ext.define('core.prop.point.view.PointbonneForm', {
                     layout: "hbox",
                     items:[{
 				   xtype : "basecombobox",
-				  fieldLabel : "终点工类型",
+				  fieldLabel : "保姆类型",
 				  itemId:"tf_type",
 				  name : "tf_type",
-				  ddCode:"POINTTYPE",
+				  ddCode:"BAOMU",
 				  beforeLabelTextTpl : comm.get('required'),
 			       allowBlank : false,
 			         flex:5,

@@ -165,7 +165,7 @@ Ext.define('core.app.module.factory.ModelFactory', {
 		},
 
 		getTypeByStr : function(str) {
-			console.log(str);
+		//	console.log(str);
 			switch (str) {
 				case 'String' :
 					return 'string';

@@ -1,11 +1,15 @@
 package com.property.base.ebo;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.annotation.Resource;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONSerializer;
 import net.sf.json.JsonConfig;
+
 import org.springframework.stereotype.Service;
+
 import com.model.hibernate.property.FeesInfo;
 import com.model.hibernate.property.FeesTypeItem;
 import com.model.hibernate.property.ResidentInfo;
@@ -43,12 +47,18 @@ public class ResidentEbo implements ResidentEbi,LogerManager{
 		}
 		List<ResidentInfo> residentInfos=(List<ResidentInfo>) ebi.findListIn("ResidentInfo", "tf_residentId", listId);
 		residentInfos.forEach(item->{
+			 List<FeesTypeItem> list=null;
+			try {
+				list = (List<FeesTypeItem>) ebi.queryByHql(" from FeesTypeItem  where tf_ResidentInfo="+item.getTf_residentId());
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+				for(FeesTypeItem ft :list){
+					ebi.delete(ft);
+				}
 			for(FeeSettingInfo f : FeeSettingInfos ){
 				 try {
-					 List<FeesTypeItem> list= (List<FeesTypeItem>) ebi.queryByHql(" from FeesTypeItem  where tf_ResidentInfo="+item.getTf_residentId());
-					for(FeesTypeItem ft :list){
-						ebi.delete(ft);
-					}
 						FeesTypeItem fitem=new FeesTypeItem();
 						fitem.setTf_beginDate(f.getStartdate());
 						fitem.setTf_endDate(f.getEnddate());

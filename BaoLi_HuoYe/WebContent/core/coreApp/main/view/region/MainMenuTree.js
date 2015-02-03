@@ -41,7 +41,7 @@ Ext.define('core.main.view.region.MainMenuTree', {
 			lines : true,
 			initComponent : function() {
 				this.store=comm.get("menuTreeStore");
-				console.log(this.store);
+				
 			/*	this.store = Ext.create('Ext.data.TreeStore', {
 							root : {
 								text : '系统菜单',

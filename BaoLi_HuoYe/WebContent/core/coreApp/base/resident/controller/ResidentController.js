@@ -357,7 +357,7 @@ init:function(){
 				    	flag=false;
 				    	}	
 		            });
-		            console.log(feeItem);
+		           // console.log(feeItem);
 		            if(feeItem["hasEndDate"]==false){
 		            	if(feeItem["enddate"]==null){
 		                    flag=false;

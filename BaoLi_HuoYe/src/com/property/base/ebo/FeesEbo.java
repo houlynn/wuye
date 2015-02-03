@@ -23,6 +23,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONSerializer;
 import net.sf.json.JsonConfig;
 
+import com.model.hibernate.property.GtbillToLevf;
 import com.model.hibernate.property.InnstallBill;
 import com.model.hibernate.property.LevelInfo;
 import com.model.hibernate.property.MeterInfo;
@@ -197,7 +198,23 @@ public class FeesEbo implements FeesEbi, CommonException {
 		InnstallBill bill = null;
 		if (list != null && list.size() > 0) {
 			bill = list.get(0);
-			List<LevelInfo> levfslist = bill.getTf_LevelInfos();
+			int tf_insid=bill.getTf_insid();;
+			String gtHql=" from GtbillToLevf where 1=1 and tf_insid="+tf_insid;
+			List<GtbillToLevf> gtls= (List<GtbillToLevf>) ebi.queryByHql(gtHql);
+			for(GtbillToLevf gt: gtls ){
+				ebi.delete(gt);
+			}
+			
+			for(int levf :levfs){
+				GtbillToLevf gtbillToLevf=new GtbillToLevf();
+				gtbillToLevf.setTf_Leveid(levf);
+				gtbillToLevf.setTf_insid(tf_insid);
+				ebi.save(gtbillToLevf);
+				gtbillToLevf=null;
+			}
+			
+			flag=true;
+			/*List<LevelInfo> levfslist = bill.getTf_LevelInfos();
 			if (levfslist != null && levfslist.size() > 0) {
 				for (LevelInfo l : levfslist) {
 					l.setTf_InnstallBill(null);
@@ -214,9 +231,10 @@ public class FeesEbo implements FeesEbi, CommonException {
 			ebi.update(values, LevelInfo.class, levf);
 		}
 		flag=true;
+		}*/
+		
 		}
 		return flag;
-
 	}
 
 }

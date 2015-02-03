@@ -248,10 +248,12 @@ public class VillageController extends BaseController {
 			node.setExpanded(true);
 			node.setLeaf(false);
 			node.setNodeInfoType("0");
-			String countHql=" select count(*) from LevelInfo where 1=1   and  tf_parent=null  and tf_InnstallBill="+invid+"  and tf_leveId="+l.getTf_leveId()+" and tf_village="+vid;
+			String countHql=" select count(*) from GtbillToLevf where 1=1   and tf_Leveid="+l.getTf_leveId()+" and tf_insid="+invid;
 		 	Integer count= ebi.getCount(countHql);
 		 	if(count!=null&&0!=count){
 		 		node.setChecked(true);
+		 	}else{
+		 		node.setChecked(false);
 		 	}
 		
 			lists.add(node);
@@ -312,7 +314,7 @@ public class VillageController extends BaseController {
 	    	@RequestParam(value="orderSql",required=false,defaultValue="") String orderSql,
 	    	@RequestParam(value="vid",required=true) int vid,
 			HttpServletRequest request) throws Exception {
-		whereSql+=" and tf_ResidentInfo.tf_levelInfo.tf_parent.tf_village.tf_viid="+vid;
+		whereSql+=" and tf_ResidentInfo.tf_levelInfo.tf_parent.tf_village.tf_viid="+vid+" and tf_submit='0' ";
 		
 		return super.load(start, limit, whereSql, parentSql, querySql, orderSql, "RepairInfo", request, (dataList)->{
 			List<RepairInfo> list=(List<RepairInfo>)dataList;
@@ -430,5 +432,20 @@ public class VillageController extends BaseController {
 		  ebi.update(info);
 		  return result;
 	  }
+	
+	
+	
+	@RequestMapping("/summitRepair")
+	  public @ResponseBody DataUpdateResponseInfo summitRepair(
+			  @RequestParam(value="id",required=true) int id
+			  ) throws Exception{
+		  DataUpdateResponseInfo result=new DataUpdateResponseInfo();
+		  RepairInfo info=ebi.findById(RepairInfo.class, id);
+		  info.setTf_submit(true);
+		  ebi.update(info);
+		  return result;
+	  }
+	
+	
 	
 }
