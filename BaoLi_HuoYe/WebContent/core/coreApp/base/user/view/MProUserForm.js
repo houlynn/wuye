@@ -121,6 +121,7 @@ Ext.define('core.base.user.view.MProUserForm', {
 								xtype : "textfield",
 								fieldLabel : "初始密码",
 								flex : 2,
+								itemId : "pwd",
 								name : "pwd"
 							}]
 				}, {

@@ -10,6 +10,7 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import com.model.hibernate.property.PropertyCompany;
 import com.model.hibernate.system.shared.Department;
 import com.model.hibernate.system.shared.EndUser;
@@ -32,7 +33,7 @@ public class EndUserEbo extends SimpleEbo<EndUser> implements EndUserEbi{
 	protected EndUserEbo() {
 	
 		super(EndUser.class);
-		System.out.println("EndUserEbo ivokeing ");
+		//System.out.println("EndUserEbo ivokeing ");
 	}
 
 	@Resource(name="ebo")
@@ -49,16 +50,15 @@ public class EndUserEbo extends SimpleEbo<EndUser> implements EndUserEbi{
 	 * @param inserted
 	 * @throws Exception
 	 */
-	public void addUser(String inserted) throws Exception{
+	public void addUser(
+			String loginCode,
+			String  userName,
+			String  proId,
+			String pwd,
+			String sex
+			) throws Exception{
 		String msg="";
 		try{
-		JSONObject jo = JSONObject.fromObject(inserted);
-		ProUserInfo proUser = (ProUserInfo) JSONObject.toBean(jo, ProUserInfo.class);
-		String loginCode=proUser.getLoginCode();
-		String  userName=proUser.getUserName();
-		String  proId=proUser.getProid();
-		String pwd=proUser.getPwd();
-		String sex=proUser.getSex();
 		PropertyCompany pc=(PropertyCompany) ebi.findById(PropertyCompany.class,Integer.valueOf( proId));
 		boolean flag=true;
 		EndUser endUser=new EndUser();
@@ -156,7 +156,12 @@ public class EndUserEbo extends SimpleEbo<EndUser> implements EndUserEbi{
 			repertory.executeSql(insertSql);
 		  }
 		  debug("授权成功!");
-		}catch (Exception e) {
+		}catch(SQLServerException e){
+			e.printStackTrace();
+			  getInsertException("", "设置用户失败 "+e.getMessage(), ResponseErrorInfo.STATUS_FAILURE);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 		  getInsertException("", "设置用户失败 "+msg, ResponseErrorInfo.STATUS_FAILURE);
 		}
 	}

@@ -63,7 +63,7 @@ public interface IModelRepertory extends ICommonRepertory {
 	 * @return
 	 */
 	public abstract DataFetchResponseInfo getModuleData(String moduleName,
-			DataFetchRequestInfo dsRequest, GridFilterData gridFilterData) throws Exception;
+			DataFetchRequestInfo dsRequest, GridFilterData gridFilterData,HttpServletRequest req) throws Exception;
 
 	/**
 	 * 根据前台传进来的参数取一个模块的 record 数据，然后返回 用在用户增加，修改了数据之后，将修改新增的数据，通过这里取得数据后返回

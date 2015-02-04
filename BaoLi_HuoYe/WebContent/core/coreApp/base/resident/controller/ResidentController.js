@@ -206,6 +206,7 @@ init:function(){
                 		    equalsValue:node.raw.code,
                 		    isCodeLevel:false
                 	};
+                	
                 	var store=gridModue.store;
                 	if(store.navigates){
                 		store.navigates.splice(0,store.navigates.length);
@@ -213,6 +214,11 @@ init:function(){
                 	}
                   	var proxy=store.getProxy();
 					proxy.extraParams.navigates=Ext.encode(store.navigates);
+					if(node.get("nodeInfoType")=="0"){
+					proxy.extraParams.type="0";
+					}else{
+					 delete proxy.extraParams.type;
+					}
 					store.load();	  
 				}
 			},

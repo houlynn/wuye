@@ -24,6 +24,12 @@ public class SqlGenerator {
 	private List<SqlField> fieldList = new ArrayList<SqlField>(); // 字段列表
 	private List<SqlField> joinField = new ArrayList<SqlField>();
 	private List<SqlLeftJoin> joinOn = new ArrayList<SqlLeftJoin>();
+	
+	private boolean gene=false;
+	
+	private String geneSql="";
+	
+	private String geneCountSql="";
 
 	// 这是取得单条记录时的主键
 	private String keyValue;
@@ -48,7 +54,24 @@ public class SqlGenerator {
 	public SqlGenerator(String moduleName) throws Exception {
 		this(ApplicationService.getModuleWithName(moduleName));
 	}
-
+	public String getGeneSql() {
+		return geneSql;
+	}
+	public void setGeneSql(String geneSql) {
+		this.geneSql = geneSql;
+	}
+	public String getGeneCountSql() {
+		return geneCountSql;
+	}
+	public void setGeneCountSql(String geneCountSql) {
+		this.geneCountSql = geneCountSql;
+	}
+	public boolean isGene() {
+		return gene;
+	}
+	public void setGene(boolean gene) {
+		this.gene = gene;
+	}
 	public SqlGenerator(_Module module) throws Exception {
 
 		// 是否有不隐藏的字段不允许查看的
@@ -146,6 +169,21 @@ public class SqlGenerator {
 		sql=sql+getSearchText();
 		}
 		System.out.println(" 凭借sql:" + sql);
+		
+		return sql;
+	}
+	
+	public String getSqlStatmentSelect() {
+		String sql = "select " + (distinct ? "distinct " : " ")
+				+ getSelectFields() + (distinct ? " , 1 as ____c " : " ");
+		sql = sql + " from " + getFrom();
+		//sql = sql + getLeftJoin();
+	/*	sql = sql + getWhere();
+		sql = sql + getSortByString();
+		if(StringUtil.isNotEmpty(getSearchText())){
+		sql=sql+getSearchText();
+		}*/
+		//System.out.println(" 凭借sql:" + sql);
 		return sql;
 	}
 
@@ -316,8 +354,8 @@ public class SqlGenerator {
 				}
 				// 检查filters 在当前的 parents 中是否有
 				for (SqlLeftJoin join : joinOn){
-					System.out.println(join.getTableAsName());
-				    System.out.println(filter.getTableAsName());
+					//System.out.println(join.getTableAsName());
+				  //  System.out.println(filter.getTableAsName());
 					if (join.getChildTableAsName().equals(filter.getTableAsName())) {
 
 						// if

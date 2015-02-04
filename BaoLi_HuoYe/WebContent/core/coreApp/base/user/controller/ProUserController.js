@@ -51,6 +51,9 @@ Ext.define("core.base.user.controller.ProUserController",{
 								if(action.result.success){
 								 system.smileInfo("修改成功!");
 								 grid.getStore().load();
+								  var selection=grid.getSelectionModel().getSelection();
+	  	                         var model = selection[0];
+	  	                         form.down("#pwd").setValue(model.get("pwd"));
 								}else{
 								system. errorAlertInfo(obj);
 								}
@@ -76,7 +79,43 @@ Ext.define("core.base.user.controller.ProUserController",{
 	  	 }
 	  	},
 	  	
-	  	
+	   "form[xtype=user.prouserform] #save":{
+	  	 beforeclick:function(btn){
+	  	 	var form=btn.up("form[xtype=user.prouserform]");
+	  	 	var grid=form.grid;
+	  	 	var formObj=form.getForm();
+					  	formObj.submit({
+					    url:"rbacUser/create.action",
+						submitEmptyText:true,
+						success:function(f,action){
+							var obj=action.result.obj;
+								if(action.result.success){
+								 system.smileInfo("添加成功!");
+								 grid.getStore().load();
+								}else{
+								system. errorAlertInfo(obj);
+								}
+						},
+							failure:function(form, action){
+							var obj=action.result.obj;
+							if(action.failureType=="client"){
+								var errors=["前台验证失败，错误信息："];
+								formObj.getFields().each(function(f){
+									if(!f.isValid()){
+										errors.push("<font color=red>"+f.fieldLabel+"</font>:"+f.getErrors().join(","));
+									}
+								});
+								system. errorAlertInfo(errors.join("<br/>"));
+							}else{
+								system. errorAlertInfo(obj);
+							}
+							}
+						
+						});
+	  	 	
+	  	 	return false;
+	  	 }
+	  	},	
 	  	
 	  	
 	 

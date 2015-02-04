@@ -16,7 +16,7 @@ import com.ufo.framework.system.web.SecurityUserHolder;
 public class VillageAspect  implements ModuleAspect {
 
 	@Override
-	public void loadBefore(DataFetchRequestInfo dsRequest,
+	public void loadBefore(DataFetchRequestInfo dsRequest,HttpServletRequest req,
 			SqlGenerator generator) throws Exception {
 		// TODO Auto-generated method stub
 		String whereSql=" where 1=1 and xcode='"+SecurityUserHolder.getIdentification()+"'";

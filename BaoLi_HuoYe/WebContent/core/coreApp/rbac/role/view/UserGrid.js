@@ -22,7 +22,7 @@ Ext.define("core.rbac.role.view.UserGrid",{
 		text:"姓名",
 		dataIndex:"username"
 	},{
-		text:"编码",
+		text:"登陆账号",
 		dataIndex:"userCode"	
 	},{
 		text:"密码",

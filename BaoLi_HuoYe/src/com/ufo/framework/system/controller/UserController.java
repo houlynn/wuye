@@ -389,12 +389,29 @@ public class UserController extends SimpleBaseController<EndUser> implements Com
 	}
 	
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public @ResponseBody
-	DataInsertResponseInfo addWithNoPrimaryKey(@RequestBody String inserted,
-			HttpServletRequest request) throws Exception {
+	public void addWithNoPrimaryKey(
+			@RequestParam(value="loginCode",required=true) String loginCode,
+			@RequestParam(value="userName",required=true) String userName,
+			@RequestParam(value="proid",required=true) String proId,
+			@RequestParam(value="pwd",required=true) String pwd,
+			@RequestParam(value="sex",required=true) String sex,
+			HttpServletResponse response,
+			HttpServletRequest request)  {
 	        EndUserEbi uebi=(EndUserEbi)ebi;
-            uebi.addUser(inserted);		
-		    return null;
+            try {
+				uebi.addUser(loginCode, userName, proId, pwd, sex);
+				toWrite(response,
+						jsonBuilder.returnSuccessJson("'添加成功!'"));
+			} catch (InsertException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				toWrite(response,
+						jsonBuilder.returnFailureJson("'添加失败! "+e.getErrorInfo().getErrorMessage()+"'"));
+			}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+				
+			}
 	
 	}
 	@RequestMapping(value = "/updateuser", method = RequestMethod.POST)

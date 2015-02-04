@@ -21,7 +21,7 @@ public class PropertyCompanyAspect  implements ModuleAspect {
 
 	
 	@Override
-	public void loadBefore(DataFetchRequestInfo dsRequest,
+	public void loadBefore(DataFetchRequestInfo dsRequest,HttpServletRequest req,
 			SqlGenerator generator) throws Exception {
 		// TODO Auto-generated method stub
 		

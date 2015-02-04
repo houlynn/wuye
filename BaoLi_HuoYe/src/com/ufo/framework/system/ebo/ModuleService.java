@@ -136,7 +136,7 @@ public class ModuleService extends Ebo implements ModelEbi {
 		gridFilterData.setSearchText(query);
 		if (columns != null)
 			gridFilterData.setGridColumnNames(columns.split(","));
-		DataFetchResponseInfo response = moduleDAO.getModuleData(moduleName, dsRequest, gridFilterData);
+		DataFetchResponseInfo response = moduleDAO.getModuleData(moduleName, dsRequest, gridFilterData,request);
 		
 		Class<ModuleAspect> classAspect=ModuleServiceFunction.getModuleAspectClass(moduleName);
 		ModuleAspect aspect=null;

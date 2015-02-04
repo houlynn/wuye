@@ -10,7 +10,7 @@ import com.ufo.framework.system.shared.module.DataFetchResponseInfo;
 import com.ufo.framework.system.shared.module.grid.GridFilterData;
 public interface ModuleAspect {
 	
-	public void loadBefore(DataFetchRequestInfo  dsRequest ,SqlGenerator generator) throws Exception;
+	public void loadBefore(DataFetchRequestInfo  dsRequest ,HttpServletRequest req, SqlGenerator generator) throws Exception;
 	
 	
 	public void afterLoad(String moduleName,DataFetchRequestInfo dsRequest,GridFilterData gridFilterData ,DataFetchResponseInfo response) throws Exception;

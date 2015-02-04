@@ -9,15 +9,15 @@ Ext.define('core.base.user.view.ProUserForm', {
 		text : '保存',
 		itemId : 'save',
 		glyph : 0xf0c7,
-		handler : function(button) {
+/*		handler : function(button) {
 			var self = this;
 			var form = button.up('form');
-			console.log(button.up('form').getForm().getRecord());
-			button.up('form').updateRecord();
-			var store = self.up("window[xtype=user.prouserwindow]").grid
-					.getStore();
+			//console.log(button.up('form').getForm().getRecord());
+		//
+			var store = form.grid.getStore();
 			if (form.isValid()) {
-				var model = button.up('form').getForm().getRecord().save();
+				//var model = button.up('form').getForm().getRecord().save();
+					button.up('form').updateRecord();
 				var task = new Ext.util.DelayedTask(function() {
 							if (model.getProxy().errorInfo) {
 								console.log(model.getProxy().errorInfo);
@@ -32,7 +32,7 @@ Ext.define('core.base.user.view.ProUserForm', {
 				task.delay(1);
 			}
 
-		}
+		}*/
 	}, {
 		text : '关闭',
 		itemId : 'close',

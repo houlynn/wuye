@@ -137,7 +137,7 @@ public class ModuleRepertory extends HibernateRepertory implements IModelReperto
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public DataFetchResponseInfo getModuleData(String moduleName, DataFetchRequestInfo dsRequest,
-			GridFilterData gridFilterData) throws Exception {
+			GridFilterData gridFilterData,HttpServletRequest req) throws Exception {
 		_Module module = ApplicationService.getModuleWithName(moduleName);
 		// 所有的导航tree产生的过滤条件
 		//List<SqlModuleFilter> treeAndParentFilters = new ArrayList<SqlModuleFilter>();
@@ -155,7 +155,7 @@ public class ModuleRepertory extends HibernateRepertory implements IModelReperto
 			ModuleAspect aspect;
 			try {
 				aspect = classAspect.newInstance();
-				aspect.loadBefore(dsRequest, generator);
+				aspect.loadBefore(dsRequest, req, generator);
 			} catch (InstantiationException e) {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
@@ -239,7 +239,7 @@ public class ModuleRepertory extends HibernateRepertory implements IModelReperto
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public Integer getRecordCount(SqlGenerator generator) {
 
-		String sql = generator.getCountSqlStatement();
+		String sql = generator.isGene()?generator.getGeneCountSql():generator.getCountSqlStatement();
 		Session session = getSf().getCurrentSession();
 		SQLQuery query = session.createSQLQuery(sql);
 		Integer countInteger = 0;
@@ -258,8 +258,7 @@ public class ModuleRepertory extends HibernateRepertory implements IModelReperto
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	public JSONArray getData(SqlGenerator generator, Integer startRow, Integer endRow) {
 		Session session = getSf().getCurrentSession();
-		String sql = generator.getSqlStatment();
-		System.out.println("sql:"+sql);
+		String sql =generator.isGene()?  generator.getGeneSql():generator.getSqlStatment();
 		SQLQuery query = session.createSQLQuery(sql);
 		if (startRow != -1) {
 			query.setFirstResult(startRow);
