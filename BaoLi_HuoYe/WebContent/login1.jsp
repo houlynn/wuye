@@ -1,17 +1,35 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
-	<%
-request.setCharacterEncoding("UTF-8");
-response.setCharacterEncoding("UTF-8");
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+<%
+	request.setCharacterEncoding("UTF-8");
+	response.setCharacterEncoding("UTF-8");
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://"
+			+ request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<style type="text/css">
+.titlefont{
+font-size: 13pt;color: white; font-weight:bold;
+body{height:100%; overflow:hidden; margin:0px; padding:0px;}
+.box {height:100%; background:#ff0000; position:absolute; width:100%;} 
+
+}
+
+
+</style>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>保利物业信息管理系统</title>
-<link rel="stylesheet" type="text/css"
+
+
+<link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css"
+	rel="stylesheet">
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+<script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+ <link rel="stylesheet" type="text/css"
 	href="/extjs/resources/css/ext-all.css" />
 <link rel="stylesheet" type="text/css"
 	href="/extjs/resources/css/example.css" />
@@ -41,6 +59,7 @@ LoginWindow = Ext.extend(
 		collapsible : true,
 		closable :false,
 		border : false,
+		renderTo:"loaginPanel",
 		defaults : {
 			border : false
 		},
@@ -174,11 +193,70 @@ Ext.onReady(function() {
 });
 
 </script>
+<%--
 <body>
 <center>
 	<div id="tr" style="margin-top: 100px; margin-left: 100px"></div>
-</center>
+</center> --%>
+<body>
+<div class="container-fluid" style="width: 100%; height: 100%;">
+	<div class="row-fluid" style="height:20%;background: #3D83CC;">
+	  <div class="span12" align="center" style="text-align: center; line-height:58px;">
+	    <span class="titlefont">保利物业信息管理系统 </span>
+	     <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+	     <span class="titlefont">关于我们</span>
+	      <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+	      <span class="titlefont">联系我们</span>
+	       <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+	        <span class="titlefont">020 -869-86385</span>
+	  </div>
+	</div>
 
 
+	<div class="row-fluid" style="height:50%; background-image: url('/platform/login/images/bg.jpg'); background-repeat: no-repeat; background-size: 100% 100%;">
+			 <div class="row-fluid" style="margin-top: 0px;margin-left:0px; height: 310pt">
+			 <div class="span12" style="padding-top: 59px;margin-left:-452px;" id="loaginPanel">
+				<!-- <form action="login.jspx" method="post" class="well"
+					style="width: 385px; height:300px; margin: 0px auto;">
+					<h5 align="center" style="line-height: 1px">系统登录</h5>
+					<hr>
+					<label>用户名:</label> <input type="text" name="username"style="height: 30px" class="span3" /><br>
+					<label>密码：</label> <input type="password" name="password" style="height: 30px" class="span3"><br>
+					<button type="submit" class="btn btn-primary">登陆系统</button>
+				</form> -->
+				
+				</div>
+			</div>
+		
+	</div>
+	<div class="row-fluid" style="height: 30%;background: white;" >
+		<div class="span12" align="center">
+		 <table style="margin-top: 13px">
+		   <tr>
+		     <td align="center" width="200px" >
+		    <input type="image" src="/platform/login/images/appicon.png" height="120" width="120" title="保利小区管家下载"/><br>
+		       <font size="1.8pt">保利小区管家APP下载</font> 
+		     </td>
+		      <td align="center" width="200px">
+		    <input type="image" src="/platform/login/images/firefox.png" height="120" width="120" title="火狐浏览器下载"/><br>
+		       <font size="1.8pt">火狐浏览器下载</font> 
+		     </td>
+		              <td align="center" width="200px">
+		    <input type="image" src="/platform/login/images/Chrome.jpg" height="120" width="120" title="谷歌浏览器下载"/><br>
+		       <font size="1.8pt">谷歌浏览器下载</font> 
+		     </td>
+		   </tr>
+		 </table>
+		</div>
+	</div>
+		<div class="row-fluid" style="height:30%;background: #EEEEEE; margin-top: 65px"  >
+		<div class="span12" style="height:30pt;" align="center">
+		 <font size="1"    color="#A9A9A9">广州英趣科技有限公司 &nbsp;&nbsp;&nbsp;Copyright 2015</font><br>
+		 <font> </font>
+		</div>
+	</div>
+	
+	
+</div>
 </body>
 </html>
