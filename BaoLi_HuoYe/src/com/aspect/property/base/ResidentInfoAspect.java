@@ -11,11 +11,13 @@ import java.util.stream.Collectors;
 
 
 
+
 import javax.servlet.http.HttpServletRequest;
 
 import com.aspect.ModuleAspect;
 import com.model.hibernate.property.FeesTypeItem;
 import com.model.hibernate.property.ResidentInfo;
+import com.model.hibernate.property.Village;
 import com.ufo.framework.common.core.web.SpringContextHolder;
 import com.ufo.framework.system.ebi.CommonException;
 import com.ufo.framework.system.ebi.Ebi;
@@ -25,6 +27,7 @@ import com.ufo.framework.system.repertory.SqlModuleFilter;
 import com.ufo.framework.system.shared.module.DataFetchRequestInfo;
 import com.ufo.framework.system.shared.module.DataFetchResponseInfo;
 import com.ufo.framework.system.shared.module.grid.GridFilterData;
+import com.ufo.framework.system.web.SecurityUserHolder;
 
 public class ResidentInfoAspect implements  ModuleAspect ,XcodeInterface,CommonException {
 
@@ -37,7 +40,6 @@ public class ResidentInfoAspect implements  ModuleAspect ,XcodeInterface,CommonE
 		String type=req.getParameter("type");
 		if("0".equals(type)){
 		String value= dsRequest.getModuleFilters().get(0).getEqualsValue();
-		System.out.println(" value :"+value);
 		String sql="select "
 				+ " _t104.tf_residentId as _t104tf_residentId ,"
 				+ " _t104.tf_number as _t104tf_number ,"
@@ -95,16 +97,28 @@ public class ResidentInfoAspect implements  ModuleAspect ,XcodeInterface,CommonE
 				+ "  from  ResidentInfo _t104 "
 				+" cross join LevelInfo _t103 "
 				+"   where _t104.tf_leveId=_t103.tf_leveId and 1=1 "
+				+"   and  _t104.xcode='"+SecurityUserHolder.getIdentification()+"' "
 			     +  "and _t103.tf_pid="+value+" order by _t104.tf_number, _t104.tf_leveId ASC";
 		
 		String sqlCount="select count(*) "
 				+ "  from  ResidentInfo _t104 "
 				+" cross join LevelInfo _t103 "
 				+"   where _t104.tf_leveId=_t103.tf_leveId and 1=1 "
+				+"   and  _t104.xcode='"+SecurityUserHolder.getIdentification()+"' "
 			     +  "and _t103.tf_pid="+value;
 		          generator.setGene(true);
 		          generator.setGeneSql(sql);
 		          generator.setGeneCountSql(sqlCount);
+		}else{
+			if(dsRequest.getModuleFilters()==null||dsRequest.getModuleFilters().size()==0)
+			   generator.setGene(true);
+			   String whereSql="  where   _t104.xcode='"+SecurityUserHolder.getIdentification()+"' ";
+			   String sqlCount=generator.getCountSqlStatement()+whereSql;
+			   String sql=generator.getSqlStatment()+whereSql;
+			    generator.setGeneSql(sql);
+		        generator.setGeneCountSql(sqlCount);
+			  
+			
 		}
 		
 		
@@ -135,7 +149,7 @@ public class ResidentInfoAspect implements  ModuleAspect ,XcodeInterface,CommonE
 		}*/
 		
 		
-		System.out.println("prntsql:");
+	//	System.out.println("prntsql:");
 
 		
 	}
@@ -175,11 +189,8 @@ public class ResidentInfoAspect implements  ModuleAspect ,XcodeInterface,CommonE
 	public void beforeCreate(Object record, String moduleName,
 			List<SqlModuleFilter> navs,HttpServletRequest req) throws Exception {
 		// TODO Auto-generated method stub
-		
-		
-	
-		
-		
+		ResidentInfo residentInfo=(ResidentInfo) record;
+		residentInfo.setXcode(SecurityUserHolder.getIdentification());
 	}
 
 	@Override

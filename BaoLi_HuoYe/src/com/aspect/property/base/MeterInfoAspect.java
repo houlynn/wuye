@@ -35,7 +35,7 @@ public class MeterInfoAspect implements ModuleAspect ,XcodeInterface,CommonExcep
 	   String whereSql="";
 	   SqlModuleFilter nav=dsRequest.getModuleFilters().get(0);
 	   String type=nav.getText();
-	   whereSql+= " and "+module.getTableAsName()+".tf_mtype='"+type+"' ";
+	   whereSql+= " and "+module.getTableAsName()+".tf_mtype='"+type+"'  and "+module.getTableAsName();
 	   generator.setSearchText(whereSql);
 	   
 	   

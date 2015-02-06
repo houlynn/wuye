@@ -143,6 +143,7 @@ Ext.define("core.base.resident.view.ResidentGrid",{
 					xtype : 'pagingtoolbar', // grid数据分页
 					store : this.store,
 					displayInfo : true,
+					itemId:"resipagingtoolbar",
 					prependButtons : true,
 					dock : 'bottom',
 					items : [{ // 在最前面加入grid方案的选择Combo

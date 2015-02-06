@@ -12,10 +12,21 @@
 <html>
 <head>
 <style type="text/css">
+html, body { 
+height: 100%; 
+margin:0px 0px 0px 0px;
+} 
 .titlefont{
 font-size: 13pt;color: white; font-weight:bold;
-body{height:100%; overflow:hidden; margin:0px; padding:0px;}
-.box {height:100%; background:#ff0000; position:absolute; width:100%;} 
+
+/* body{height:100%; overflow:hidden; margin:0px; padding:0px;}
+.box {height:100%; background:#ff0000; position:absolute; width:100%;}  */
+
+}
+.loginTitle{
+font-size: 13pt;color: #3D83CC; font-weight:bold;
+text-align: center;
+font-size: 20px;
 
 }
 
@@ -25,38 +36,26 @@ body{height:100%; overflow:hidden; margin:0px; padding:0px;}
 <title>保利物业信息管理系统</title>
 
 
-<link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css"
-	rel="stylesheet">
-<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+ <link href="http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css"
+	rel="stylesheet"> 
+ <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
 <script src="http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
- <link rel="stylesheet" type="text/css"
+  <link rel="stylesheet" type="text/css"
 	href="/extjs/resources/css/ext-all.css" />
-<link rel="stylesheet" type="text/css"
-	href="/extjs/resources/css/example.css" />
-<link rel="stylesheet" type="text/css"
-	href="/extjs/resources/css/TabScrollerMenu.css" />
-<link rel="stylesheet" type="text/css"
-	href="/extjs/resources/css/CheckHeader.css" />
 <script type="text/javascript" src="<%=basePath%>extjs/ext-all-dev.js"></script>
-<link type="text/css" rel="stylesheet"
-	href="<%=basePath%>css/module.css">
- 	 <link rel="stylesheet" type="text/css"
-	href="<%=basePath%>extjs/resources/ext-theme-neptune/ext-theme-neptune-all-debug.css">
-<script type="text/javascript" src="/extjs/examples.js"></script>
 </head>
 <script type="text/javascript">
-   function changeCode (obj){  
+  function changeCode (obj){  
      var d = new Date();  
       obj.src = "<%=request.getContextPath()%>/rbacUser/LoginVerifyCodeImage.action?d="+d; 
  }  
 Ext.QuickTips.init();
 LoginWindow = Ext.extend(
-				Ext.Window,
+		Ext.Panel,
 	{
-		title : "管理员登录",
-		width : 450,
-		height : 200,
-		collapsible : true,
+		width : 330,
+		height : 320,
+		collapsible : false,
 		closable :false,
 		border : false,
 		renderTo:"loaginPanel",
@@ -123,12 +122,13 @@ LoginWindow = Ext.extend(
 			var myform = new Ext.form.FormPanel({
 				bodyStyle : "padding-top:6px",
 				defaultType : "textfield",
-				labelAlign : "right",
 				labelWidth : 35,
+				cls:"well",
 				labelPad : 2,
-				height:170,
+				height:"100&",
 				border:false,
-				frame : true,
+				frame : false,
+				height : 320,
 				// frame : true,
 				method : "POST",
 				buttonAlign:"center",
@@ -141,33 +141,73 @@ LoginWindow = Ext.extend(
 					allowBlank : false,
 					width : 350
 				},
-				items : [ {
-					cls : "user",
-					name : "userCode",
-					fieldLabel : "登录帐号",
-					blankText : "帐号不能为空",
-				}, {
-					cls : "key",
-					name : "password",
-					fieldLabel : "登录密码",
-					blankText : "密码不能为空",
-					inputType : "password",
-				}, {
-					cls : "key",
-					name : "verifyCode",
-					id : "randCode",
-					fieldLabel : "验证码",
-					width : 200,
-					blankText : "验证码不能为空"
-				},{  
-					           xtype:"container",
-				                html:'<div style="padding-left:80px" mce_style="padding-left:80px"><a href="#" mce_href="#"><img alt="如果看不清单击图片更换图片。" onclick="javascript:changeCode(this)" id="code" height="30" width="72" src="<%=request.getContextPath()%>/rbacUser/LoginVerifyCodeImage.action" mce_src="validateCodeServlet" border=0></img></a></div>',  
-					            border:false  
-					            }  
- ],
+				items : [
+				         {
+				        	
+				             xtype:"fieldcontainer",
+				             flex:1,
+				                  items:[{
+				                	  width : 350,
+				                	  flex:1,
+				                	  textalign:"center",
+				            	  xtype:"label",
+				            	  html:"<h3 class='loginTitle'>用户登陆</h3>"
+				                    }]
+				         },
+					     {
+					     xtype:"fieldcontainer",
+					     flex:1,
+					             items:[{
+					            	 flex:1,
+					            	 labelAlign:"right",
+						         cls : "user",
+						         name : "userCode",
+						           fieldLabel : "登录帐号",
+						            blankText : "帐号不能为空",
+						            xtype:"textfield"
+					               }]
+					},
+					{
+						 xtype:"fieldcontainer",
+						 flex:1,
+							items:[{
+								 flex:1,
+								 labelAlign:"right",
+							cls : "key",
+							name : "password",
+							fieldLabel : "登录密码",
+							blankText : "密码不能为空",
+							  xtype:"textfield",
+							inputType : "password",
+							}]
+						},
+						{
+							 xtype:"fieldcontainer",
+							 flex:1,
+							 items:[{
+								 flex:1,
+									cls : "key",
+									labelAlign:"right",
+									name : "verifyCode",
+									id : "randCode",
+									fieldLabel : "验证码",
+									 xtype:"textfield",
+									blankText : "验证码不能为空"
+								},
+								 {  
+							           xtype:"container",
+						                html:'<div style="padding-left:80px" mce_style="padding-left:80px"><a href="#" mce_href="#"><img alt="如果看不清单击图片更换图片。" onclick="javascript:changeCode(this)" id="code" height="30" width="72" src="<%=request.getContextPath()%>/rbacUser/LoginVerifyCodeImage.action" mce_src="validateCodeServlet" border=0></img></a></div>',  
+							            border:false  
+							            }  ]
+							
+						}
+					
+				      
+                ],
 				buttons : [ {
 					text : "确定",
 					id : "sure",
+					cls:'btn btn-primary',
 					handler : subjectForm//鼠标按键提交表单
 				}, {
 					text : "重置",
@@ -190,7 +230,7 @@ Ext.onReady(function() {
 	var win = new LoginWindow();
 	win.show();
 
-});
+}); 
 
 </script>
 <%--
@@ -199,64 +239,51 @@ Ext.onReady(function() {
 	<div id="tr" style="margin-top: 100px; margin-left: 100px"></div>
 </center> --%>
 <body>
-<div class="container-fluid" style="width: 100%; height: 100%;">
-	<div class="row-fluid" style="height:20%;background: #3D83CC;">
-	  <div class="span12" align="center" style="text-align: center; line-height:58px;">
-	    <span class="titlefont">保利物业信息管理系统 </span>
-	     <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-	     <span class="titlefont">关于我们</span>
-	      <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-	      <span class="titlefont">联系我们</span>
-	       <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-	        <span class="titlefont">020 -869-86385</span>
-	  </div>
-	</div>
 
-
-	<div class="row-fluid" style="height:50%; background-image: url('/platform/login/images/bg.jpg'); background-repeat: no-repeat; background-size: 100% 100%;">
-			 <div class="row-fluid" style="margin-top: 0px;margin-left:0px; height: 310pt">
-			 <div class="span12" style="padding-top: 59px;margin-left:-452px;" id="loaginPanel">
-				<!-- <form action="login.jspx" method="post" class="well"
-					style="width: 385px; height:300px; margin: 0px auto;">
-					<h5 align="center" style="line-height: 1px">系统登录</h5>
-					<hr>
-					<label>用户名:</label> <input type="text" name="username"style="height: 30px" class="span3" /><br>
-					<label>密码：</label> <input type="password" name="password" style="height: 30px" class="span3"><br>
-					<button type="submit" class="btn btn-primary">登陆系统</button>
-				</form> -->
+	   <div style="height:8%;background: #3D83CC; margin-top: 0px">
+			  <div class="span12" align="center"style="text-align: center; line-height: 58px;">
+				<span class="titlefont">保利物业信息管理系统 </span> <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				<span class="titlefont">关于我们</span> <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				<span class="titlefont">联系我们</span> <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+				<span class="titlefont">020 -869-86385</span>
+			  </div>
+		</div>
+		
+		
+		<div style="height:67%; background-image: url('/platform/login/images/bg.jpg'); background-repeat: no-repeat; background-size: 100% 100%;">
+			   <div class="row-fluid" style="margin-top: 0px; margin-left: -0px; height: 310pt">
+				  <div class="span12" style="padding-top: 65px; margin-left: 350px;" id="loaginPanel">
 				
 				</div>
-			</div>
+			 </div>
+		</div>
 		
-	</div>
-	<div class="row-fluid" style="height: 30%;background: white;" >
-		<div class="span12" align="center">
-		 <table style="margin-top: 13px">
+		<div style="height: 20%;background: white;" align="center">
+		 <table style="margin-top: 0px">
 		   <tr>
 		     <td align="center" width="200px" >
-		    <input type="image" src="/platform/login/images/appicon.png" height="120" width="120" title="保利小区管家下载"/><br>
+		      <input type="image" src="/platform/login/images/appicon.png" height="120" width="120" title="保利小区管家下载"/><br>
 		       <font size="1.8pt">保利小区管家APP下载</font> 
 		     </td>
 		      <td align="center" width="200px">
-		    <input type="image" src="/platform/login/images/firefox.png" height="120" width="120" title="火狐浏览器下载"/><br>
+		     <input type="image" src="/platform/login/images/firefox.png" height="120" width="120" title="火狐浏览器下载"/><br>
 		       <font size="1.8pt">火狐浏览器下载</font> 
 		     </td>
-		              <td align="center" width="200px">
-		    <input type="image" src="/platform/login/images/Chrome.jpg" height="120" width="120" title="谷歌浏览器下载"/><br>
+		     <td align="center" width="200px">
+		     <input type="image" src="/platform/login/images/chrome.png" height="120" width="120" title="谷歌浏览器下载"/><br>
 		       <font size="1.8pt">谷歌浏览器下载</font> 
 		     </td>
 		   </tr>
 		 </table>
-		</div>
 	</div>
-		<div class="row-fluid" style="height:30%;background: #EEEEEE; margin-top: 65px"  >
+	
+<div  style="height:5%;background: #EEEEEE; margin-top: 0px" ;align="center" >
 		<div class="span12" style="height:30pt;" align="center">
 		 <font size="1"    color="#A9A9A9">广州英趣科技有限公司 &nbsp;&nbsp;&nbsp;Copyright 2015</font><br>
-		 <font> </font>
+		 <font></font>
 		</div>
 	</div>
 	
 	
-</div>
 </body>
 </html>

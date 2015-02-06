@@ -74,8 +74,8 @@ Ext.define("core.prop.expre.view.ExpreGrid", {
 		  dataIndex : "tf_appUser",
 		  width : 150,
 		},
-			{text : "物品描述",
-		dataIndex : "tf_rmark",
+		{text : "物品描述",
+		dataIndex : "tf_remark",
 		width : 320,
 		columnType : "textfield"
 		}
