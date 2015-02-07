@@ -110,7 +110,7 @@ public class ResidentController    implements LogerManager,CommonException {
 	@RequestMapping(RequestPathConstants.REQUEST_LOADPATH)
 	public @ResponseBody List<JSONTreeNode>  getTree(HttpServletRequest request,HttpServletResponse response,
 			@RequestParam(value="vid",required=true) int vid,
-			@RequestParam(value="orderSql",required=false,defaultValue=" order by tf_leveId DESC") String orderSql
+			@RequestParam(value="orderSql",required=false,defaultValue=" order by tf_leveName DESC") String orderSql
 			){
 		List<JSONTreeNode> lists=new ArrayList<JSONTreeNode>();
 		try
